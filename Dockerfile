@@ -6,15 +6,14 @@ LABEL maintainer="Berancan Guven"
 LABEL description="Portfolio V3 - PHP 8.2 avec Nginx"
 
 # Installation des dépendances système et extensions PHP
-RUN apk add --no-cache \
+RUN apk update && apk add --no-cache \
     nginx \
     supervisor \
     git \
     unzip \
     libzip-dev \
     mysql-client \
-    && docker-php-ext-install pdo pdo_mysql zip opcache \
-    && apk del --purge autoconf g++ make
+    && docker-php-ext-install pdo pdo_mysql zip opcache
 
 # Installation de Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
