@@ -36,8 +36,6 @@ services:
       - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
     networks:
       - portfolio_network
-    ports:
-      - "3306:3306"
 
   # phpMyAdmin (optionnel, pour gestion de la BDD)
   phpmyadmin:
