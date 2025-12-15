@@ -1,0 +1,314 @@
+<section class="two-factor-setup">
+    <div class="setup-container">
+        <h1><i class="fas fa-shield-alt"></i> Configuration 2FA</h1>
+        <p class="subtitle">Sécurisez votre compte avec l'authentification à deux facteurs</p>
+
+        <?php if (!empty($_GET['error'])): ?>
+            <div class="alert alert-danger">
+                <?php
+                switch ($_GET['error']) {
+                    case 'invalid_code':
+                        echo '❌ Code invalide. Veuillez réessayer.';
+                        break;
+                    case 'already_enabled':
+                        echo '⚠️ Le 2FA est déjà activé sur votre compte.';
+                        break;
+                    default:
+                        echo '❌ Une erreur est survenue.';
+                }
+                ?>
+            </div>
+        <?php endif; ?>
+
+        <?php if (!empty($_GET['success'])): ?>
+            <div class="alert alert-success">
+                ✅ 2FA activé avec succès ! Votre compte est maintenant mieux protégé.
+            </div>
+        <?php endif; ?>
+
+        <div class="setup-steps">
+            <!-- Étape 1 -->
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h3>Téléchargez une application d'authentification</h3>
+                    <p>Installez une application TOTP comme :</p>
+                    <ul>
+                        <li><strong>Google Authenticator</strong> (iOS/Android)</li>
+                        <li><strong>Microsoft Authenticator</strong> (iOS/Android)</li>
+                        <li><strong>Authy</strong> (iOS/Android/Desktop)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Étape 2 -->
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h3>Scannez ce QR Code</h3>
+                    <div class="qr-code-container">
+                        <img src="<?= htmlspecialchars($qrCodeUrl) ?>" alt="QR Code 2FA" class="qr-code">
+                    </div>
+                    <p class="text-muted">Ou entrez manuellement ce secret :</p>
+                    <div class="secret-code">
+                        <code><?= htmlspecialchars($secret) ?></code>
+                        <button type="button" class="btn-copy" onclick="copySecret()">
+                            <i class="fas fa-copy"></i> Copier
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Étape 3 -->
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h3>Vérifiez le code</h3>
+                    <p>Entrez le code à 6 chiffres généré par votre application :</p>
+                    
+                    <form action="<?= $_ENV['ADMIN_SECRET_URL'] ?>/2fa/enable" method="POST" class="verify-form">
+                        <input type="hidden" name="csrf_token" value="<?= \App\Middleware\AuthMiddleware::getCsrfToken() ?>">
+                        <input type="hidden" name="secret" value="<?= htmlspecialchars($secret) ?>">
+                        
+                        <div class="code-input-group">
+                            <input type="text" 
+                                   name="code" 
+                                   id="twoFactorCode" 
+                                   placeholder="000000" 
+                                   maxlength="6" 
+                                   pattern="[0-9]{6}"
+                                   autocomplete="off"
+                                   required
+                                   class="code-input">
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-check"></i> Activer le 2FA
+                        </button>
+                        
+                        <a href="<?= $_ENV['ADMIN_SECRET_URL'] ?>/dashboard" class="btn btn-secondary">
+                            <i class="fas fa-times"></i> Annuler
+                        </a>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Codes de backup -->
+            <div class="backup-codes-section">
+                <h3><i class="fas fa-key"></i> Codes de récupération</h3>
+                <p>Après activation, vous recevrez <strong>10 codes de backup</strong> à usage unique.</p>
+                <p class="text-warning">
+                    ⚠️ <strong>Important :</strong> Conservez ces codes en lieu sûr ! Ils vous permettront de vous connecter si vous perdez l'accès à votre application d'authentification.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+.two-factor-setup {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e3f2fd 100%);
+    padding: 2rem;
+}
+
+.setup-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.setup-container h1 {
+    color: #314473;
+    text-align: center;
+    margin-bottom: 0.5rem;
+}
+
+.subtitle {
+    text-align: center;
+    color: #666;
+    margin-bottom: 2rem;
+}
+
+.alert {
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+}
+
+.alert-danger {
+    background: #fee;
+    border-left: 4px solid #f44336;
+    color: #c62828;
+}
+
+.alert-success {
+    background: #e8f5e9;
+    border-left: 4px solid #4caf50;
+    color: #2e7d32;
+}
+
+.setup-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.step {
+    display: flex;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid #314473;
+}
+
+.step-number {
+    width: 40px;
+    height: 40px;
+    background: #314473;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+.step-content {
+    flex: 1;
+}
+
+.step-content h3 {
+    color: #314473;
+    margin-bottom: 1rem;
+}
+
+.step-content ul {
+    margin: 0.5rem 0;
+    padding-left: 1.5rem;
+}
+
+.qr-code-container {
+    text-align: center;
+    margin: 1.5rem 0;
+}
+
+.qr-code {
+    border: 2px solid #314473;
+    border-radius: 8px;
+    padding: 1rem;
+    background: white;
+}
+
+.secret-code {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: white;
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+.secret-code code {
+    flex: 1;
+    font-size: 1.1rem;
+    color: #314473;
+    font-family: 'Courier New', monospace;
+    letter-spacing: 2px;
+}
+
+.btn-copy {
+    background: #314473;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-copy:hover {
+    background: #293961;
+}
+
+.verify-form {
+    margin-top: 1.5rem;
+}
+
+.code-input-group {
+    margin-bottom: 1.5rem;
+}
+
+.code-input {
+    width: 100%;
+    font-size: 2rem;
+    text-align: center;
+    padding: 1rem;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    letter-spacing: 0.5rem;
+    font-family: 'Courier New', monospace;
+}
+
+.code-input:focus {
+    outline: none;
+    border-color: #314473;
+}
+
+.verify-form button {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+}
+
+.backup-codes-section {
+    background: #fff3cd;
+    padding: 1.5rem;
+    border-radius: 8px;
+    border-left: 4px solid #ffa726;
+}
+
+.backup-codes-section h3 {
+    color: #e65100;
+    margin-bottom: 1rem;
+}
+
+.text-warning {
+    color: #e65100;
+}
+
+.text-muted {
+    color: #666;
+    font-size: 0.9rem;
+}
+</style>
+
+<script>
+function copySecret() {
+    const secret = '<?= htmlspecialchars($secret) ?>';
+    navigator.clipboard.writeText(secret).then(() => {
+        alert('✅ Secret copié dans le presse-papiers !');
+    });
+}
+
+// Auto-focus sur l'input du code
+document.addEventListener('DOMContentLoaded', function() {
+    const codeInput = document.getElementById('twoFactorCode');
+    if (codeInput) {
+        codeInput.focus();
+        
+        // Valider uniquement les chiffres
+        codeInput.addEventListener('input', function(e) {
+            this.value = this.value.replace(/[^0-9]/g, '');
+        });
+    }
+});
+</script>

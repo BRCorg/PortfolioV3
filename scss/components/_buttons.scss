@@ -1,0 +1,282 @@
+// ==========================================
+// Buttons
+// ==========================================
+
+.btn {
+  @include button-base;
+  @include flex-center;
+
+  &.blue {
+    background-color: $primary-darker;
+    color: $white;
+
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+}
+
+.contact-btn {
+  padding: 0.375rem 1rem;
+  border-radius: $border-radius-round;
+  font-weight: 500;
+  background-color: transparent;
+  @include transition;
+  color: $primary-color;
+  cursor: pointer;
+}
+
+.logout-btn {
+  background-color: $danger-color;
+  color: $white;
+  padding: $spacing-sm $spacing-md;
+  border-radius: 0.375rem;
+  text-decoration: none;
+  @include transition(opacity);
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+.back-btn {
+  display: inline-block;
+  padding: 0.6rem 1.5rem;
+  background-color: $primary-color;
+  color: $white;
+  border-radius: $border-radius-md;
+  font-weight: 600;
+  text-decoration: none;
+  @include transition(background);
+
+  &:hover {
+    background-color: $primary-dark;
+    box-shadow: 0 0 0.625rem $primary-color;
+  }
+}
+
+.btn-delete-project {
+  margin-top: auto;
+  align-self: flex-start;
+  background-color: $danger-color;
+  color: $white;
+  padding: 0.4rem 0.8rem;
+  border-radius: $border-radius-sm;
+  text-decoration: none;
+  font-weight: 600;
+  @include transition(opacity);
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+.delete-category-btn {
+  color: $danger-color;
+  text-decoration: none;
+  font-weight: 600;
+  @include transition(opacity);
+
+  &:hover {
+    opacity: 0.8;
+    text-decoration: underline;
+  }
+}
+
+// Dark mode toggle button
+.dark-mode-toggle {
+  position: fixed;
+  top: 1.25rem;
+  right: 1.25rem;
+  width: 3.125rem;
+  height: 3.125rem;
+  border-radius: 50%;
+  background: linear-gradient(135deg, $primary-color, $primary-darker);
+  border: none;
+  color: $white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0.25rem 0.9375rem rgba($primary-color, 0.4);
+  transition: $transition-medium;
+  z-index: 999;
+
+  &:hover {
+    transform: translateY(-0.1875rem) rotate(20deg);
+    box-shadow: 0 0.375rem 1.25rem rgba($primary-color, 0.5);
+  }
+
+  &:active {
+    transform: translateY(0) rotate(0);
+  }
+}
+
+// Dark mode toggle pour la page home (en bas à gauche)
+.dark-mode-toggle-home {
+  position: fixed;
+  bottom: 1.875rem;
+  left: 1.875rem;
+  width: 3.75rem;
+  height: 3.75rem;
+  border-radius: 50%;
+  background: linear-gradient(135deg, $primary-color, $primary-darker);
+  border: none;
+  color: $white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0.375rem 1.25rem rgba($primary-color, 0.4);
+  transition: all 0.3s ease;
+  z-index: 1000;
+
+  &:hover {
+    transform: translateY(-0.3125rem) rotate(20deg);
+    box-shadow: 0 0.625rem 1.875rem rgba($primary-color, 0.6);
+  }
+
+  &:active {
+    transform: translateY(-0.125rem) rotate(0);
+  }
+
+  i {
+    transition: transform 0.3s ease;
+  }
+}
+
+// Scroll to top button (en bas à droite)
+.scroll-to-top {
+  position: fixed;
+  bottom: 1.875rem;
+  right: 1.875rem;
+  width: 3.75rem;
+  height: 3.75rem;
+  border-radius: 50%;
+  background: linear-gradient(135deg, $primary-color, $primary-darker);
+  border: none;
+  color: $white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0.375rem 1.25rem rgba($primary-color, 0.4);
+  transition: all 0.3s ease;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(1.25rem);
+
+  &.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  &:hover {
+    transform: translateY(-0.3125rem) scale(1.1);
+    box-shadow: 0 0.625rem 1.875rem rgba($primary-color, 0.6);
+  }
+
+  &:active {
+    transform: translateY(-0.125rem) scale(1.05);
+  }
+
+  i {
+    font-size: 1.5rem;
+    transition: transform 0.3s ease;
+  }
+}
+
+// Edit profile button
+.edit-profile-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-xs;
+  background: linear-gradient(135deg, $primary-color, $primary-dark);
+  color: $white;
+  padding: $spacing-md $spacing-lg;
+  border-radius: $border-radius-md;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  text-decoration: none;
+  box-shadow: 0 0.25rem 0.75rem rgba($primary-color, 0.3);
+  transition: $transition-medium;
+
+  i {
+    font-size: 0.9rem;
+  }
+
+  &:hover {
+    transform: translateY(-0.125rem);
+    box-shadow: 0 0.375rem 1.25rem rgba($primary-color, 0.4);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+// Dashboard action buttons
+.dashboard-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-xs;
+  padding: $spacing-sm $spacing-md;
+  border-radius: $border-radius-md;
+  font-weight: 600;
+  cursor: pointer;
+  transition: $transition-fast;
+  text-decoration: none;
+  border: none;
+  font-size: 0.9rem;
+
+  &.btn-primary {
+    background: linear-gradient(135deg, $primary-color, $primary-dark);
+    color: $white;
+    box-shadow: 0 0.125rem 0.5rem rgba($primary-color, 0.3);
+
+    &:hover {
+      transform: translateY(-0.0625rem);
+      box-shadow: 0 0.25rem 0.75rem rgba($primary-color, 0.4);
+    }
+  }
+
+  &.btn-secondary {
+    background: #e0e0e0;
+    color: #666;
+
+    &:hover {
+      background: #d0d0d0;
+    }
+  }
+
+  &.btn-success {
+    background: #4CAF50;
+    color: $white;
+
+    &:hover {
+      background: darken(#4CAF50, 8%);
+      transform: translateY(-0.0625rem);
+    }
+  }
+
+  &.btn-danger {
+    background: $danger-color;
+    color: $white;
+
+    &:hover {
+      background: darken($danger-color, 8%);
+      transform: translateY(-0.0625rem);
+    }
+  }
+
+  i {
+    font-size: 0.85rem;
+  }
+}

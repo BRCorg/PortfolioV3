@@ -1,0 +1,201 @@
+// ==========================================
+// Modal
+// ==========================================
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.6);
+  display: none;
+  @include flex-center;
+  z-index: 1000;
+  
+  &.show {
+    display: flex;
+  }
+
+  .modal-content {
+    background: $white;
+    padding: $spacing-xl;
+    border-radius: $border-radius-xl;
+    animation: fadeIn 0.3s ease;
+    max-height: 90vh;
+    overflow-y: auto;
+    max-width: 37.5rem;
+    width: 90%;
+    box-shadow: 0 1.25rem 3.75rem rgba(0, 0, 0, 0.3);
+    position: relative;
+
+    // Dark mode
+    .dark & {
+      background: #2a2a2a;
+      color: $white;
+      box-shadow: 0 1.25rem 3.75rem rgba(0, 0, 0, 0.6);
+    }
+    
+    h2 {
+      color: $primary-dark;
+      margin-bottom: $spacing-lg;
+      
+      .dark & {
+        color: $white;
+      }
+    }
+    
+    label {
+      color: #333;
+      font-weight: 600;
+      margin-bottom: $spacing-xs;
+      display: block;
+      
+      .dark & {
+        color: #e0e0e0;
+      }
+    }
+    
+    input[type="text"],
+    input[type="email"],
+    input[type="file"],
+    textarea,
+    select {
+      width: 100%;
+      padding: $spacing-sm;
+      border: 0.0625rem solid #ddd;
+      border-radius: $border-radius-md;
+      margin-bottom: $spacing-md;
+      font-family: $font-primary;
+      
+      .dark & {
+        background: #333;
+        border-color: #555;
+        color: $white;
+        
+        &::placeholder {
+          color: #999;
+        }
+      }
+      
+      &:focus {
+        outline: none;
+        border-color: $primary-color;
+        box-shadow: 0 0 0 0.1875rem rgba($primary-color, 0.1);
+      }
+    }
+    
+    textarea {
+      min-height: 6.25rem;
+      resize: vertical;
+    }
+    
+    .checkbox-group {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(9.375rem, 1fr));
+      gap: $spacing-sm;
+      margin-bottom: $spacing-md;
+      
+      label {
+        display: flex;
+        align-items: center;
+        gap: $spacing-xs;
+        font-weight: 400;
+        cursor: pointer;
+        
+        input[type="checkbox"] {
+          width: auto;
+          margin: 0;
+        }
+      }
+    }
+    
+    .modal-actions {
+      display: flex;
+      gap: $spacing-md;
+      justify-content: flex-end;
+      margin-top: $spacing-lg;
+      
+      button {
+        padding: $spacing-sm $spacing-lg;
+        border-radius: $border-radius-md;
+        border: none;
+        cursor: pointer;
+        font-weight: 600;
+        @include transition(all);
+        
+        &.submit-btn {
+          background-color: $primary-color;
+          color: $white;
+
+          &:hover {
+            background-color: $primary-dark;
+            transform: translateY(-0.125rem);
+            box-shadow: 0 0.25rem 0.75rem rgba($primary-color, 0.3);
+          }
+        }
+        
+        &.cancel-btn {
+          background-color: #e0e0e0;
+          color: #333;
+          
+          .dark & {
+            background-color: #444;
+            color: #e0e0e0;
+          }
+
+          &:hover {
+            background-color: #d0d0d0;
+            
+            .dark & {
+              background-color: #555;
+            }
+          }
+        }
+      }
+    }
+    
+    .close-modal {
+      position: absolute;
+      top: $spacing-md;
+      right: $spacing-md;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #666;
+      width: 2rem;
+      height: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      @include transition(all);
+      
+      .dark & {
+        color: #aaa;
+      }
+      
+      &:hover {
+        background: rgba(0, 0, 0, 0.1);
+        color: #333;
+        
+        .dark & {
+          background: rgba(255, 255, 255, 0.1);
+          color: $white;
+        }
+      }
+    }
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

@@ -1,0 +1,185 @@
+<section class="contacts-list">
+    <header class="dashboard-header">
+        <div class="header-content">
+            <h1><i class="fa-solid fa-envelope"></i> Messages reçus</h1>
+            <div class="header-actions">
+                <span class="message-count"><?= count($messages) ?> message<?= count($messages) !== 1 ? 's' : '' ?></span>
+                <a href="<?= $_ENV['ADMIN_SECRET_URL'] ?>/dashboard" class="btn btn-secondary">← Retour</a>
+            </div>
+        </div>
+    </header>
+
+    <?php if (empty($messages)): ?>
+        <div class="empty-state">
+            <div class="empty-icon">
+                <i class="fa-solid fa-inbox"></i>
+            </div>
+            <h3>Aucun message</h3>
+            <p>Votre boîte de réception est vide pour le moment.</p>
+        </div>
+    <?php else: ?>
+        <div class="messages-grid">
+            <?php foreach ($messages as $message): ?>
+                <article class="message-card <?= $message['is_read'] ? 'read' : 'unread' ?>">
+                    <div class="card-header">
+                        <div class="sender-info">
+                            <div class="sender-avatar">
+                                <?= strtoupper(substr(trim($message['name']), 0, 1)) ?>
+                            </div>
+                            <div class="sender-details">
+                                <h3 class="sender-name"><?= htmlspecialchars($message['name']) ?></h3>
+                                <span class="message-time">
+                                    <i class="fa-regular fa-clock"></i>
+                                    <?= date('d/m/Y à H:i', strtotime($message['created_at'])) ?>
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div class="card-badges">
+                            <?php if (!$message['is_read']): ?>
+                                <span class="badge badge-new">
+                                    <i class="fa-solid fa-circle"></i> Nouveau
+                                </span>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+
+                    <?php if (!empty($message['subject'])): ?>
+                        <div class="message-subject">
+                            <i class="fa-solid fa-tag"></i>
+                            <span><?= htmlspecialchars($message['subject']) ?></span>
+                        </div>
+                    <?php endif; ?>
+
+                    <div class="message-preview">
+                        <p><?= htmlspecialchars(substr($message['message'], 0, 200)) ?><?= strlen($message['message']) > 200 ? '...' : '' ?></p>
+                    </div>
+
+                    <div class="card-footer">
+                        <div class="message-actions">
+                            <a href="mailto:<?= htmlspecialchars($message['email']) ?>?subject=Re: <?= urlencode($message['subject'] ?? 'Votre message') ?>" 
+                               class="btn btn-sm btn-primary" title="Répondre par email">
+                                <i class="fa-solid fa-reply"></i>
+                                Répondre
+                            </a>
+
+                            <?php if (!$message['is_read']): ?>
+                                <button class="btn btn-sm btn-mark-read" data-id="<?= $message['id'] ?>" title="Marquer comme lu">
+                                    <i class="fa-solid fa-check"></i>
+                                </button>
+                            <?php endif; ?>
+
+                            <button class="btn btn-sm btn-delete" data-id="<?= $message['id'] ?>" title="Supprimer">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </div>
+                        
+                        <button class="btn-expand" data-target="message-<?= $message['id'] ?>">
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </button>
+                    </div>
+
+                    <div class="message-full" id="message-<?= $message['id'] ?>" style="display: none;">
+                        <div class="message-content">
+                            <h4>Message complet :</h4>
+                            <div class="message-body">
+                                <?= nl2br(htmlspecialchars($message['message'])) ?>
+                            </div>
+                            <div class="contact-details">
+                                <strong>Email :</strong> 
+                                <a href="mailto:<?= htmlspecialchars($message['email']) ?>"><?= htmlspecialchars($message['email']) ?></a>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            <?php endforeach; ?>
+        </div>
+</section>
+
+<script>
+// Marquer comme lu
+document.querySelectorAll('.btn-mark-read').forEach(btn => {
+    btn.addEventListener('click', async function() {
+        const messageId = this.dataset.id;
+        const response = await fetch('<?= $_ENV['ADMIN_SECRET_URL'] ?>/contacts/' + messageId + '/mark-read', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }
+        });
+
+        const result = await response.json();
+        if (result.success) {
+            const card = this.closest('.message-card');
+            card.classList.remove('unread');
+            card.classList.add('read');
+            card.querySelector('.badge-new').remove();
+            this.remove();
+            
+            // Mettre à jour le compteur
+            const countEl = document.querySelector('.message-count');
+            if (countEl) {
+                const currentCount = parseInt(countEl.textContent.match(/\d+/)[0]);
+                countEl.textContent = `${currentCount} message${currentCount !== 1 ? 's' : ''}`;
+            }
+        } else {
+            alert(result.message);
+        }
+    });
+});
+
+// Supprimer un message
+document.querySelectorAll('.btn-delete').forEach(btn => {
+    btn.addEventListener('click', async function() {
+        if (!confirm('Êtes-vous sûr de vouloir supprimer ce message ?')) return;
+
+        const messageId = this.dataset.id;
+        const response = await fetch('<?= $_ENV['ADMIN_SECRET_URL'] ?>/contacts/' + messageId + '/delete', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }
+        });
+
+        const result = await response.json();
+        if (result.success) {
+            this.closest('.message-card').remove();
+            
+            // Mettre à jour le compteur et vérifier s'il reste des messages
+            const remainingMessages = document.querySelectorAll('.message-card').length;
+            const countEl = document.querySelector('.message-count');
+            if (countEl) {
+                countEl.textContent = `${remainingMessages} message${remainingMessages !== 1 ? 's' : ''}`;
+            }
+            
+            // Afficher l'état vide si plus de messages
+            if (remainingMessages === 0) {
+                document.querySelector('.messages-grid').innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon"><i class="fa-solid fa-inbox"></i></div>
+                        <h3>Aucun message</h3>
+                        <p>Votre boîte de réception est vide pour le moment.</p>
+                    </div>
+                `;
+            }
+        } else {
+            alert(result.message);
+        }
+    });
+});
+
+// Expand/Collapse message
+document.querySelectorAll('.btn-expand').forEach(btn => {
+    btn.addEventListener('click', function() {
+        const targetId = this.dataset.target;
+        const messageContent = document.getElementById(targetId);
+        const icon = this.querySelector('i');
+        
+        if (messageContent.style.display === 'none') {
+            messageContent.style.display = 'block';
+            icon.classList.remove('fa-chevron-down');
+            icon.classList.add('fa-chevron-up');
+        } else {
+            messageContent.style.display = 'none';
+            icon.classList.remove('fa-chevron-up');
+            icon.classList.add('fa-chevron-down');
+        }
+    });
+});
+</script>

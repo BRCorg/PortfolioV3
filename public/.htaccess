@@ -1,0 +1,67 @@
+# ==========================================
+# .htaccess pour le dossier public/
+# ==========================================
+
+# Activer le moteur de réécriture
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # Forcer HTTPS en production (décommenter en production)
+    # RewriteCond %{HTTPS} off
+    # RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+    
+    # Forcer www (ou non-www selon préférence)
+    # RewriteCond %{HTTP_HOST} !^www\. [NC]
+    # RewriteRule ^(.*)$ https://www.%{HTTP_HOST}/$1 [R=301,L]
+
+    # Rediriger toutes les requêtes vers index.php sauf fichiers existants
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ index.php [QSA,L]
+</IfModule>
+
+# Headers de sécurité
+<IfModule mod_headers.c>
+    # Protection XSS
+    Header set X-XSS-Protection "1; mode=block"
+
+    # Empêcher le MIME sniffing
+    Header set X-Content-Type-Options "nosniff"
+
+    # Clickjacking protection
+    Header set X-Frame-Options "SAMEORIGIN"
+
+    # Politique de référent
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+
+    # HTTPS strict (décommenter en production avec HTTPS)
+    # Header set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+</IfModule>
+
+# Compression Gzip
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/json
+</IfModule>
+
+# Cache des fichiers statiques
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType image/jpg "access plus 1 year"
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/gif "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/svg+xml "access plus 1 year"
+    ExpiresByType image/webp "access plus 1 year"
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+    ExpiresByType application/pdf "access plus 1 month"
+</IfModule>
+
+# Limites d'upload PHP
+php_value upload_max_filesize 10M
+php_value post_max_size 50M
+php_value max_execution_time 60
+
+# Désactiver l'affichage des erreurs en production
+# php_flag display_errors off
+# php_flag display_startup_errors off

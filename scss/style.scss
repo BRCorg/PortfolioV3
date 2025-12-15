@@ -1,0 +1,42 @@
+// ==========================================
+// FICHIER PRINCIPAL SCSS
+// Portfolio V2
+// ==========================================
+
+// 1. UTILS - Variables, mixins, fonctions
+@import 'utils/variables';
+@import 'utils/mixins';
+
+// 2. BASE - Reset, typographie, éléments de base
+@import 'base/fonts';
+@import 'base/reset';
+
+// 3. COMPONENTS - Composants réutilisables
+@import 'components/loader';
+@import 'components/nav';
+@import 'components/footer';
+@import 'components/modal';
+@import 'components/buttons';
+@import 'components/cards';
+@import 'components/testimonials';
+@import 'components/timeline';
+@import 'components/projects-slider';
+@import 'components/contacts';
+@import 'components/admin-lists';
+@import 'components/animations';
+
+// 4. PAGES - Styles spécifiques aux pages
+@import 'pages/home';
+@import 'pages/portfolio';
+@import 'pages/projects';
+@import 'pages/project-details';
+@import 'pages/contact';
+@import 'pages/login';
+@import 'pages/dashboard';
+@import 'pages/404';
+
+// 5. VENDORS - Bibliothèques tierces (si nécessaire)
+// @import 'vendors/nom-de-la-lib';
+
+// 6. RESPONSIVE - Overrides qui doivent surclasser les composants
+@import 'utils/responsive';

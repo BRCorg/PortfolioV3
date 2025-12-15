@@ -1,0 +1,307 @@
+// ==========================================
+// Loader Animation
+// ==========================================
+@import '../utils/variables';
+
+.page-loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, $primary-color 0%, $primary-darker 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+
+  // Dark mode
+  .dark & {
+    background: linear-gradient(135deg, $primary-dark 0%, darken($primary-dark, 10%) 100%);
+  }
+
+  &.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+}
+
+.loader-content {
+  text-align: center;
+  position: relative;
+}
+
+.logo-container {
+  position: relative;
+  width: 9.375rem;
+  height: 9.375rem;
+  margin: 0 auto 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-gb {
+  font-size: 5rem;
+  font-weight: 900;
+  color: $white;
+  font-family: $font-primary;
+  position: relative;
+  z-index: 2;
+  animation: logoFloat 2s ease-in-out infinite, logoPulse 1.5s ease-in-out infinite;
+  text-shadow: 0 0 1.875rem rgba($accent-color, 0.8),
+               0 0 3.75rem rgba($accent-color, 0.5),
+               0 0.3125rem 0.9375rem rgba(0, 0, 0, 0.3);
+  letter-spacing: -0.3125rem;
+}
+
+// Cercles animés autour du logo
+.loader-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 0.1875rem solid transparent;
+  border-top-color: $accent-color;
+  border-right-color: $accent-color;
+  animation: spin 1.5s linear infinite;
+
+  &:nth-child(1) {
+    width: 7.5rem;
+    height: 7.5rem;
+    top: 0.9375rem;
+    left: 0.9375rem;
+    animation-duration: 1.5s;
+    border-top-color: rgba($accent-color, 0.8);
+    border-right-color: rgba($accent-color, 0.4);
+  }
+
+  &:nth-child(2) {
+    width: 8.75rem;
+    height: 8.75rem;
+    top: 0.3125rem;
+    left: 0.3125rem;
+    animation-duration: 2s;
+    animation-direction: reverse;
+    border-top-color: rgba($white, 0.6);
+    border-right-color: rgba($white, 0.3);
+  }
+
+  &:nth-child(3) {
+    width: 6.25rem;
+    height: 6.25rem;
+    top: 1.5625rem;
+    left: 1.5625rem;
+    animation-duration: 1.2s;
+    border-top-color: rgba($accent-color, 0.6);
+    border-right-color: rgba($accent-color, 0.2);
+  }
+}
+
+// Particules flottantes
+.loader-particles {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+
+.particle {
+  position: absolute;
+  width: 0.25rem;
+  height: 0.25rem;
+  background: $white;
+  border-radius: 50%;
+  opacity: 0;
+  animation: particleFloat 3s ease-in-out infinite;
+  box-shadow: 0 0 0.625rem rgba($white, 0.8);
+
+  @for $i from 1 through 12 {
+    &:nth-child(#{$i}) {
+      $angle: ($i - 1) * 30deg;
+      top: 50%;
+      left: 50%;
+      animation-delay: #{$i * 0.1}s;
+
+      @keyframes particleFloat#{$i} {
+        0% {
+          transform: translate(-50%, -50%) rotate($angle) translateX(0) scale(0);
+          opacity: 0;
+        }
+        50% {
+          opacity: 1;
+        }
+        100% {
+          transform: translate(-50%, -50%) rotate($angle) translateX(5rem) scale(1);
+          opacity: 0;
+        }
+      }
+
+      animation-name: particleFloat#{$i};
+    }
+  }
+}
+
+// Texte de chargement
+.loader-text {
+  color: $white;
+  font-size: 1.2rem;
+  font-weight: 600;
+  letter-spacing: 0.1875rem;
+  text-transform: uppercase;
+  animation: textPulse 1.5s ease-in-out infinite;
+  text-shadow: 0 0.125rem 0.625rem rgba(0, 0, 0, 0.3);
+  margin-top: 1rem;
+
+  &::after {
+    content: '';
+    animation: dots 1.5s steps(4, end) infinite;
+  }
+}
+
+// Barre de progression
+.loader-progress {
+  width: 12.5rem;
+  height: 0.1875rem;
+  background: rgba($white, 0.2);
+  border-radius: 0.625rem;
+  margin: 1.5rem auto 0;
+  overflow: hidden;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg,
+      transparent,
+      $accent-color,
+      $white,
+      $accent-color,
+      transparent
+    );
+    animation: progressSlide 2s linear infinite;
+  }
+}
+
+// Animations
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes logoFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-0.625rem);
+  }
+}
+
+@keyframes logoPulse {
+  0%, 100% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  50% {
+    transform: scale(1.05);
+    filter: brightness(1.2);
+  }
+}
+
+@keyframes particleFloat {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) translateY(-5rem) scale(1);
+    opacity: 0;
+  }
+}
+
+@keyframes textPulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+@keyframes dots {
+  0%, 20% {
+    content: '.';
+  }
+  40% {
+    content: '..';
+  }
+  60%, 100% {
+    content: '...';
+  }
+}
+
+@keyframes progressSlide {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .logo-container {
+    width: 7.5rem;
+    height: 7.5rem;
+  }
+
+  .logo-gb {
+    font-size: 4rem;
+  }
+
+  .loader-ring {
+    &:nth-child(1) {
+      width: 6.25rem;
+      height: 6.25rem;
+      top: 0.625rem;
+      left: 0.625rem;
+    }
+
+    &:nth-child(2) {
+      width: 7.1875rem;
+      height: 7.1875rem;
+      top: 0.1563rem;
+      left: 0.1563rem;
+    }
+
+    &:nth-child(3) {
+      width: 5.3125rem;
+      height: 5.3125rem;
+      top: 1.0938rem;
+      left: 1.0938rem;
+    }
+  }
+
+  .loader-text {
+    font-size: 1rem;
+    letter-spacing: 0.125rem;
+  }
+
+  .loader-progress {
+    width: 9.375rem;
+  }
+}

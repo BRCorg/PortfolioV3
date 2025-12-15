@@ -1,0 +1,411 @@
+<section class="dashboard">
+    <!-- Header -->
+    <header class="dashboard-header">
+        <h1><i class="fas fa-tachometer-alt"></i> Dashboard</h1>
+        <div class="header-actions">
+            <?php if (!empty($_SESSION['user']['two_factor_enabled'])): ?>
+                <span class="badge badge-success">
+                    <i class="fas fa-shield-alt"></i> 2FA actif
+                </span>
+            <?php endif; ?>
+            
+            <a href="/" class="dashboard-btn btn-secondary">
+                <i class="fas fa-home"></i> Retour au site
+            </a>
+            <a href="<?= $_ENV['ADMIN_SECRET_URL'] ?? '/admin' ?>/logout" class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i> Déconnexion
+            </a>
+        </div>
+    </header>
+
+    <!-- Stats Grid -->
+    <section class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fas fa-code"></i>
+            </div>
+            <div class="stat-value"><?= $skillsCount ?? 0 ?></div>
+            <div class="stat-label">Skills</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fas fa-project-diagram"></i>
+            </div>
+            <div class="stat-value"><?= $projectsCount ?? 0 ?></div>
+            <div class="stat-label">Projets</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fas fa-folder"></i>
+            </div>
+            <div class="stat-value"><?= $categoriesCount ?? 0 ?></div>
+            <div class="stat-label">Catégories</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fas fa-envelope"></i>
+            </div>
+            <div class="stat-value"><?= $contactsCount ?? 0 ?></div>
+            <div class="stat-label">Messages</div>
+        </div>
+    </section>
+
+    <!-- Quick Actions -->
+    <section class="items">
+        <h2><i class="fas fa-bolt"></i> Actions rapides</h2>
+        <div class="cards">
+            <!-- Skills Card -->
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-code"></i>
+                </div>
+                <h3 style="margin: 1rem 0; color: #314473;">Skills</h3>
+                <div style="display: flex; gap: 0.5rem; margin-top: auto;">
+                    <button id="openSkillModal" class="dashboard-btn btn-primary" style="flex: 1;">
+                        <i class="fas fa-plus"></i> Ajouter
+                    </button>
+                    <a href="<?= $_ENV['ADMIN_SECRET_URL'] ?? '/admin' ?>/skills" class="dashboard-btn btn-secondary" style="flex: 1;">
+                        <i class="fas fa-list"></i> Liste
+                    </a>
+                </div>
+            </div>
+
+            <!-- Projects Card -->
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-project-diagram"></i>
+                </div>
+                <h3 style="margin: 1rem 0; color: #314473;">Projets</h3>
+                <div style="display: flex; gap: 0.5rem; margin-top: auto;">
+                    <button id="openProjectModal" class="dashboard-btn btn-primary" style="flex: 1;">
+                        <i class="fas fa-plus"></i> Ajouter
+                    </button>
+                    <a href="<?= $_ENV['ADMIN_SECRET_URL'] ?? '/admin' ?>/projects" class="dashboard-btn btn-secondary" style="flex: 1;">
+                        <i class="fas fa-list"></i> Liste
+                    </a>
+                </div>
+            </div>
+
+            <!-- Categories Card -->
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-folder"></i>
+                </div>
+                <h3 style="margin: 1rem 0; color: #314473;">Catégories</h3>
+                <div style="display: flex; gap: 0.5rem; margin-top: auto;">
+                    <button id="openCategoryModal" class="dashboard-btn btn-primary" style="flex: 1;">
+                        <i class="fas fa-plus"></i> Ajouter
+                    </button>
+                    <a href="<?= $_ENV['ADMIN_SECRET_URL'] ?? '/admin' ?>/categories" class="dashboard-btn btn-secondary" style="flex: 1;">
+                        <i class="fas fa-list"></i> Liste
+                    </a>
+                </div>
+            </div>
+
+            <!-- Sécurité 2FA Card -->
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h3 style="margin: 1rem 0; color: #314473;">Sécurité 2FA</h3>
+                <?php if (!empty($_SESSION['user']['two_factor_enabled'])): ?>
+                    <p style="color: #4caf50; font-weight: 600; margin: 0.5rem 0;">
+                        <i class="fas fa-check-circle"></i> Authentification activée
+                    </p>
+                    <button onclick="disable2FA()" class="dashboard-btn btn-danger" style="width: 100%;">
+                        <i class="fas fa-times"></i> Désactiver le 2FA
+                    </button>
+                <?php else: ?>
+                    <p style="color: #999; margin: 0.5rem 0;">Protection supplémentaire</p>
+                    <a href="<?= $_ENV['ADMIN_SECRET_URL'] ?? '/admin' ?>/2fa/setup" class="dashboard-btn btn-success" style="width: 100%;">
+                        <i class="fas fa-shield-alt"></i> Activer le 2FA
+                    </a>
+                <?php endif; ?>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal Skills -->
+    <div id="skillModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-code"></i> Ajouter une skill</h3>
+                <button class="close"><i class="fas fa-times"></i></button>
+            </div>
+
+            <form id="createSkillForm">
+                <div class="form-group">
+                    <label for="skillName">
+                        <i class="fas fa-tag"></i> Nom de la skill <span class="required">*</span>
+                    </label>
+                    <input type="text"
+                           id="skillName"
+                           name="name"
+                           placeholder="Ex: PHP, JavaScript, etc."
+                           required>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="close-modal">Annuler</button>
+                    <button type="submit">
+                        <i class="fas fa-plus"></i> Ajouter
+                    </button>
+                </div>
+            </form>
+
+            <div id="skillMessage"></div>
+        </div>
+    </div>
+
+    <!-- Modal Projects -->
+    <div id="projectModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-project-diagram"></i> Ajouter un projet</h3>
+                <button class="close"><i class="fas fa-times"></i></button>
+            </div>
+
+            <form id="createProjectForm" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="projectTitle">
+                        <i class="fas fa-heading"></i> Titre <span class="required">*</span>
+                    </label>
+                    <input type="text"
+                           id="projectTitle"
+                           name="title"
+                           placeholder="Titre du projet"
+                           required>
+                </div>
+
+                <div class="form-group">
+                    <label for="projectDescription">
+                        <i class="fas fa-align-left"></i> Description courte (page d'accueil)
+                    </label>
+                    <textarea id="projectDescription"
+                              name="description"
+                              placeholder="Description courte pour la liste des projets (200 caractères max recommandé)..."
+                              maxlength="250"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="projectDescriptionLong">
+                        <i class="fas fa-file-alt"></i> Description longue (page détails)
+                    </label>
+                    <textarea id="projectDescriptionLong"
+                              name="description_long"
+                              placeholder="Description complète du projet pour la page de détails..."
+                              rows="6"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="projectCategory">
+                        <i class="fas fa-folder"></i> Catégorie <span class="required">*</span>
+                    </label>
+                    <select id="projectCategory" name="category_id" required>
+                        <option value="">-- Choisir une catégorie --</option>
+                        <?php foreach ($categories as $cat): ?>
+                            <option value="<?= $cat['id'] ?>"><?= htmlspecialchars($cat['name']) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="projectSkills">
+                        <i class="fas fa-code"></i> Compétences utilisées
+                    </label>
+                    <div class="skills-selector">
+                        <?php foreach ($skills as $skill): ?>
+                            <label class="skill-checkbox">
+                                <input type="checkbox"
+                                       name="skill_ids[]"
+                                       value="<?= $skill['id'] ?>">
+                                <span><?= htmlspecialchars($skill['name']) ?></span>
+                            </label>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="projectImage">
+                        <i class="fas fa-image"></i> Image principale <span class="required">*</span>
+                    </label>
+                    <div class="file-input-wrapper">
+                        <input type="file"
+                               id="projectImage"
+                               name="image"
+                               accept="image/*"
+                               required>
+                        <div class="file-input-label">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <span>Choisir l'image principale (max 5MB)</span>
+                        </div>
+                    </div>
+                    <small style="color: #666; margin-top: 0.5rem; display: block;">
+                        Cette image sera affichée dans la liste des projets
+                    </small>
+                </div>
+
+                <div class="form-group">
+                    <label for="projectGallery">
+                        <i class="fas fa-images"></i> Images du carousel (facultatif)
+                    </label>
+                    <div class="file-input-wrapper">
+                        <input type="file"
+                               id="projectGallery"
+                               name="gallery[]"
+                               accept="image/*"
+                               multiple>
+                        <div class="file-input-label">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <span>Ajouter des images pour le carousel (max 5MB chacune)</span>
+                        </div>
+                    </div>
+                    <small style="color: #666; margin-top: 0.5rem; display: block;">
+                        Ces images seront affichées dans un carousel sur la page détails du projet
+                    </small>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="close-modal">Annuler</button>
+                    <button type="submit">
+                        <i class="fas fa-plus"></i> Ajouter
+                    </button>
+                </div>
+            </form>
+
+            <div id="projectMessage"></div>
+        </div>
+    </div>
+
+    <!-- Modal Categories -->
+    <div id="categoryModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-folder"></i> Ajouter une catégorie</h3>
+                <button class="close"><i class="fas fa-times"></i></button>
+            </div>
+
+            <form id="createCategoryForm">
+                <div class="form-group">
+                    <label for="categoryName">
+                        <i class="fas fa-tag"></i> Nom de la catégorie <span class="required">*</span>
+                    </label>
+                    <input type="text"
+                           id="categoryName"
+                           name="name"
+                           placeholder="Ex: Web, Mobile, etc."
+                           required>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="close-modal">Annuler</button>
+                    <button type="submit">
+                        <i class="fas fa-plus"></i> Ajouter
+                    </button>
+                </div>
+            </form>
+
+            <div id="categoryMessage"></div>
+        </div>
+    </div>
+
+</section>
+
+<!-- Messages récents -->
+<section class="recent-messages">
+    <header class="section-header">
+        <h2><i class="fas fa-envelope"></i> Messages récents</h2>
+        <span class="message-count"><?= count($recentMessages) ?> message<?= count($recentMessages) !== 1 ? 's' : '' ?></span>
+    </header>
+
+    <?php if (empty($recentMessages)): ?>
+        <div class="empty-state">
+            <i class="fas fa-inbox"></i>
+            <p>Aucun message pour le moment</p>
+        </div>
+    <?php else: ?>
+        <div class="messages-container">
+            <?php foreach ($recentMessages as $message): ?>
+                <article class="message-item <?= $message['is_read'] ? 'read' : 'unread' ?>" data-message-id="<?= $message['id'] ?>">>
+                    <div class="message-header">
+                        <div class="sender-info">
+                            <div class="sender-avatar">
+                                <?= strtoupper(substr(trim($message['name'] ?? 'A'), 0, 1)) ?>
+                            </div>
+                            <div class="sender-details">
+                                <h4><?= htmlspecialchars($message['name'] ?? 'Anonyme') ?></h4>
+                                <span class="sender-email"><?= htmlspecialchars($message['email']) ?></span>
+                                <?php if (!empty($message['subject'])): ?>
+                                    <div class="message-subject" style="color: #314473; font-weight: 500; font-size: 0.9rem; margin-top: 2px;">
+                                        <?= htmlspecialchars($message['subject']) ?>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                        <div class="message-meta">
+                            <span class="message-date"><?= date('d/m/Y à H:i', strtotime($message['created_at'])) ?></span>
+                            <?php if (!$message['is_read']): ?>
+                                <span class="unread-badge">Nouveau</span>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                    <div class="message-preview">
+                        <?= htmlspecialchars(mb_substr($message['message'], 0, 120)) ?><?= strlen($message['message']) > 120 ? '...' : '' ?>
+                    </div>
+                    <div class="message-actions">
+                        <?php if (!$message['is_read']): ?>
+                            <button class="btn-action" onclick="markAsRead(<?= $message['id'] ?>)">
+                                <i class="fas fa-check"></i> Marquer comme lu
+                            </button>
+                        <?php else: ?>
+                            <span class="read-indicator" style="color: #4CAF50; font-size: 0.85rem; font-weight: 500;">
+                                <i class="fas fa-check-circle"></i> Lu
+                            </span>
+                        <?php endif; ?>
+                        <button class="btn-action danger" onclick="deleteMessage(<?= $message['id'] ?>)">
+                            <i class="fas fa-trash"></i> Supprimer
+                        </button>
+                    </div>
+                </article>
+            <?php endforeach; ?>
+        </div>
+    <?php endif; ?>
+</section>
+
+<script>
+// Fonction pour désactiver le 2FA
+function disable2FA() {
+    const password = prompt('⚠️ Pour désactiver le 2FA, veuillez entrer votre mot de passe :');
+    
+    if (!password) {
+        return;
+    }
+    
+    if (!confirm('Êtes-vous sûr de vouloir désactiver le 2FA ? Votre compte sera moins sécurisé.')) {
+        return;
+    }
+    
+    // Créer un formulaire pour envoyer la requête
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = '<?= $_ENV['ADMIN_SECRET_URL'] ?? '/admin' ?>/2fa/disable';
+    
+    const csrfInput = document.createElement('input');
+    csrfInput.type = 'hidden';
+    csrfInput.name = 'csrf_token';
+    csrfInput.value = '<?= \App\Middleware\AuthMiddleware::getCsrfToken() ?>';
+    
+    const passwordInput = document.createElement('input');
+    passwordInput.type = 'hidden';
+    passwordInput.name = 'password';
+    passwordInput.value = password;
+    
+    form.appendChild(csrfInput);
+    form.appendChild(passwordInput);
+    document.body.appendChild(form);
+    form.submit();
+}
+</script>

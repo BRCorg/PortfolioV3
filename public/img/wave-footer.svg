@@ -1,0 +1,21 @@
+<svg viewBox="0 0 1440 120" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+  <defs>
+    <linearGradient id="waveGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#314473;stop-opacity:0.9" />
+      <stop offset="50%" style="stop-color:#3d5a8c;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#314473;stop-opacity:0.9" />
+    </linearGradient>
+  </defs>
+  <!-- Vague principale -->
+  <path fill="url(#waveGradient)"
+        d="M0,60 C240,100 480,20 720,60 C960,100 1200,20 1440,60 L1440,120 L0,120 Z"
+        opacity="0.7" />
+  <!-- Vague secondaire -->
+  <path fill="url(#waveGradient)"
+        d="M0,80 C360,40 720,100 1080,80 C1260,70 1440,90 1440,80 L1440,120 L0,120 Z"
+        opacity="0.5" />
+  <!-- Vague de fond -->
+  <path fill="url(#waveGradient)"
+        d="M0,90 C240,70 480,110 720,90 C960,70 1200,110 1440,90 L1440,120 L0,120 Z"
+        opacity="0.3" />
+</svg>

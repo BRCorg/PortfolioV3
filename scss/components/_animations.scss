@@ -1,0 +1,39 @@
+// ==========================================
+// ANIMATIONS SECTIONS AU SCROLL
+// ==========================================
+
+.section-animate {
+  opacity: 0;
+  transform: translateY(1.875rem);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+  
+  &.section-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Animation de la barre décorative sous les titres
+h2::after {
+  transform: scaleX(0);
+  transition: transform 0.8s ease 0.3s;
+}
+
+.section-visible h2::after,
+h2.section-visible::after {
+  transform: scaleX(1);
+}
+
+// Respecter les préférences d'accessibilité
+@media (prefers-reduced-motion: reduce) {
+  .section-animate {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  
+  h2::after {
+    transform: scaleX(1);
+    transition: none;
+  }
+}

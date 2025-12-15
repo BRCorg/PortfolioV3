@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css">
+    <title>Admin - Guven Berancan Portfolio</title>
+    <link rel="stylesheet" href="/css/style.css?v=<?= time() ?>">
+    <script>
+        // Injecter l'URL admin et le token CSRF pour JavaScript
+        window.ADMIN_URL = '<?= $_ENV['ADMIN_SECRET_URL'] ?? '/admin' ?>';
+        window.CSRF_TOKEN = '<?= \App\Middleware\AuthMiddleware::getCsrfToken() ?>';
+    </script>
+</head>
+<body>
+    <section>
+        <div>
+            <?php include $template.".phtml" ?>
+        </div>
+    </section>
+
+    <script src="/js/script.js" defer></script>
+
+    <?php if (strpos($template, 'dashboard') !== false || strpos($template, 'list') !== false || strpos($template, 'edit') !== false): ?>
+        <script src="/js/dashboard.js" defer></script>
+        <script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js" defer></script>
+    <?php endif; ?>
+</body>
+</html>

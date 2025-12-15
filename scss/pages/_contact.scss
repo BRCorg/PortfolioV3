@@ -1,0 +1,354 @@
+// ==========================================
+// Page Contact
+// ==========================================
+
+.contact-section {
+  margin-top: 2.5rem;
+  padding: 4rem $spacing-xl;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  h2 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--text-color);
+    text-align: center;
+    margin-bottom: $spacing-md;
+  }
+
+  .contact-subtitle {
+    text-align: center;
+    font-size: 1rem;
+    color: var(--text-color);
+    opacity: 0.7;
+    margin-bottom: $spacing-xxl;
+    max-width: 37.5rem;
+  }
+
+  .contact-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: $spacing-xl;
+  }
+
+  .contact-left,
+  .contact-right {
+    flex: 1 1 25rem;
+    padding: $spacing-md;
+  }
+
+  .contact-left {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-xl;
+
+    .contact-intro {
+      margin-bottom: $spacing-lg;
+      text-align: center;
+
+      h3 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--text-color);
+        margin-bottom: 2rem;
+      }
+
+      p {
+        font-size: 1rem;
+        color: var(--text-color);
+        opacity: 0.8;
+        line-height: 1.6;
+      }
+    }
+
+    .contact-options {
+      display: flex;
+      flex-direction: column;
+      gap: $spacing-md;
+    }
+
+    .contact-option {
+      background: var(--nav-bg);
+      border-radius: $border-radius-lg;
+      padding: $spacing-lg;
+      color: var(--text-color);
+      display: flex;
+      align-items: center;
+      gap: $spacing-md;
+      flex-direction: column;
+      @include transition;
+
+      i {
+        font-size: 2rem;
+        color: var(--button-icon-color);
+      }
+
+      &:hover {
+        @include hover-lift;
+        box-shadow: 0 0.25rem 0.9375rem rgba(0, 0, 0, 0.2);
+      }
+
+      .info {
+        text-align: center;
+
+        h4 {
+          font-size: 1.2rem;
+          margin-bottom: $spacing-xs;
+        }
+
+        a {
+          color: var(--link-color);
+          font-size: 0.95rem;
+          text-decoration: none;
+
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+    }
+  }
+
+  .contact-right {
+    .contact-intro {
+      margin-bottom: $spacing-lg;
+      text-align: center;
+
+      h3 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--text-color);
+        margin-bottom: 2rem;
+      }
+
+      p {
+        font-size: 1rem;
+        color: var(--text-color);
+        opacity: 0.8;
+        line-height: 1.6;
+      }
+    }
+
+    .contact-form {
+      margin-top: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: $spacing-lg;
+
+      .form-group {
+        display: flex;
+        flex-direction: column;
+
+        label {
+          display: block;
+          font-weight: 600;
+          margin-bottom: $spacing-sm;
+          color: var(--text-color);
+          
+          .required {
+            color: $danger-color;
+            margin-left: 0.25rem;
+            font-weight: 700;
+          }
+        }
+
+        input,
+        textarea {
+          width: 100%;
+          padding: $spacing-md;
+          border-radius: $border-radius-lg;
+          border: 0.125rem solid rgba(0, 0, 0, 0.1);
+          background: var(--nav-bg);
+          color: var(--text-color);
+          resize: none;
+          font-size: 1rem;
+          font-family: inherit;
+          @include transition(border-color);
+
+          .dark & {
+            border-color: rgba(255, 255, 255, 0.1);
+          }
+
+          &:focus {
+            outline: none;
+            border-color: $primary-color;
+            box-shadow: 0 0 0 0.1875rem rgba($primary-color, 0.1);
+          }
+
+          &::placeholder {
+            color: var(--text-color);
+            opacity: 0.5;
+          }
+        }
+      }
+
+      .submit-btn {
+        align-self: flex-start;
+        background: $primary-color;
+        color: $white;
+        padding: 0.9rem 2.5rem;
+        border: none;
+        border-radius: $border-radius-lg;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: $spacing-sm;
+        @include transition;
+
+        i {
+          font-size: 1rem;
+        }
+
+        &:hover {
+          background: $primary-dark;
+          box-shadow: 0 0.25rem 0.9375rem rgba($primary-color, 0.3);
+          transform: translateY(-0.125rem);
+        }
+
+        &:active {
+          transform: translateY(0);
+        }
+      }
+      
+      .form-disclaimer {
+        margin-top: $spacing-md;
+        
+        .required-note {
+          font-size: 0.9rem;
+          color: var(--text-color);
+          margin-bottom: $spacing-sm;
+          font-weight: 500;
+          
+          .required {
+            color: $danger-color;
+            font-weight: 700;
+          }
+        }
+        
+        p:not(.required-note) {
+          font-size: 0.85rem;
+          color: rgba(var(--text-color), 0.7);
+          line-height: 1.4;
+          text-align: center;
+          
+          .dark & {
+            color: rgba(255, 255, 255, 0.6);
+          }
+        }
+      }
+    }
+  }
+
+  .project-card {
+    padding: 2em;
+    @include card-base;
+    overflow: hidden;
+    @include hover-lift;
+
+    img {
+      width: 100%;
+      height: 11.25rem;
+      object-fit: cover;
+    }
+
+    h3, p, .category {
+      padding: 0 $spacing-md;
+    }
+
+    h3 {
+      font-size: 1.3rem;
+      margin: $spacing-md 0 $spacing-sm;
+      color: var(--text-color);
+    }
+
+    p {
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    .category {
+      font-style: italic;
+      font-size: 0.9rem;
+      color: var(--link-color);
+    }
+
+    .h2projet {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--text-color);
+      text-align: center;
+      margin-bottom: $spacing-xxl;
+    }
+
+    #btn-project,
+    .btn-project {
+      display: inline-block;
+      margin: $spacing-md auto;
+      padding: 0.6rem 1.4rem;
+      background-color: var(--link-color);
+      color: $white;
+      border-radius: $border-radius-md;
+      text-decoration: none;
+      font-weight: 600;
+      @include transition(background);
+
+      &:hover {
+        background-color: var(--button-icon-color);
+        box-shadow: 0 0 0.5rem var(--link-color);
+        transform: scale(1.05);
+      }
+    }
+  }
+
+  .project-details {
+    max-width: 50rem;
+    margin: 5rem auto;
+    padding: $spacing-xl;
+    text-align: center;
+
+    h1 {
+      font-size: 2.2rem;
+      color: var(--text-color);
+      margin-bottom: $spacing-md;
+    }
+
+    .category {
+      font-style: italic;
+      color: var(--link-color);
+      margin-bottom: $spacing-lg;
+    }
+
+    img {
+      max-width: 100%;
+      border-radius: $border-radius-xl;
+      box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.1);
+      margin-bottom: $spacing-xl;
+    }
+
+    p {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      color: var(--text-color);
+    }
+  }
+}
+
+// Responsive
+@include mobile {
+  .contact-wrapper {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .contact-left,
+  .contact-right {
+    width: 100%;
+    max-width: 31.25rem;
+  }
+}

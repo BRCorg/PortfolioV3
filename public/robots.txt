@@ -1,0 +1,23 @@
+# robots.txt pour Portfolio Guven Berancan
+
+User-agent: *
+Allow: /
+Disallow: /chemin-securise-admin-1902/
+Disallow: /uploads/profile/
+Disallow: /logs/
+Disallow: /vendor/
+Disallow: /config/
+Disallow: /src/
+
+# Sitemap
+Sitemap: https://<?= $_SERVER['HTTP_HOST'] ?? 'votre-domaine.com' ?>/sitemap.xml
+
+# Bots spécifiques
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+# Crawl-delay pour éviter la surcharge
+Crawl-delay: 1

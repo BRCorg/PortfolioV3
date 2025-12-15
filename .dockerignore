@@ -1,0 +1,54 @@
+# Git
+.git
+.gitignore
+
+# Docker
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# Claude AI
+.claude
+
+# Tests
+tests
+.phpunit.cache
+phpunit.xml
+
+# Documentation locale
+*.md
+!README.md
+
+# Fichiers Windows
+*.bat
+
+# Environnement local
+.env.local
+.env.backup
+
+# Logs
+*.log
+logs
+
+# Cache et temporaires
+*.cache
+*.tmp
+*.backup
+.DS_Store
+Thumbs.db
+
+# Node modules (si utilisé)
+node_modules
+
+# Fichiers de développement
+deploy.sh
+export-database.bat
+
+# Source SCSS (CSS déjà compilé)
+scss

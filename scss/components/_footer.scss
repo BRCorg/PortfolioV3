@@ -1,0 +1,138 @@
+// ==========================================
+// Footer
+// ==========================================
+@import '../utils/variables';
+
+footer {
+  z-index: 1;
+  position: relative;
+  background-color: var(--nav-bg);
+  text-align: center;
+  padding-top: 12rem;
+  padding-bottom: $spacing-xxl;
+  color: var(--text-color);
+  overflow: hidden;
+
+  .wave {
+    position: absolute;
+    top: -1.25rem;
+    left: 0;
+    width: 100%;
+    height: 15.625rem;
+    background: url('../img/wave-footer.svg') no-repeat center top;
+    background-size: 100% 100%;
+    transform: scaleY(-1);
+    z-index: 0;
+  }
+
+  h3, .footer-links, .footer-social, p {
+    position: relative;
+    z-index: 1;
+  }
+
+  h3 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: $spacing-lg;
+    color: $primary-color;
+
+    .dark & {
+      color: $accent-color;
+    }
+  }
+
+  .footer-links {
+    display: flex;
+    justify-content: center;
+    gap: $spacing-xl;
+    margin-bottom: $spacing-xl;
+    flex-wrap: wrap;
+
+    a {
+      color: var(--link-color);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      padding: 0.5rem 1rem;
+      border-radius: $border-radius-md;
+
+      &:hover {
+        color: $primary-color;
+        background: rgba($primary-color, 0.1);
+        transform: translateY(-0.125rem);
+
+        .dark & {
+          color: $accent-color;
+          background: rgba($accent-color, 0.1);
+        }
+      }
+    }
+  }
+
+  .footer-social {
+    display: flex;
+    justify-content: center;
+    gap: $spacing-lg;
+    margin-bottom: $spacing-xl;
+
+    a {
+      width: 2.8125rem;
+      height: 2.8125rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--nav-bg);
+      border: 0.125rem solid $primary-color;
+      color: $primary-color;
+      font-size: 1.3rem;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.1);
+
+      .dark & {
+        border-color: $accent-color;
+        color: $accent-color;
+      }
+
+      &:hover {
+        background: $primary-color;
+        color: $white;
+        transform: translateY(-0.3125rem) scale(1.1);
+        box-shadow: 0 0.3125rem 0.9375rem rgba($primary-color, 0.4);
+
+        .dark & {
+          background: $accent-color;
+          color: $primary-dark;
+          box-shadow: 0 0.3125rem 0.9375rem rgba($accent-color, 0.4);
+        }
+      }
+    }
+  }
+
+  p {
+    font-size: 0.9rem;
+    opacity: 0.7;
+    margin-top: $spacing-md;
+  }
+
+  @media (max-width: 768px) {
+    padding-top: 10rem;
+
+    h3 {
+      font-size: 1.5rem;
+    }
+
+    .footer-links {
+      flex-direction: column;
+      gap: $spacing-md;
+      align-items: center;
+
+      a {
+        width: 100%;
+        max-width: 12.5rem;
+      }
+    }
+  }
+}

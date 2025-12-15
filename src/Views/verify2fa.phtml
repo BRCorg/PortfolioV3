@@ -1,0 +1,335 @@
+<section class="two-factor-verify">
+    <div class="verify-container">
+        <div class="verify-header">
+            <i class="fas fa-shield-alt"></i>
+            <h1>Authentification à deux facteurs</h1>
+            <p>Entrez le code généré par votre application</p>
+        </div>
+
+        <?php if (!empty($_GET['error'])): ?>
+            <div class="alert alert-danger">
+                <?php
+                switch ($_GET['error']) {
+                    case 'invalid_code':
+                        echo '❌ Code invalide. Veuillez réessayer.';
+                        break;
+                    case 'expired':
+                        echo '⏰ Session expirée. Veuillez vous reconnecter.';
+                        break;
+                    default:
+                        echo '❌ Une erreur est survenue.';
+                }
+                ?>
+            </div>
+        <?php endif; ?>
+
+        <form action="<?= $_ENV['ADMIN_SECRET_URL'] ?>/2fa/verify" method="POST" class="verify-form">
+            <input type="hidden" name="csrf_token" value="<?= \App\Middleware\AuthMiddleware::getCsrfToken() ?>">
+            
+            <div class="code-input-wrapper">
+                <label for="twoFactorCode">Code à 6 chiffres</label>
+                <input type="text" 
+                       name="code" 
+                       id="twoFactorCode" 
+                       placeholder="000000" 
+                       maxlength="6" 
+                       pattern="[0-9]{6}"
+                       autocomplete="off"
+                       required
+                       autofocus
+                       class="code-input">
+                <small class="help-text">Le code se renouvelle toutes les 30 secondes</small>
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-check"></i> Vérifier
+            </button>
+
+            <div class="divider">OU</div>
+
+            <button type="button" class="btn btn-secondary" onclick="showBackupCodeInput()">
+                <i class="fas fa-key"></i> Utiliser un code de récupération
+            </button>
+        </form>
+
+        <!-- Formulaire code de backup (caché par défaut) -->
+        <form action="<?= $_ENV['ADMIN_SECRET_URL'] ?>/2fa/verify-backup" method="POST" class="backup-form" id="backupForm" style="display: none;">
+            <input type="hidden" name="csrf_token" value="<?= \App\Middleware\AuthMiddleware::getCsrfToken() ?>">
+            
+            <div class="backup-input-wrapper">
+                <label for="backupCode">Code de récupération</label>
+                <input type="text" 
+                       name="backup_code" 
+                       id="backupCode" 
+                       placeholder="XXXX-XXXX" 
+                       maxlength="9"
+                       autocomplete="off"
+                       required
+                       class="backup-input">
+                <small class="help-text">Format : XXXX-XXXX (8 chiffres)</small>
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-check"></i> Vérifier le code de backup
+            </button>
+
+            <button type="button" class="btn btn-link" onclick="showNormalInput()">
+                ← Retour au code 2FA
+            </button>
+        </form>
+
+        <div class="help-section">
+            <p>
+                <i class="fas fa-question-circle"></i> 
+                <strong>Problème d'accès ?</strong>
+            </p>
+            <p>Si vous avez perdu l'accès à votre application d'authentification, utilisez un code de récupération.</p>
+        </div>
+    </div>
+</section>
+
+<style>
+.two-factor-verify {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #314473 0%, #1a2650 100%);
+    padding: 2rem;
+}
+
+.verify-container {
+    max-width: 450px;
+    width: 100%;
+    background: white;
+    border-radius: 16px;
+    padding: 3rem 2rem;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.verify-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.verify-header i {
+    font-size: 4rem;
+    color: #314473;
+    margin-bottom: 1rem;
+}
+
+.verify-header h1 {
+    color: #314473;
+    margin-bottom: 0.5rem;
+    font-size: 1.75rem;
+}
+
+.verify-header p {
+    color: #666;
+}
+
+.alert {
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    animation: slideIn 0.3s ease;
+}
+
+.alert-danger {
+    background: #fee;
+    border-left: 4px solid #f44336;
+    color: #c62828;
+}
+
+.code-input-wrapper,
+.backup-input-wrapper {
+    margin-bottom: 1.5rem;
+}
+
+.code-input-wrapper label,
+.backup-input-wrapper label {
+    display: block;
+    color: #314473;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.code-input {
+    width: 100%;
+    font-size: 2.5rem;
+    text-align: center;
+    padding: 1.25rem;
+    border: 2px solid #ddd;
+    border-radius: 12px;
+    letter-spacing: 1rem;
+    font-family: 'Courier New', monospace;
+    transition: 0.3s;
+}
+
+.backup-input {
+    width: 100%;
+    font-size: 1.5rem;
+    text-align: center;
+    padding: 1rem;
+    border: 2px solid #ddd;
+    border-radius: 12px;
+    letter-spacing: 0.5rem;
+    font-family: 'Courier New', monospace;
+    transition: 0.3s;
+}
+
+.code-input:focus,
+.backup-input:focus {
+    outline: none;
+    border-color: #314473;
+    box-shadow: 0 0 0 3px rgba(49, 68, 115, 0.1);
+}
+
+.help-text {
+    display: block;
+    margin-top: 0.5rem;
+    color: #999;
+    font-size: 0.875rem;
+}
+
+.btn {
+    width: 100%;
+    padding: 1rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.btn-primary {
+    background: #314473;
+    color: white;
+    margin-bottom: 1rem;
+}
+
+.btn-primary:hover {
+    background: #293961;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(49, 68, 115, 0.3);
+}
+
+.btn-secondary {
+    background: #f8f9fa;
+    color: #666;
+    border: 2px solid #ddd;
+}
+
+.btn-secondary:hover {
+    background: #e9ecef;
+}
+
+.btn-link {
+    background: transparent;
+    color: #314473;
+    text-decoration: underline;
+}
+
+.btn-link:hover {
+    background: #f8f9fa;
+}
+
+.divider {
+    text-align: center;
+    margin: 1.5rem 0;
+    color: #999;
+    font-size: 0.875rem;
+    position: relative;
+}
+
+.divider::before,
+.divider::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 40%;
+    height: 1px;
+    background: #ddd;
+}
+
+.divider::before {
+    left: 0;
+}
+
+.divider::after {
+    right: 0;
+}
+
+.help-section {
+    margin-top: 2rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid #314473;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.help-section p {
+    margin: 0.5rem 0;
+}
+
+.help-section strong {
+    color: #314473;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+    .verify-container {
+        padding: 2rem 1.5rem;
+    }
+
+    .code-input {
+        font-size: 2rem;
+        letter-spacing: 0.5rem;
+    }
+}
+</style>
+
+<script>
+// Valider uniquement les chiffres pour le code 2FA
+document.getElementById('twoFactorCode').addEventListener('input', function(e) {
+    this.value = this.value.replace(/[^0-9]/g, '');
+});
+
+// Gérer le format XXXX-XXXX pour les codes de backup
+document.getElementById('backupCode').addEventListener('input', function(e) {
+    let value = this.value.replace(/[^0-9]/g, '');
+    if (value.length > 4) {
+        value = value.slice(0, 4) + '-' + value.slice(4, 8);
+    }
+    this.value = value;
+});
+
+function showBackupCodeInput() {
+    document.querySelector('.verify-form').style.display = 'none';
+    document.getElementById('backupForm').style.display = 'block';
+    document.getElementById('backupCode').focus();
+}
+
+function showNormalInput() {
+    document.querySelector('.verify-form').style.display = 'block';
+    document.getElementById('backupForm').style.display = 'none';
+    document.getElementById('twoFactorCode').focus();
+}
+</script>

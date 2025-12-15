@@ -1,0 +1,484 @@
+// Timeline Formation Styles
+@import '../utils/variables';
+
+.timeline-section {
+  margin-bottom: 2.5rem;
+  padding: 4rem 2rem;
+  background-color: var(--bg-color);
+  position: relative;
+  overflow: hidden;
+
+  .timeline-title {
+    text-align: center;
+    font-size: 2.5rem;
+    color: $primary-color;
+    margin-bottom: 1rem;
+    font-weight: 700;
+    position: relative;
+    z-index: 1;
+
+    // Dark mode
+    .dark & {
+      color: $white !important;
+    }
+
+    &::after {
+      content: '';
+      display: block;
+      width: 5rem;
+      height: 0.25rem;
+      background: $primary-color !important;
+      margin: 1rem auto 0;
+      border-radius: 0.125rem;
+
+      // Dark mode
+      .dark & {
+        background: $white !important;
+      }
+    }
+  }
+
+  .timeline-description {
+    text-align: center;
+    font-size: 1.1rem;
+    color: #666;
+    max-width: 37.5rem;
+    margin: 0 auto 2rem;
+    line-height: 1.6;
+
+    .dark & {
+      color: #b0b0b0;
+    }
+  }
+}
+
+.timeline-container {
+  max-width: 75rem;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+.timeline-arrow {
+  background-color: transparent;
+  border: 0.125rem solid $primary-color; // Bleu en mode clair
+  color: $primary-color;
+  width: 3.125rem;
+  height: 3.125rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+
+  // Dark mode
+  .dark & {
+    border-color: var(--text-color);
+    color: var(--text-color);
+  }
+
+  &:hover {
+    background-color: $primary-color; // Bleu en mode clair
+    color: white;
+    transform: scale(1.1);
+    box-shadow: 0 0 1.25rem rgba($primary-color, 0.5);
+
+    .dark & {
+      background-color: $primary-color;
+      border-color: $primary-color;
+      box-shadow: 0 0 1.25rem rgba($primary-color, 0.5);
+    }
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  i {
+    font-size: 1.2rem;
+  }
+}
+
+.timeline-content {
+  flex: 1;
+  min-height: 26.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+
+  @media (max-width: 768px) {
+    min-height: 36.25rem;
+  }
+}
+
+.timeline-item {
+  position: absolute;
+  width: 100%;
+  max-width: 43.75rem;
+  background-color: var(--bg-color);
+  border: 0.125rem solid $primary-color; // Bleu en mode clair
+  border-radius: 1rem;
+  padding: 2rem;
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+  opacity: 0;
+  transform: translateX(6.25rem) scale(0.9);
+  pointer-events: none;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: $shadow-medium;
+
+  // Dark mode
+  .dark & {
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0.25rem 0.9375rem rgba(0, 0, 0, 0.3);
+  }
+
+  &.active {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+    pointer-events: auto;
+  }
+
+  &.prev {
+    transform: translateX(-6.25rem) scale(0.9);
+  }
+}
+
+.timeline-icon {
+  width: 4.375rem;
+  height: 4.375rem;
+  min-width: 4.375rem;
+  background-color: $primary-color; // Bleu en mode clair
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 0.3125rem 1.25rem rgba($primary-color, 0.4);
+  margin-top: 0.2rem;
+
+  // Dark mode
+  .dark & {
+    background-color: $primary-color;
+    box-shadow: 0 0.3125rem 1.25rem rgba($primary-color, 0.4);
+  }
+
+  i {
+    font-size: 1.8rem;
+    color: white;
+  }
+}
+
+.timeline-info {
+  flex: 1;
+  color: var(--text-color);
+
+  .timeline-degree {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--text-color);
+    line-height: 1.4;
+  }
+
+  .timeline-period {
+    font-size: 0.95rem;
+    color: $primary-color;
+    font-weight: 600;
+    margin-bottom: 0.8rem;
+
+    // Dark mode
+    .dark & {
+      color: $accent-color;
+    }
+  }
+
+  .timeline-school {
+    font-size: 0.9rem;
+    color: var(--text-color);
+    opacity: 0.85;
+    line-height: 1.6;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+  }
+
+  .timeline-description {
+    font-size: 0.9rem;
+    color: var(--text-color);
+    opacity: 0.75;
+    line-height: 1.6;
+    margin-top: 0.5rem;
+
+    ul {
+      margin: 0.5rem 0 0 1.2rem;
+      padding: 0;
+
+      li {
+        margin-bottom: 0.3rem;
+      }
+    }
+  }
+
+  .company-logo {
+    display: inline-flex;
+    align-items: center;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+  }
+}
+
+.timeline-track {
+  max-width: 62.5rem;
+  margin: 3rem auto 0;
+  position: relative;
+  z-index: 1;
+}
+
+.timeline-years {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  padding: 0 0.625rem;
+}
+
+.year-marker {
+  color: var(--text-color);
+  opacity: 0.5;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  padding: 0.5rem 1rem;
+  border-radius: 0.625rem;
+
+  &:hover {
+    color: $primary-color;
+    opacity: 1;
+    background: rgba($primary-color, 0.1);
+
+    .dark & {
+      background: rgba($primary-color, 0.2);
+    }
+  }
+
+  &.active {
+    color: $primary-color;
+    opacity: 1;
+    background: rgba($primary-color, 0.15);
+
+    .dark & {
+      color: $accent-color;
+      background: rgba($primary-color, 0.25);
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -0.9375rem;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0.75rem;
+      height: 0.75rem;
+      background: $primary-color;
+      border-radius: 50%;
+      box-shadow: 0 0 0.625rem rgba($primary-color, 0.8);
+
+      .dark & {
+        background: $accent-color;
+        box-shadow: 0 0 0.625rem rgba($accent-color, 0.8);
+      }
+    }
+  }
+}
+
+.timeline-progress {
+  height: 0.25rem;
+  background: rgba($primary-color, 0.2); // Bleu transparent en mode clair
+  border-radius: 0.125rem;
+  overflow: hidden;
+  position: relative;
+
+  .dark & {
+    background: rgba(255, 255, 255, 0.1);
+  }
+}
+
+.timeline-progress-bar {
+  height: 100%;
+  background: $primary-color;
+  border-radius: 0.125rem;
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 0 0.625rem rgba($primary-color, 0.6);
+
+  .dark & {
+    background: $accent-color;
+    box-shadow: 0 0 0.625rem rgba($accent-color, 0.6);
+  }
+}
+
+// Indicateurs pour items multiples dans la même année
+.timeline-item-indicators {
+  position: absolute;
+  bottom: -2.8125rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.5rem;
+  z-index: 10;
+}
+
+.indicator-dot {
+  width: 0.625rem;
+  height: 0.625rem;
+  border-radius: 50%;
+  background: rgba($primary-color, 0.3); // Bleu transparent en mode clair
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+
+  .dark & {
+    background: rgba(255, 255, 255, 0.3);
+  }
+
+  &:hover {
+    background: rgba($primary-color, 0.6);
+    transform: scale(1.2);
+
+    .dark & {
+      background: rgba($primary-color, 0.8);
+    }
+  }
+
+  &.active {
+    background: $primary-color;
+    width: 0.75rem;
+    height: 0.75rem;
+    box-shadow: 0 0 0.5rem rgba($primary-color, 0.6);
+
+    .dark & {
+      background: $accent-color;
+      box-shadow: 0 0 0.5rem rgba($accent-color, 0.6);
+    }
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .timeline-section {
+    padding: 3rem 1rem;
+  }
+
+  .timeline-title {
+    font-size: 2rem;
+  }
+
+  .timeline-container {
+    gap: 1rem;
+  }
+
+  .timeline-arrow {
+    width: 2.5rem;
+    height: 2.5rem;
+
+    i {
+      font-size: 1rem;
+    }
+  }
+
+  .timeline-item {
+    flex-direction: column;
+    text-align: center;
+    padding: 2rem 1.5rem;
+    max-width: 100%;
+  }
+
+  .timeline-icon {
+    width: 3.75rem;
+    height: 3.75rem;
+
+    i {
+      font-size: 1.5rem;
+    }
+  }
+
+  .timeline-info {
+    .timeline-degree {
+      font-size: 1.2rem;
+    }
+
+    .timeline-period {
+      font-size: 0.9rem;
+    }
+
+    .timeline-school {
+      font-size: 0.85rem;
+      justify-content: center;
+    }
+  }
+
+  .timeline-years {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+  }
+
+  .year-marker {
+    font-size: 0.9rem;
+    padding: 0.3rem 0.7rem;
+
+    &.active::after {
+      bottom: -0.625rem;
+      width: 0.5rem;
+      height: 0.5rem;
+    }
+  }
+
+  .timeline-item-indicators {
+    bottom: -2.1875rem;
+  }
+
+  .indicator-dot {
+    width: 0.5rem;
+    height: 0.5rem;
+
+    &.active {
+      width: 0.625rem;
+      height: 0.625rem;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .timeline-container {
+    gap: 0.5rem;
+  }
+
+  .timeline-arrow {
+    width: 2.1875rem;
+    height: 2.1875rem;
+  }
+
+  .timeline-item {
+    padding: 1.5rem 1rem;
+    min-height: 15.625rem;
+  }
+
+  .timeline-title {
+    font-size: 1.5rem;
+  }
+}

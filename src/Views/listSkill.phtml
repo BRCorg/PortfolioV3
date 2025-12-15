@@ -1,0 +1,130 @@
+<section class="list-section skills-list-admin">
+    <header class="dashboard-header">
+        <h1>Liste des compétences</h1>
+        <a href="<?= $_ENV['ADMIN_SECRET_URL'] ?>/dashboard" class="btn">← Retour au dashboard</a>
+    </header>
+
+    <?php if (empty($skills)): ?>
+        <div class="empty-state">
+            <p>Aucune compétence pour le moment.</p>
+            <p>Retournez au dashboard pour en créer une.</p>
+        </div>
+    <?php else: ?>
+        <div class="table-container">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Nom</th>
+                        <th>Niveau</th>
+                        <th>Catégorie</th>
+                        <th>Ordre</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($skills as $skill): ?>
+                        <tr data-skill-id="<?= $skill['id'] ?>">
+                            <td><strong><?= htmlspecialchars($skill['name']) ?></strong></td>
+                            <td><?= htmlspecialchars($skill['level'] ?? 'intermediate') ?></td>
+                            <td><?= htmlspecialchars($skill['category'] ?? 'other') ?></td>
+                            <td><?= $skill['display_order'] ?? 0 ?></td>
+                            <td class="actions">
+                                <button class="btn btn-sm btn-edit" data-id="<?= $skill['id'] ?>" data-name="<?= htmlspecialchars($skill['name']) ?>">
+                                    <i class="fa-solid fa-edit"></i> Modifier
+                                </button>
+                                <button class="btn btn-sm btn-delete" data-id="<?= $skill['id'] ?>">
+                                    <i class="fa-solid fa-trash"></i> Supprimer
+                                </button>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    <?php endif; ?>
+</section>
+
+<!-- Modale d'édition -->
+<div id="editSkillModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h3>Modifier la compétence</h3>
+        <form id="editSkillForm">
+            <input type="hidden" id="edit-skill-id">
+            <div>
+                <label for="edit-skill-name">Nom</label>
+                <input type="text" id="edit-skill-name" name="name" required>
+            </div>
+            <div>
+                <label for="edit-skill-level">Niveau</label>
+                <select id="edit-skill-level" name="level">
+                    <option value="beginner">Débutant</option>
+                    <option value="intermediate">Intermédiaire</option>
+                    <option value="advanced">Avancé</option>
+                    <option value="expert">Expert</option>
+                </select>
+            </div>
+            <button type="submit">Mettre à jour</button>
+        </form>
+        <div id="editMessage"></div>
+    </div>
+</div>
+
+<script>
+// Gestion de la modale d'édition
+const editModal = document.getElementById('editSkillModal');
+const closeModal = editModal.querySelector('.close');
+
+document.querySelectorAll('.btn-edit').forEach(btn => {
+    btn.addEventListener('click', function() {
+        const skillId = this.dataset.id;
+        const skillName = this.dataset.name;
+
+        document.getElementById('edit-skill-id').value = skillId;
+        document.getElementById('edit-skill-name').value = skillName;
+        editModal.style.display = 'block';
+    });
+});
+
+closeModal.addEventListener('click', () => {
+    editModal.style.display = 'none';
+});
+
+// Formulaire d'édition
+document.getElementById('editSkillForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const skillId = document.getElementById('edit-skill-id').value;
+    const formData = new FormData(this);
+
+    const response = await fetch(`<?= $_ENV['ADMIN_SECRET_URL'] ?>/skills/${skillId}/update`, {
+        method: 'POST',
+        body: formData
+    });
+
+    const result = await response.json();
+    document.getElementById('editMessage').textContent = result.message;
+
+    if (result.success) {
+        setTimeout(() => location.reload(), 1000);
+    }
+});
+
+// Suppression
+document.querySelectorAll('.btn-delete').forEach(btn => {
+    btn.addEventListener('click', async function() {
+        if (!confirm('Êtes-vous sûr de vouloir supprimer cette compétence ?')) return;
+
+        const skillId = this.dataset.id;
+        const response = await fetch(`<?= $_ENV['ADMIN_SECRET_URL'] ?>/skills/${skillId}/delete`, {
+            method: 'POST'
+        });
+
+        const result = await response.json();
+        if (result.success) {
+            this.closest('tr').remove();
+        } else {
+            alert(result.message);
+        }
+    });
+});
+</script>

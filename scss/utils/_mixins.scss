@@ -1,0 +1,75 @@
+// ==========================================
+// Mixins
+// ==========================================
+
+// Flexbox center
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+// Transition
+@mixin transition($property: all, $duration: $transition-medium) {
+  transition: $property $duration;
+}
+
+// Button base
+@mixin button-base {
+  padding: 0.6rem 1rem;
+  border-radius: $border-radius-md;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  text-decoration: none;
+  @include transition;
+}
+
+// Hover effect
+@mixin hover-lift {
+  &:hover {
+    transform: translateY(-0.3125rem);
+  }
+}
+
+// Card base
+@mixin card-base {
+  background-color: var(--nav-bg);
+  border-radius: $border-radius-xl;
+  box-shadow: $shadow-light;
+  @include transition(all);
+
+  &:hover {
+    box-shadow: $shadow-heavy;
+  }
+}
+
+// Responsive
+@mixin mobile {
+  @media (max-width: $breakpoint-mobile) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (max-width: $breakpoint-tablet) {
+    @content;
+  }
+}
+
+// Responsive mixin généralisé
+@mixin responsive($breakpoint) {
+  @if $breakpoint == mobile {
+    @media (max-width: $breakpoint-mobile) {
+      @content;
+    }
+  } @else if $breakpoint == tablet {
+    @media (max-width: $breakpoint-tablet) {
+      @content;
+    }
+  } @else if $breakpoint == desktop {
+    @media (min-width: $breakpoint-desktop) {
+      @content;
+    }
+  }
+}

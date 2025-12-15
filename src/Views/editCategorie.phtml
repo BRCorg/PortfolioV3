@@ -1,0 +1,12 @@
+<section class="edit-section">
+  <h2>Modifier la catégorie</h2>
+  <form action="index.php?route=update-category" method="POST">
+    <input type="hidden" name="id" value="<?= htmlspecialchars($category['id']) ?>">
+    
+    <label for="name">Nom de la catégorie :</label>
+    <input type="text" id="name" name="name" value="<?= htmlspecialchars($category['name']) ?>" required>
+
+    <button type="submit">Mettre à jour</button>
+    <a href="index.php?route=list-categories">Annuler</a>
+  </form>
+</section>

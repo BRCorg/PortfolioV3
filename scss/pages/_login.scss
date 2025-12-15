@@ -1,0 +1,176 @@
+// ==========================================
+// Page Login Admin
+// ==========================================
+
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, $primary-darker 0%, $primary-dark 100%);
+  padding: $spacing-md;
+
+  .login-box {
+    background: $white;
+    padding: $spacing-xxl;
+    border-radius: $border-radius-lg;
+    box-shadow: 0 0.625rem 2.5rem rgba(0, 0, 0, 0.3);
+    width: 100%;
+    max-width: 26.25rem;
+    animation: fadeInUp 0.6s ease;
+
+    h2 {
+      text-align: center;
+      color: $primary-dark;
+      margin-bottom: $spacing-xl;
+      font-size: 1.8rem;
+      font-weight: 600;
+      position: relative;
+
+      &::after {
+        content: '';
+        display: block;
+        width: 3.75rem;
+        height: 0.1875rem;
+        background: $primary-color;
+        margin: $spacing-md auto 0;
+        border-radius: 0.125rem;
+      }
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: $spacing-lg;
+
+      // Honeypot - champ invisible pour piéger les bots
+      .honeypot {
+        position: absolute;
+        left: -624.9375rem;
+        width: 0.0625rem;
+        height: 0.0625rem;
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .form-group {
+        position: relative;
+
+        label {
+          display: block;
+          color: $primary-dark;
+          font-weight: 500;
+          margin-bottom: $spacing-xs;
+          font-size: 0.9rem;
+        }
+
+        input {
+          width: 100%;
+          padding: $spacing-md;
+          border: 0.125rem solid #e0e0e0;
+          border-radius: $border-radius-sm;
+          font-size: 1rem;
+          transition: $transition-medium;
+          outline: none;
+
+          &:focus {
+            border-color: $primary-color;
+            box-shadow: 0 0 0 0.1875rem rgba(49, 68, 115, 0.1);
+          }
+
+          &::placeholder {
+            color: #999;
+          }
+        }
+      }
+
+      button[type="submit"] {
+        width: 100%;
+        padding: $spacing-md;
+        background: linear-gradient(135deg, $primary-color 0%, $primary-dark 100%);
+        color: $white;
+        border: none;
+        border-radius: $border-radius-sm;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: $transition-medium;
+        margin-top: $spacing-sm;
+
+        &:hover {
+          transform: translateY(-0.125rem);
+          box-shadow: 0 0.3125rem 1.25rem rgba(49, 68, 115, 0.4);
+        }
+
+        &:active {
+          transform: translateY(0);
+        }
+      }
+
+      .error-message {
+        background: rgba(220, 20, 60, 0.1);
+        color: $danger-color;
+        padding: $spacing-md;
+        border-radius: $border-radius-sm;
+        border-left: 0.25rem solid $danger-color;
+        font-size: 0.9rem;
+        animation: shake 0.5s ease;
+      }
+
+      .info-message {
+        text-align: center;
+        color: #666;
+        font-size: 0.85rem;
+        margin-top: $spacing-md;
+
+        a {
+          color: $primary-color;
+          text-decoration: none;
+          font-weight: 500;
+
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Animation fadeInUp
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(1.875rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Animation shake pour les erreurs
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-0.3125rem);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(0.3125rem);
+  }
+}
+
+// Responsive
+@media (max-width: $breakpoint-mobile) {
+  .login-container {
+    .login-box {
+      padding: $spacing-xl;
+
+      h2 {
+        font-size: 1.5rem;
+      }
+    }
+  }
+}

@@ -1,0 +1,678 @@
+<section id="home">
+  <div class="main-container">
+    <div class="image">
+      <div class="status-badge">
+        <i class="fa-solid fa-briefcase"></i>
+        <span>En recherche de stage</span>
+      </div>
+      <img class="imageHome" src="/img/PhotoDeProfilPF2.png" alt="Guven Berancan - Développeur Web Full Stack Junior - Photo de profil professionnelle" class="profile-img" loading="eager">
+    </div>
+    <div class="content">
+      <h1>Salut moi c'est <span>Berancan Guven</span></h1>
+      <div class="typewriter">Je suis <span id="typewriterText"></span></div>
+      <p class="text-content">🎓 Étudiant en deuxième année de Bachelor <strong>Développement Web Full Stack</strong> à la 3W Academy
+        <img src="/img/3waLogo.png" alt="Logo 3W Academy" width="25" height="25" style="vertical-align: middle;" loading="lazy">
+        <br><br>
+        Anciennement dans le marketing et le commerce, je me suis réorienté vers le développement web pour me tourner vers un domaine plus technique et créatif.<br>
+Je recherche un <strong>stage de 4 mois, du 1er avril au 31 juillet</strong>, afin de monter en compétences et de participer à des projets concrets. Curieux, sérieux et motivé, je souhaite intégrer une équipe où je pourrai progresser tout en apportant une vision orientée utilisateur et résultat.
+      </p>
+
+      <div class="skills-section">
+        <?php $skillCategories = [
+          'Développement Web :' => [
+            'HTML' => 'devicon-html5-plain colored',
+            'CSS' => 'devicon-css3-plain colored',
+            'Sass' => 'devicon-sass-original colored',
+            'JavaScript' => 'devicon-javascript-plain colored',
+            'TypeScript' => 'devicon-typescript-plain colored',
+            'React' => 'devicon-react-original colored',
+            'PHP' => 'devicon-php-plain colored',
+            'Symfony' => 'devicon-symfony-original colored',
+            'Node.js' => 'devicon-nodejs-plain-wordmark colored',
+          ],
+          'Outils & CMS :' => [
+            'WordPress' => 'devicon-wordpress-plain colored',
+            'Figma' => 'devicon-figma-plain colored',
+            'Docker' => 'devicon-docker-plain colored',
+            'GitHub' => 'devicon-github-original',
+          ],
+          'Base de donnée :' => [
+            'MySQL' => 'devicon-mysql-plain colored',
+            'PostgreSQL' => 'devicon-postgresql-plain colored',
+            'MongoDB' => 'devicon-mongodb-plain colored',
+          ],
+        ];
+
+        foreach ($skillCategories as $categoryTitle => $skills):
+        ?>
+          <div class="skill-category">
+            <h3 class="category-title"><?= $categoryTitle ?></h3>
+            <div class="skills-home">
+              <?php foreach ($skills as $skillName => $iconClass): ?>
+                <a href="#home" class="skill-icon-link" title="<?= htmlspecialchars($skillName) ?>">
+                  <i class="<?= $iconClass ?>"></i>
+                </a>
+              <?php endforeach; ?>
+            </div>
+          </div>
+        <?php endforeach; ?>
+      </div>
+    </div>
+  </div>
+  
+  <div class="scroll-indicator">
+    <div class="scroll-arrow">
+      <i class="fas fa-chevron-down"></i>
+    </div>
+    <span class="scroll-text">Scroll</span>
+  </div>
+</section>
+
+<section id="projects" class="base-template portfolio">
+  <div class="wrapper base-template__wrapper">
+    <h2 class="base-template__title h2projet">Mes Projets</h2>
+    <div class="base-template__text">
+      Découvrez mes réalisations en développement web, des projets qui reflètent ma passion pour les technologies modernes.
+      <br>
+      Chaque projet raconte une histoire unique alliant créativité technique et innovation.
+    </div>
+
+    <div class="base-template__content">
+      <div class="emotions-slider projects-slider">
+
+        <div class="emotions-slider__nav slider-nav">
+          <div tabindex="0" class="slider-nav__item slider-nav__item_prev">
+            <svg width="16" height="28" viewBox="0 0 16 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M14 26L2 14L14 2" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </div>
+          <div tabindex="0" class="slider-nav__item slider-nav__item_next">
+            <svg width="16" height="28" viewBox="0 0 16 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M2 26L14 14L2 2" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </div>
+        </div>
+
+        <div class="emotions-slider__slider swiper">
+          <div class="emotions-slider__wrapper swiper-wrapper">
+
+            <?php $iconMap = [
+              'html' => 'devicon-html5-plain colored',
+              'html5' => 'devicon-html5-plain colored',
+              'css' => 'devicon-css3-plain colored',
+              'css3' => 'devicon-css3-plain colored',
+              'sass' => 'devicon-sass-original colored',
+              'scss' => 'devicon-sass-original colored',
+              'javascript' => 'devicon-javascript-plain colored',
+              'js' => 'devicon-javascript-plain colored',
+              'typescript' => 'devicon-typescript-plain colored',
+              'ts' => 'devicon-typescript-plain colored',
+              'react' => 'devicon-react-original colored',
+              'reactjs' => 'devicon-react-original colored',
+              'php' => 'devicon-php-plain colored',
+              'symfony' => 'devicon-symfony-original colored',
+              'node.js' => 'devicon-nodejs-plain colored',
+              'nodejs' => 'devicon-nodejs-plain colored',
+              'node' => 'devicon-nodejs-plain colored',
+              'wordpress' => 'devicon-wordpress-plain colored',
+              'figma' => 'devicon-figma-plain colored',
+              'docker' => 'devicon-docker-plain colored',
+              'github' => 'devicon-github-original',
+              'git' => 'devicon-git-plain colored',
+              'mysql' => 'devicon-mysql-plain colored',
+              'postgresql' => 'devicon-postgresql-plain colored',
+              'postgres' => 'devicon-postgresql-plain colored',
+              'mongodb' => 'devicon-mongodb-plain colored',
+              'mongo' => 'devicon-mongodb-plain colored',
+              'python' => 'devicon-python-plain colored',
+              'java' => 'devicon-java-plain colored',
+              'c++' => 'devicon-cplusplus-plain colored',
+              'cpp' => 'devicon-cplusplus-plain colored',
+              'c#' => 'devicon-csharp-plain colored',
+              'csharp' => 'devicon-csharp-plain colored',
+              'angular' => 'devicon-angularjs-plain colored',
+              'vue' => 'devicon-vuejs-plain colored',
+              'vuejs' => 'devicon-vuejs-plain colored',
+              'bootstrap' => 'devicon-bootstrap-plain colored',
+              'tailwind' => 'devicon-tailwindcss-plain colored',
+              'tailwindcss' => 'devicon-tailwindcss-plain colored',
+              'laravel' => 'devicon-laravel-plain colored',
+              'express' => 'devicon-express-original',
+              'expressjs' => 'devicon-express-original',
+            ];
+            ?>
+
+            <?php foreach ($projects as $index => $project): ?>
+            <div class="emotions-slider__slide swiper-slide">
+              <div class="emotions-slider__item emotions-slider-item">
+                <div class="emotions-slider-item__image">
+                  <img src="<?= htmlspecialchars($project['image'] ?? 'assets/img/default.png') ?>" alt="<?= htmlspecialchars($project['title']) ?>" loading="lazy" />
+                </div>
+
+                <div class="emotions-slider-item__content">
+                  <div class="emotions-slider-item__header">
+                    <div class="emotions-slider-item__header-inner">
+                      <div class="emotions-slider-item__skills">
+                        <?php if (!empty($project['skills'])): ?>
+                          <?php foreach (array_slice($project['skills'], 0, 4) as $skill):
+                            $skillKey = strtolower(trim($skill['name']));
+                            $iconClass = !empty($skill['icon_class']) ? $skill['icon_class'] : ($iconMap[$skillKey] ?? null);
+                          ?>
+                            <div class="skill-badge" title="<?= htmlspecialchars($skill['name']) ?>">
+                              <?php if ($iconClass): ?>
+                                <i class="<?= htmlspecialchars($iconClass) ?>"></i>
+                              <?php else: ?>
+                                <span class="skill-initial"><?= strtoupper(substr($skill['name'], 0, 1)) ?></span>
+                              <?php endif; ?>
+                            </div>
+                          <?php endforeach; ?>
+                          <?php if (count($project['skills']) > 4): ?>
+                            <div class="skill-badge more-skills" title="+<?= count($project['skills']) - 4 ?> autres">
+                              +<?= count($project['skills']) - 4 ?>
+                            </div>
+                          <?php endif; ?>
+                        <?php endif; ?>
+                      </div>
+                      <div class="emotions-slider-item__price"><?= htmlspecialchars($project['category_name']) ?></div>
+                    </div>
+                  </div>
+
+                  <div class="emotions-slider-item__info">
+                    <h2 class="emotions-slider-item__title">
+                      <?= htmlspecialchars($project['title']) ?>
+                    </h2>
+                    <div class="emotions-slider-item__text">
+                      <?= htmlspecialchars($project['description']) ?>
+                    </div>
+                  </div>
+
+                  <div class="emotions-slider-item__footer">
+                    <a class="emotions-slider-item__btn" href="/project/<?= $project['id'] ?>">
+                      <span class="emotions-slider-item__btn-text">Voir le projet</span>
+                      <span class="emotions-slider-item__btn-icon">
+                        <i class="fas fa-arrow-right"></i>
+                      </span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <?php endforeach; ?>
+
+          </div>
+        </div>
+
+        <div class="emotions-slider__pagination slider-pagination"></div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+  <section id="parcours" class="timeline-section">
+    <h2 class="timeline-title">Mon Parcours</h2>
+    <p class="timeline-description">
+      Mon évolution professionnelle et académique, des premières expériences jusqu'à aujourd'hui.
+    </p>
+
+    <div class="timeline-container">
+      <button class="timeline-arrow timeline-arrow-left" id="prevYear">
+        <i class="fa-solid fa-chevron-left"></i>
+      </button>
+
+      <div class="timeline-content">
+        <div class="timeline-item" data-year="2020">
+          <div class="timeline-icon">
+            <i class="fa-solid fa-graduation-cap"></i>
+          </div>
+          <div class="timeline-info">
+            <h3 class="timeline-degree">Bac STMG Option Mercatique</h3>
+            <p class="timeline-period">2020</p>
+            <p class="timeline-school">Obtention du Baccalauréat Sciences et Technologies du Management et de la Gestion</p>
+            <div class="timeline-description">
+              Spécialisation en marketing et gestion commerciale, bases en économie et management
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-item" data-year="2021">
+          <div class="timeline-icon">
+            <i class="fa-solid fa-briefcase"></i>
+          </div>
+          <div class="timeline-info">
+            <h3 class="timeline-degree">Stage Assistant Commercial</h3>
+            <p class="timeline-period">2021 - BTS NDRC 1ère année</p>
+            <p class="timeline-school">
+              <span>Fnac</span>
+              <span class="company-logo">
+                <img src="/img/Fnac-Logo.png" alt="Logo Fnac" width="45" height="45" style="vertical-align: middle;" loading="lazy">
+              </span>
+            </p>
+            <div class="timeline-description">
+              <ul>
+                <li>Accueil et orientation des clients en magasin</li>
+                <li>Conseil personnalisé et vente de produits culturels et high-tech</li>
+                <li>Gestion de la relation client et fidélisation</li>
+                <li>Mise en rayon et merchandising</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-item" data-year="2022">
+          <div class="timeline-icon">
+            <i class="fa-solid fa-calendar-days"></i>
+          </div>
+          <div class="timeline-info">
+            <h3 class="timeline-degree">Stage Évènementiel</h3>
+            <p class="timeline-period">2022 - BTS NDRC 2ème année</p>
+            <p class="timeline-school">
+              <span>Fnac</span>
+              <span class="company-logo">
+                <img src="/img/Fnac-Logo.png" alt="Logo Fnac" width="45" height="45" style="vertical-align: middle;" loading="lazy">
+              </span>
+            </p>
+            <div class="timeline-description">
+              <ul>
+                <li>Organisation et animation d'événements commerciaux en magasin</li>
+                <li>Animation de stands lors de lancements produits</li>
+                <li>Développement de l'expérience client et création d'engagement</li>
+                <li>Coordination avec les équipes marketing</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-item" data-year="2022">
+          <div class="timeline-icon">
+            <i class="fa-solid fa-store"></i>
+          </div>
+          <div class="timeline-info">
+            <h3 class="timeline-degree">Commercial</h3>
+            <p class="timeline-period">2022 - Stage puis CDD</p>
+            <p class="timeline-school">
+              <span>La Grande Récré</span>
+              <span class="company-logo">
+                <img src="/img/LGR-Logo.jpg" alt="Logo La Grande Récré" width="45" height="35" style="vertical-align: middle;" loading="lazy">
+              </span>
+            </p>
+            <div class="timeline-description">
+              <ul>
+                <li>Conseil client spécialisé dans l'univers des jouets et loisirs</li>
+                <li>Organisation et gestion d'événements en magasin (animations, démonstrations)</li>
+                <li>Merchandising et mise en avant des produits selon les tendances</li>
+                <li>Gestion des stocks et optimisation des ventes</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-item" data-year="2023">
+          <div class="timeline-icon">
+            <i class="fa-solid fa-laptop-code"></i>
+          </div>
+          <div class="timeline-info">
+            <h3 class="timeline-degree">Reconversion Développement Web</h3>
+            <p class="timeline-period">2023</p>
+            <p class="timeline-school">Formation Studi + Autoformation</p>
+            <div class="timeline-description">
+              <ul>
+                <li>Initiation au développement web avec Studi (formation non poursuivie)</li>
+                <li>Apprentissage autonome approfondi : HTML5, CSS3, JavaScript</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-item" data-year="2024">
+          <div class="timeline-icon">
+            <i class="fa-solid fa-graduation-cap"></i>
+          </div>
+          <div class="timeline-info">
+            <h3 class="timeline-degree">Bachelor Développeur Web Full Stack</h3>
+            <p class="timeline-period">2024 - 1ère année</p>
+            <p class="timeline-school">
+              <span>3W Academy</span>
+              <span class="company-logo">
+                <img src="/img/3waLogo.png" alt="Logo 3W Academy" width="24" height="24" style="vertical-align: middle;" loading="lazy">
+              </span>
+            </p>
+            <div class="timeline-description">
+              <ul>
+                <li>Perfectionnement en HTML5, CSS3 et JavaScript pour des interfaces web modernes</li>
+                <li>Développement back-end avec PHP et gestion de bases de données relationnelles</li>
+                <li>Création et personnalisation de sites avec WordPress CMS</li>
+                <li>Initiation aux outils No-Code pour des prototypages rapides</li>
+                <li>Méthodologies agiles et gestion de projet web</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-item" data-year="2025">
+          <div class="timeline-icon">
+            <i class="fa-solid fa-code"></i>
+          </div>
+          <div class="timeline-info">
+            <h3 class="timeline-degree">Stage Développeur Web Full Stack</h3>
+            <p class="timeline-period">2025 - 1er année</p>
+            <p class="timeline-school">L'école des loisirs - Maison d'édition jeunesse</p>
+            <div class="timeline-description">
+              <ul>
+                <li>Création d'un dashboard de contact en PHP/JS avec Chart.js et authentification SSO</li>
+                <li>Développement d'un dashboard d'abonnement en PHP/JS avec Chart.js et authentification SSO</li>
+                <li>Création d'un générateur de mots de passe temporaires pour les animatrices</li>
+                <li>Collaboration avec les équipes éditoriales et marketing</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-item active" data-year="2025">
+          <div class="timeline-icon">
+            <i class="fa-solid fa-user-graduate"></i>
+          </div>
+          <div class="timeline-info">
+            <h3 class="timeline-degree">Bachelor Développeur Web Full Stack</h3>
+            <p class="timeline-period">2025 - 2ème année (en cours)</p>
+            <p class="timeline-school">
+              <span>3W Academy</span>
+              <span class="company-logo">
+                <img src="/img/3waLogo.png" alt="Logo 3W Academy" width="24" height="24" style="vertical-align: middle;" loading="lazy">
+              </span>
+            </p>
+            <div class="timeline-description">
+              <ul>
+                <li>Approfondissement des frameworks Symfony et Node.js pour des architectures back-end robustes</li>
+                <li>Maîtrise de TypeScript pour un développement front-end typé et maintenable</li>
+                <li>Gestion de bases de données MongoDB pour des solutions NoSQL performantes</li>
+                <li>Conteneurisation et déploiement d'applications avec Docker</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-item" data-year="2026">
+          <div class="timeline-icon">
+            <i class="fa-solid fa-spinner fa-spin"></i>
+          </div>
+          <div class="timeline-info">
+            <h3 class="timeline-degree">À venir...</h3>
+            <p class="timeline-period">2026</p>
+            <p class="timeline-school">Nouveau chapitre en préparation</p>
+            <div class="timeline-description">
+              Prêt à relever de nouveaux défis et à continuer mon évolution professionnelle dans le développement web
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button class="timeline-arrow timeline-arrow-right" id="nextYear">
+        <i class="fa-solid fa-chevron-right"></i>
+      </button>
+    </div>
+
+    <div class="timeline-track">
+      <div class="timeline-years">
+        <span class="year-marker" data-year="2020">2020</span>
+        <span class="year-marker" data-year="2021">2021</span>
+        <span class="year-marker" data-year="2022">2022</span>
+        <span class="year-marker" data-year="2023">2023</span>
+        <span class="year-marker" data-year="2024">2024</span>
+        <span class="year-marker active" data-year="2025">2025</span>
+        <span class="year-marker" data-year="2026">2026</span>
+      </div>
+      <div class="timeline-progress">
+        <div class="timeline-progress-bar" id="progressBar"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="testimonials" class="testimonials-section">
+    <h2 class="testimonials-title">Témoignages</h2>
+    <p class="testimonials-subtitle">Retours d'expérience de mes collaborateurs et formateurs</p>
+    
+    <div class="testimonials-container">
+      <button class="testimonial-arrow testimonial-arrow-left" id="prevTestimonial">
+        <i class="fa-solid fa-chevron-left"></i>
+      </button>
+      
+      <div class="testimonials-wrapper">
+        <div class="testimonials-track" id="testimonialsTrack">
+          
+          <div class="testimonial-card">
+            <div class="testimonial-content">
+              <div class="testimonial-author">
+                <div class="author-info">
+                  <h4>Marie Dupont</h4>
+                  <span>Responsable Formation - 3W Academy</span>
+                </div>
+                <div class="author-rating">
+                  <i class="fa-solid fa-star"></i>
+                  <i class="fa-solid fa-star"></i>
+                  <i class="fa-solid fa-star"></i>
+                  <i class="fa-solid fa-star"></i>
+                  <i class="fa-solid fa-star"></i>
+                </div>
+              </div>
+              <div class="testimonial-text">
+                <i class="fa-solid fa-quote-left quote-icon"></i>
+                <p>"Berancan fait preuve d'une grande rigueur dans son travail et d'une excellente capacité d'adaptation. Sa reconversion vers le développement web témoigne de sa détermination et de sa passion pour les nouvelles technologies."</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="testimonial-card">
+            <div class="testimonial-content">
+              <div class="testimonial-author">
+                <div class="author-info">
+                  <h4>Jean Martin</h4>
+                  <span>Développeur Senior - L'école des loisirs</span>
+                </div>
+                <div class="author-rating">
+                  <i class="fa-solid fa-star"></i>
+                  <i class="fa-solid fa-star"></i>
+                  <i class="fa-solid fa-star"></i>
+                  <i class="fa-solid fa-star"></i>
+                  <i class="fa-solid fa-star"></i>
+                </div>
+              </div>
+              <div class="testimonial-text">
+                <i class="fa-solid fa-quote-left quote-icon"></i>
+                <p>"Un collaborateur sérieux et motivé. Berancan a su s'intégrer rapidement dans l'équipe et apporter sa vision commerciale au développement de nos outils. Son stage a été une vraie réussite."</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="testimonial-card">
+            <div class="testimonial-content">
+              <div class="testimonial-author">
+                <div class="author-info">
+                  <h4>Sophie Leroy</h4>
+                  <span>Manager - Fnac</span>
+                </div>
+                <div class="author-rating">
+                  <i class="fa-solid fa-star"></i>
+                  <i class="fa-solid fa-star"></i>
+                  <i class="fa-solid fa-star"></i>
+                  <i class="fa-solid fa-star"></i>
+                  <i class="fa-solid fa-star"></i>
+                </div>
+              </div>
+              <div class="testimonial-text">
+                <i class="fa-solid fa-quote-left quote-icon"></i>
+                <p>"Excellent sens du contact client et grande polyvalence. Berancan sait allier compétences techniques et relationnel, un atout précieux dans le développement web moderne."</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="testimonial-card">
+            <div class="testimonial-content">
+              <div class="testimonial-author">
+                <div class="author-info">
+                  <h4>Thomas Dubois</h4>
+                  <span>Chef de Projet - Agence Digitale</span>
+                </div>
+                <div class="author-rating">
+                  <i class="fa-solid fa-star"></i>
+                  <i class="fa-solid fa-star"></i>
+                  <i class="fa-solid fa-star"></i>
+                  <i class="fa-solid fa-star"></i>
+                  <i class="fa-solid fa-star"></i>
+                </div>
+              </div>
+              <div class="testimonial-text">
+                <i class="fa-solid fa-quote-left quote-icon"></i>
+                <p>"Berancan possède un excellent esprit d'analyse et une capacité remarquable à transformer les besoins clients en solutions techniques concrètes. Sa rapidité d'apprentissage est impressionnante."</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="testimonial-card">
+            <div class="testimonial-content">
+              <div class="testimonial-author">
+                <div class="author-info">
+                  <h4>Amélie Bernard</h4>
+                  <span>Formatrice PHP - 3w Academy</span>
+                </div>
+                <div class="author-rating">
+                  <i class="fa-solid fa-star"></i>
+                  <i class="fa-solid fa-star"></i>
+                  <i class="fa-solid fa-star"></i>
+                  <i class="fa-solid fa-star"></i>
+                  <i class="fa-solid fa-star"></i>
+                </div>
+              </div>
+              <div class="testimonial-text">
+                <i class="fa-solid fa-quote-left quote-icon"></i>
+                <p>"Un étudiant exemplaire qui n'hésite jamais à approfondir ses connaissances. Berancan montre une vraie passion pour le code et une méthodologie de travail remarquable."</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="testimonial-card">
+            <div class="testimonial-content">
+              <div class="testimonial-author">
+                <div class="author-info">
+                  <h4>Pierre Rousseau</h4>
+                  <span>Lead Developer - Startup Tech</span>
+                </div>
+                <div class="author-rating">
+                  <i class="fa-solid fa-star"></i>
+                  <i class="fa-solid fa-star"></i>
+                  <i class="fa-solid fa-star"></i>
+                  <i class="fa-solid fa-star"></i>
+                  <i class="fa-solid fa-star"></i>
+                </div>
+              </div>
+              <div class="testimonial-text">
+                <i class="fa-solid fa-quote-left quote-icon"></i>
+                <p>"Collaborer avec Berancan a été un vrai plaisir. Il apporte des idées fraîches, maîtrise les bonnes pratiques et sait travailler en équipe. Un profil que je recommande vivement."</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      
+      <button class="testimonial-arrow testimonial-arrow-right" id="nextTestimonial">
+        <i class="fa-solid fa-chevron-right"></i>
+      </button>
+    </div>
+    
+    <div class="testimonials-dots">
+      <span class="dot active" data-slide="0"></span>
+      <span class="dot" data-slide="1"></span>
+      <span class="dot" data-slide="2"></span>
+      <span class="dot" data-slide="3"></span>
+      <span class="dot" data-slide="4"></span>
+      <span class="dot" data-slide="5"></span>
+    </div>
+  </section>
+
+  <section id="contact" class="contact-section">
+    <h2>Restons en Contact</h2>
+    <p class="contact-subtitle">N'hésitez pas à me contacter pour toute opportunité de stage, offre d'emploi, projet ou collaboration</p>
+
+    <div class="contact-wrapper">
+      <div class="contact-left">
+        <div class="contact-intro">
+          <h3>Parlons de votre projet</h3>
+          <p>Je suis actuellement en recherche de nouvelles opportunités et disponible pour échanger sur vos besoins en développement web.</p>
+        </div>
+
+        <div class="contact-options">
+          <div class="contact-option">
+            <i class="fa-solid fa-envelope"></i>
+            <div class="info">
+              <h4>Email</h4>
+              <a href="mailto:guvenberancan1@gmail.com">guvenberancan1@gmail.com <img src="/img/click.png" alt="Cliquer" width="20" height="20" style="vertical-align: middle;" loading="lazy"></a>
+            </div>
+          </div>
+
+          <div class="contact-option">
+            <i class="fa-brands fa-linkedin"></i>
+            <div class="info">
+              <h4>LinkedIn</h4>
+              <a href="https://www.linkedin.com/in/berancanguven/?originalSubdomain=fr" target="_blank" rel="noopener noreferrer">Connectons-nous sur LinkedIn <img src="/img/click.png" alt="Cliquer" width="20" height="20" style="vertical-align: middle;" loading="lazy"></a>
+            </div>
+          </div>
+
+          <div class="contact-option">
+            <i class="fa-brands fa-github"></i>
+            <div class="info">
+              <h4>GitHub</h4>
+              <a href="https://github.com/BRCorg" target="_blank" rel="noopener noreferrer">Découvrez mes projets <img src="/img/click.png" alt="Cliquer" width="20" height="20" style="vertical-align: middle;" loading="lazy"></a>
+            </div>
+          </div>
+
+          <div class="contact-option">
+            <i class="fa-brands fa-whatsapp"></i>
+            <div class="info">
+              <h4>WhatsApp</h4>
+              <a href="https://wa.me/33782679169" target="_blank" rel="noopener noreferrer">+33 7 82 67 91 69 <img src="/img/click.png" alt="Cliquer" width="20" height="20" style="vertical-align: middle;" loading="lazy"></a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="contact-right">
+        <div class="contact-intro">
+        <h3>N'hésitez pas à me contacter</h3>
+        <p class="email-notification">📧 <em>*Je serai notifié de votre envoi par email pour une réponse rapide.</em></p>
+        </div>
+        <form action="/contact/submit" method="POST" class="contact-form">
+          <input type="hidden" name="csrf_token" value="<?= \App\Middleware\AuthMiddleware::getCsrfToken() ?>">
+          <div class="form-group">
+            <label for="name">Nom complet <span class="required">*</span></label>
+            <input type="text" name="name" id="name" placeholder="Jean Dupont" required>
+          </div>
+
+          <div class="form-group">
+            <label for="email">Adresse email <span class="required">*</span></label>
+            <input type="email" name="email" id="email" placeholder="jean.dupont@exemple.fr" required>
+          </div>
+
+          <div class="form-group">
+            <label for="subject">Sujet <span class="required">*</span></label>
+            <input type="text" name="subject" id="subject" placeholder="Proposition de stage / Projet" required>
+          </div>
+
+          <div class="form-group">
+            <label for="message">Votre message <span class="required">*</span></label>
+            <textarea name="message" id="message" rows="6" placeholder="Décrivez votre projet ou votre proposition..." required></textarea>
+          </div>
+
+          <button type="submit" class="submit-btn">
+            <i class="fa-solid fa-paper-plane"></i>
+            Envoyer le message
+          </button>
+          
+          <div class="form-disclaimer">
+            <p class="required-note"><span class="required">*</span> Champs obligatoires</p>
+            <p><em>Les données collectées via ce formulaire sont utilisées uniquement pour vous recontacter concernant votre demande et ne sont pas partagées avec des tiers.</em></p>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>

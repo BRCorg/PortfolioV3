@@ -1,0 +1,73 @@
+<div class="login-container">
+    <div class="login-box">
+        <h2>Connexion Admin</h2>
+
+        <form action="<?= $_ENV['ADMIN_SECRET_URL'] ?? '/admin' ?>/login" method="POST">
+            <!-- CSRF Token -->
+            <input type="hidden" name="csrf_token" value="<?= \App\Middleware\AuthMiddleware::getCsrfToken() ?>">
+
+            <?php if (isset($_GET['error'])): ?>
+                <div class="error-message">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <?php
+                        if ($_GET['error'] === 'blocked') {
+                            echo 'Trop de tentatives. Réessayez dans ' . e($_GET['time'] ?? '15') . ' minutes.';
+                        } elseif ($_GET['error'] === 'invalid_token') {
+                            echo 'Session expirée. Veuillez réessayer.';
+                        } else {
+                            echo 'Identifiants incorrects. Veuillez réessayer.';
+                        }
+                    ?>
+                </div>
+            <?php endif; ?>
+
+            <!-- Honeypot - champ invisible pour piéger les bots -->
+            <div class="honeypot">
+                <label for="website">Site web (ne pas remplir)</label>
+                <input
+                    type="text"
+                    id="website"
+                    name="website"
+                    autocomplete="off"
+                    tabindex="-1"
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="email">
+                    <i class="fas fa-envelope"></i> Email
+                </label>
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="admin@example.com"
+                    required
+                    autocomplete="email"
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="password">
+                    <i class="fas fa-lock"></i> Mot de passe
+                </label>
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="••••••••"
+                    required
+                    autocomplete="current-password"
+                >
+            </div>
+
+            <button type="submit">
+                <i class="fas fa-sign-in-alt"></i> Se connecter
+            </button>
+
+            <p class="info-message">
+                <i class="fas fa-shield-alt"></i> Accès sécurisé réservé aux administrateurs
+            </p>
+        </form>
+    </div>
+</div>

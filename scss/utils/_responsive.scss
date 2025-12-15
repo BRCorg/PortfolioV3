@@ -1,0 +1,147 @@
+// ==========================================
+// Responsive Media Queries
+// ==========================================
+
+@include mobile {
+  .contact-wrapper {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .contact-left,
+  .contact-right {
+    width: 100%;
+    max-width: 31.25rem;
+  }
+
+  .imageHome {
+    max-height: 26rem !important;
+    display: flex;
+    justify-content: center;
+    margin: 0;
+  }
+
+  nav .nav-container {
+    .links {
+      display: none;
+    }
+
+    /* ensure the nav container can be a positioning context */
+    position: relative;
+
+    .hamburg {
+      display: block;
+      /* place the hamburger at the bottom-right of the header */
+      position: absolute;
+      right: 1.5rem;
+      bottom: 1.4rem;
+      z-index: 1500;
+      /* ensure it doesn't inherit flex orders */
+      order: 0;
+      margin: 0;
+    }
+
+    .cv-btn {
+      /* reduce size so it doesn't visually compete with the hamburger */
+      order: 0;
+      padding-inline: 0.6rem;
+      font-size: 0.9rem;
+    }
+
+    /* on very small screens, hide the inline CV button (we added it in the dropdown) */
+    @media (max-width: 30rem) {
+      .cv-btn {
+        display: none;
+      }
+    }
+
+    /* Additional explicit media block matching your preference */
+    @media (max-width: 55.25rem) {
+      .hamburg {
+        display: block;
+        position: absolute;
+        right: 1.5rem;
+        bottom: 1.4rem;
+        z-index: 1500;
+        order: 0;
+        margin: 0;
+      }
+
+      /* Hide social icons on mobile to free space */
+      .social-links-nav {
+        display: none;
+      }
+
+      /* Tweak dropdown visual to sit below header and use primary color */
+      /* make this selector specific to avoid being overridden and apply mobile styles */
+      nav .nav-container .dropdown {
+        background: $primary-color !important;
+        z-index: 100;
+        position: absolute;
+        top: 5rem !important;
+        transform: translateY(-31.25rem);
+        width: 100%;
+        /* backdrop-filter removed for better mobile performance */
+        box-shadow: 0 0 1.25rem black;
+        transition: transform 0.3s ease;
+      }
+    }
+  }
+
+  .dropdown {
+    display: block;
+
+    .cancel {
+      display: block;
+      position: absolute;
+      top: $spacing-md;
+      right: $spacing-lg;
+      font-size: 1.5rem;
+      color: $white;
+      cursor: pointer;
+    }
+  }
+
+  .main-container {
+    flex-direction: column;
+
+    .content,
+    .image {
+      width: 80%;
+    }
+  }
+}
+
+@include tablet {
+  .project-details {
+    padding: $spacing-lg;
+
+    h1 {
+      font-size: 2rem;
+    }
+
+    p.description {
+      font-size: 1rem;
+    }
+  }
+}
+
+/* Global media query placed at root to ensure correct selectors (avoid nested duplication) */
+@media (max-width: 55.25rem) {
+  nav .nav-container .dropdown {
+    background: $primary-color !important;
+    top: 5rem !important;
+  }
+
+  nav .nav-container .social-links-nav {
+    display: none;
+  }
+
+  nav .nav-container .hamburg {
+    display: block;
+    position: absolute;
+    right: 1.5rem;
+    bottom: 1.4rem;
+    z-index: 1500;
+  }
+}

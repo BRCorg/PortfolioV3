@@ -1,0 +1,241 @@
+// ==========================================
+// Messages Contact - Interface Simplifiée 
+// ==========================================
+
+.contacts-list {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f8fafc 0%, #e3f2fd 100%);
+  padding: $spacing-xl;
+
+  .dashboard-header .header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: $spacing-xl;
+    background: $white;
+    border-radius: $border-radius-xl;
+    box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.08);
+    
+    h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: $primary-dark;
+      margin: 0;
+      
+      i { color: $primary-color; margin-right: $spacing-md; }
+    }
+    
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: $spacing-lg;
+      
+      .message-count {
+        padding: $spacing-sm $spacing-md;
+        background: $primary-color;
+        color: $white;
+        border-radius: $border-radius-round;
+        font-weight: 600;
+      }
+    }
+  }
+
+  .messages-grid {
+    display: grid;
+    gap: $spacing-xl;
+    
+    .message-card {
+      background: $white;
+      border-radius: $border-radius-xl;
+      padding: $spacing-xl;
+      box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.08);
+      border: 0.125rem solid transparent;
+      transition: all $transition-medium;
+      position: relative;
+      
+      &::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 0.25rem;
+        background: #ddd;
+      }
+      
+      &.unread {
+        border-color: rgba($primary-color, 0.2);
+        &::before { background: $primary-color; }
+      }
+      
+      &:hover {
+        transform: translateY(-0.25rem);
+        box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.12);
+      }
+      
+      .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: $spacing-lg;
+        
+        .sender-info {
+          display: flex;
+          align-items: center;
+          gap: $spacing-md;
+          
+          .sender-avatar {
+            width: 3.125rem;
+            height: 3.125rem;
+            border-radius: 50%;
+            background: $primary-color;
+            color: $white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+          }
+          
+          .sender-details {
+            .sender-name {
+              font-size: 1.1rem;
+              font-weight: 600;
+              color: #333;
+              margin: 0 0 $spacing-xs 0;
+            }
+            
+            .message-time {
+              color: #666;
+              font-size: 0.85rem;
+              i { margin-right: $spacing-xs; }
+            }
+          }
+        }
+        
+        .badge-new {
+          background: #ff6b6b;
+          color: $white;
+          padding: $spacing-xs $spacing-sm;
+          border-radius: $border-radius-round;
+          font-size: 0.8rem;
+          font-weight: 600;
+        }
+      }
+      
+      .message-subject {
+        background: rgba($primary-color, 0.08);
+        padding: $spacing-sm $spacing-md;
+        border-radius: $border-radius-md;
+        margin-bottom: $spacing-lg;
+        border-left: 0.1875rem solid $primary-color;
+        
+        i { color: $primary-color; margin-right: $spacing-sm; }
+        span { font-weight: 600; color: #333; }
+      }
+      
+      .message-preview p {
+        color: #666;
+        line-height: 1.6;
+        margin: 0;
+        margin-bottom: $spacing-lg;
+      }
+      
+      .card-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: $spacing-lg;
+        border-top: 0.0625rem solid #eee;
+        
+        .message-actions {
+          display: flex;
+          gap: $spacing-sm;
+          
+          .btn {
+            padding: $spacing-sm $spacing-md;
+            border-radius: $border-radius-md;
+            font-size: 0.85rem;
+            transition: $transition-fast;
+            
+            &.btn-primary {
+              background: $primary-color;
+              color: $white;
+              border: none;
+              &:hover { background: $primary-darker; }
+            }
+            
+            &.btn-mark-read, &.btn-delete {
+              padding: $spacing-sm;
+              width: 2.25rem;
+              height: 2.25rem;
+              border: none;
+              color: $white;
+              
+              &:hover { transform: scale(1.1); }
+            }
+            
+            &.btn-mark-read { background: #4CAF50; }
+            &.btn-delete { background: #f44336; }
+          }
+        }
+        
+        .btn-expand {
+          background: none;
+          border: none;
+          color: #999;
+          font-size: 1.2rem;
+          padding: $spacing-sm;
+          border-radius: 50%;
+          cursor: pointer;
+          transition: $transition-fast;
+          
+          &:hover {
+            background: rgba($primary-color, 0.1);
+            color: $primary-color;
+          }
+        }
+      }
+      
+      .message-full {
+        margin-top: $spacing-lg;
+        padding-top: $spacing-lg;
+        border-top: 0.0625rem solid #eee;
+        
+        h4 { color: #333; margin-bottom: $spacing-md; }
+        
+        .message-body {
+          background: rgba($primary-color, 0.03);
+          padding: $spacing-lg;
+          border-radius: $border-radius-md;
+          margin-bottom: $spacing-md;
+          border-left: 0.1875rem solid $primary-color;
+          color: #666;
+          line-height: 1.7;
+        }
+        
+        .contact-details {
+          font-size: 0.9rem;
+          strong { color: #333; }
+          a { color: $primary-color; text-decoration: none; }
+        }
+      }
+    }
+  }
+  
+  .empty-state {
+    text-align: center;
+    padding: $spacing-xxl * 2;
+    background: $white;
+    border-radius: $border-radius-xl;
+    
+    .empty-icon {
+      font-size: 4rem;
+      color: #ccc;
+      margin-bottom: $spacing-xl;
+    }
+    
+    h3 { color: #666; }
+    p { color: #999; }
+  }
+}

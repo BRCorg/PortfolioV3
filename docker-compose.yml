@@ -1,0 +1,65 @@
+version: '3.8'
+
+services:
+  # Application PHP + Nginx
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: portfolio_app
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./public/uploads:/var/www/html/public/uploads
+      - ./.env:/var/www/html/.env:ro
+    environment:
+      - APP_ENV=production
+      - DEBUG_MODE=false
+    networks:
+      - portfolio_network
+    depends_on:
+      - db
+
+  # Base de données MySQL
+  db:
+    image: mysql:8.0
+    container_name: portfolio_db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-root_password_change_me}
+      MYSQL_DATABASE: ${DB_NAME:-portfolio_v2}
+      MYSQL_USER: ${DB_USER:-portfolio_user}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-portfolio_password}
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    networks:
+      - portfolio_network
+    ports:
+      - "3306:3306"
+
+  # phpMyAdmin (optionnel, pour gestion de la BDD)
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: portfolio_phpmyadmin
+    restart: unless-stopped
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      PMA_USER: ${DB_USER:-portfolio_user}
+      PMA_PASSWORD: ${DB_PASSWORD:-portfolio_password}
+    ports:
+      - "8080:80"
+    networks:
+      - portfolio_network
+    depends_on:
+      - db
+
+networks:
+  portfolio_network:
+    driver: bridge
+
+volumes:
+  db_data:
+    driver: local

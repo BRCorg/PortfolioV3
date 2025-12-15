@@ -1,0 +1,59 @@
+<section class="list-section projects-list-admin">
+    <header class="dashboard-header">
+        <div class="header-content">
+            <h1><i class="fas fa-folder-open"></i> Liste des projets</h1>
+            <span class="projects-count"><?= count($projects) ?> projet<?= count($projects) !== 1 ? 's' : '' ?></span>
+        </div>
+        <a href="<?= $_ENV['ADMIN_SECRET_URL'] ?>/dashboard" class="btn">
+            <i class="fas fa-arrow-left"></i> Retour au dashboard
+        </a>
+    </header>
+    
+    <?php if (empty($projects)): ?>
+        <div class="empty-state">
+            <div class="empty-icon">
+                <i class="fas fa-folder-open"></i>
+            </div>
+            <p>Aucun projet pour le moment</p>
+            <p>Retournez au dashboard pour en créer un.</p>
+        </div>
+    <?php else: ?>
+        <div class="projects-grid">
+            <?php foreach ($projects as $project): ?>
+                <article class="project-card">
+                    <div class="card-image">
+                        <img src="<?= htmlspecialchars($project['image']) ?>" alt="<?= htmlspecialchars($project['title']) ?>" loading="lazy">
+                        <div class="card-overlay">
+                            <span class="category-badge">
+                                <?= htmlspecialchars($project['category_name'] ?? 'Sans catégorie') ?>
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="card-content">
+                        <div class="card-header">
+                            <h3 class="project-title"><?= htmlspecialchars($project['title']) ?></h3>
+                            <div class="project-meta">
+                                <span class="project-id">#<?= $project['id'] ?></span>
+                            </div>
+                        </div>
+                        
+                        <div class="project-description">
+                            <?= nl2br(htmlspecialchars(mb_substr($project['description'], 0, 150))) ?>
+                            <?= strlen($project['description']) > 150 ? '...' : '' ?>
+                        </div>
+                        
+                        <div class="card-actions">
+                            <a href="<?= $_ENV['ADMIN_SECRET_URL'] ?? '/admin' ?>/projects/<?= $project['id'] ?>/delete" 
+                               class="btn btn-sm btn-delete btn-full" 
+                               onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce projet ?')">
+                                <i class="fas fa-trash"></i> Supprimer
+                            </a>
+                        </div>
+                    </div>
+                </article>
+            <?php endforeach; ?>
+        </div>
+    <?php endif; ?>
+</section>
+

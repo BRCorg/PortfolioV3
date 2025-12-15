@@ -1,0 +1,160 @@
+// ==========================================
+// Page Portfolio - Nouveau Design
+// ==========================================
+
+.portfolio {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  padding: 5rem $spacing-xl;
+  position: relative;
+}
+
+#categoryFilter {
+  padding: $spacing-md $spacing-lg;
+  border-radius: $border-radius-md;
+  border: 0.125rem solid rgba($primary-color, 0.2);
+  background: var(--nav-bg);
+  color: var(--text-color);
+  margin-bottom: $spacing-xxl;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.05);
+  position: relative;
+  z-index: 1;
+
+  &:hover {
+    border-color: $primary-color;
+    box-shadow: 0 0.25rem 0.75rem rgba($primary-color, 0.15);
+    transform: translateY(-0.125rem);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: $primary-color;
+    box-shadow: 0 0 0 0.1875rem rgba($primary-color, 0.1);
+  }
+}
+
+.portfolio-title {
+  font-size: 2rem;
+  margin-bottom: $spacing-md;
+  font-weight: 600;
+  color: #333;
+
+  // Dark mode
+  .dark & {
+    color: $white;
+  }
+}
+
+.portfolio-filter {
+  margin-bottom: $spacing-xl;
+
+  label {
+    font-weight: 500;
+    margin-right: $spacing-sm;
+  }
+
+  select {
+    padding: $spacing-sm $spacing-md;
+    border-radius: $border-radius-sm;
+    border: 0.0625rem solid #ccc;
+    font-size: 1rem;
+  }
+}
+
+// Project details page
+.project-details {
+  max-width: 62.5rem;
+  margin: 5rem auto;
+  padding: $spacing-xl;
+  background-color: var(--nav-bg);
+  color: var(--text-color);
+  border-radius: $border-radius-xl;
+  box-shadow: 0 0.25rem 0.9375rem rgba(0, 0, 0, 0.1);
+
+  h1 {
+    font-size: 2.5rem;
+    margin-bottom: $spacing-md;
+    color: $primary-dark;
+    text-align: center;
+
+    // Dark mode
+    .dark & {
+      color: $white;
+    }
+  }
+
+  .category {
+    text-align: center;
+    font-style: italic;
+    color: var(--link-color);
+    margin-bottom: $spacing-xl;
+    font-weight: 500;
+  }
+
+  img {
+    width: 100%;
+    max-height: 31.25rem;
+    object-fit: cover;
+    border-radius: $border-radius-lg;
+    margin-bottom: $spacing-xl;
+    box-shadow: 0 0.25rem 1.25rem rgba(0, 0, 0, 0.2);
+  }
+
+  p.description {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    text-align: justify;
+    margin-bottom: $spacing-xl;
+  }
+}
+
+// Projects list (admin)
+.projects-list {
+  padding: $spacing-xl;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+
+  a[href*='dashboard'] {
+    display: inline-block;
+    margin-bottom: $spacing-xl;
+    background-color: $primary-color;
+    color: $white;
+    padding: $spacing-sm $spacing-md;
+    border-radius: 0.375rem;
+    text-decoration: none;
+    @include transition(background-color);
+
+    &:hover {
+      background-color: $primary-dark;
+    }
+  }
+
+  .project-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(17.5rem, 1fr));
+    gap: $spacing-xl;
+
+    .project-card {
+      background-color: $white;
+      border-radius: $border-radius-lg;
+      box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.1);
+      padding: $spacing-md;
+      display: flex;
+      flex-direction: column;
+      gap: $spacing-sm;
+      @include transition(transform, $transition-fast);
+      @include hover-lift;
+
+      .imgProject {
+        max-width: 100%;
+        max-height: 12.5rem;
+        object-fit: cover;
+        border-radius: 0.375rem;
+      }
+    }
+  }
+}

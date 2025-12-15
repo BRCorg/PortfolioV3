@@ -1,0 +1,39 @@
+// ==========================================
+// Reset & Base Styles
+// ==========================================
+
+* {
+  padding: 0;
+  margin: 0;
+  font-family: $font-primary;
+  box-sizing: border-box;
+}
+
+html {
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+body {
+  min-height: 100vh;
+  transition: background 0.3s ease, color 0.3s ease;
+  padding: 0;
+  background: var(--bg-color);
+  color: var(--text-color);
+}
+
+// Titres en mode dark - désactiver le gradient et forcer la couleur blanche
+.dark h1,
+.dark h2,
+.dark h3,
+.dark h4,
+.dark h5,
+.dark h6 {
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  -webkit-text-fill-color: $white !important;
+  background-clip: unset !important;
+  color: $white !important;
+}

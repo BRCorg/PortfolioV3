@@ -1,0 +1,68 @@
+# Dependencies
+vendor/
+
+# Environment
+.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Claude AI
+.claude/
+
+# CSS Source Maps (ne pas mettre en prod)
+*.css.map
+
+# Dépendances
+vendor/
+composer.lock
+
+# Fichiers système
+.DS_Store
+Thumbs.db
+
+# SÉCURITÉ CRITIQUE - Fichiers sensibles
+.env
+.env.local
+.env.production
+.env.backup
+*.log
+error_log
+
+# Uploads et fichiers utilisateurs
+public/uploads/profile/
+public/uploads/projects/
+*.tmp
+*.backup
+
+# Fichiers IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Fichiers système et cache
+*.pid
+*.seed
+*.pid.lock
+
+# Logs
+*.log
+logs/*.log
+
+# Export base de données (ne jamais committer)
+*.sql
+portfolio_v2_export.sql
+
+# Tests
+.phpunit.cache/
+phpunit.xml
+
+# Fichiers Windows
+*.bat
+compile-sass.bat
+watch-sass.bat
+export-database.bat

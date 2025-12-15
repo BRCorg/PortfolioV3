@@ -1,0 +1,64 @@
+<section class="list-section categories-list-admin">
+    <header class="dashboard-header">
+        <h1>Liste des catégories</h1>
+        <a href="<?= $_ENV['ADMIN_SECRET_URL'] ?>/dashboard" class="btn">← Retour au dashboard</a>
+    </header>
+
+    <?php if (empty($categories)): ?>
+        <div class="empty-state">
+            <p>Aucune catégorie pour le moment.</p>
+            <p>Retournez au dashboard pour en créer une.</p>
+        </div>
+    <?php else: ?>
+        <div class="table-container">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Nom</th>
+                        <th>Description</th>
+                        <th>Slug</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($categories as $category): ?>
+                        <tr data-category-id="<?= $category['id'] ?>">
+                            <td><strong><?= htmlspecialchars($category['name']) ?></strong></td>
+                            <td><?= htmlspecialchars($category['description'] ?? '') ?></td>
+                            <td><code><?= htmlspecialchars($category['slug'] ?? '') ?></code></td>
+                            <td class="actions">
+                                <a href="<?= $_ENV['ADMIN_SECRET_URL'] ?>/categories/<?= $category['id'] ?>/edit" class="btn btn-sm btn-edit">
+                                    <i class="fa-solid fa-edit"></i> Modifier
+                                </a>
+                                <button class="btn btn-sm btn-delete" data-id="<?= $category['id'] ?>">
+                                    <i class="fa-solid fa-trash"></i> Supprimer
+                                </button>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    <?php endif; ?>
+</section>
+
+<script>
+// Suppression
+document.querySelectorAll('.btn-delete').forEach(btn => {
+    btn.addEventListener('click', async function() {
+        if (!confirm('Êtes-vous sûr de vouloir supprimer cette catégorie ?')) return;
+
+        const categoryId = this.dataset.id;
+        const response = await fetch(`<?= $_ENV['ADMIN_SECRET_URL'] ?>/categories/${categoryId}/delete`, {
+            method: 'POST'
+        });
+
+        const result = await response.json();
+        if (result.success) {
+            this.closest('tr').remove();
+        } else {
+            alert(result.message);
+        }
+    });
+});
+</script>
