@@ -9,7 +9,7 @@ services:
     container_name: portfolio_app
     restart: unless-stopped
     ports:
-      - "80:80"
+      - "8081:80"
     volumes:
       - ./public/uploads:/var/www/html/public/uploads
       - ./.env:/var/www/html/.env:ro
