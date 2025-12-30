@@ -7,7 +7,7 @@
 
 require_once __DIR__ . '/../bootstrap.php';
 
-use Config\Database;
+use config\Database;
 use App\Repositories\ProjectRepository;
 
 header('Content-Type: application/xml; charset=utf-8');

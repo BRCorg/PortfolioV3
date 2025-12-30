@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-use Config\Database;
+use config\Database;
 use App\Repositories\UserRepository;
 use App\Middleware\AuthMiddleware;
 use App\Middleware\RateLimiter;

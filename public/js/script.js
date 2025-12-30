@@ -101,10 +101,17 @@ function hamburg() {
     const dropdown = document.querySelector('.dropdown');
     if (dropdown) {
         if (menuOpen) {
-            dropdown.style.transform = 'translateY(-500px)';
+            // Fermer le menu - glisse vers la gauche
+            dropdown.style.opacity = '0';
+            dropdown.style.transform = 'translateX(-100px)';
+            setTimeout(() => {
+                dropdown.style.transform = 'translateX(-71.25rem)';
+            }, 300);
             menuOpen = false;
         } else {
-            dropdown.style.transform = 'translateY(0px)';
+            // Ouvrir le menu - glisse depuis la gauche
+            dropdown.style.transform = 'translateX(0)';
+            dropdown.style.opacity = '1';
             menuOpen = true;
         }
     }
@@ -113,7 +120,11 @@ function hamburg() {
 function cancel() {
     const dropdown = document.querySelector('.dropdown');
     if (dropdown) {
-        dropdown.style.transform = 'translateY(-500px)';
+        dropdown.style.opacity = '0';
+        dropdown.style.transform = 'translateX(-100px)';
+        setTimeout(() => {
+            dropdown.style.transform = 'translateX(-71.25rem)';
+        }, 300);
         menuOpen = false;
     }
 }

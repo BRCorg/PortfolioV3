@@ -1,4 +1,8 @@
 <?php
+// Affichage des erreurs pour debug
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
 // Forcer l'encodage UTF-8
 header('Content-Type: text/html; charset=utf-8');
 mb_internal_encoding('UTF-8');

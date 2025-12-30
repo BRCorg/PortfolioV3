@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-use Config\Database;
+use config\Database;
 use App\Models\Project;
 use App\Models\Skill;
 use App\Models\User;

@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-use Config\Database;
+use config\Database;
 use App\Repositories\CategoryRepository;
 use App\Middleware\AuthMiddleware;
 
