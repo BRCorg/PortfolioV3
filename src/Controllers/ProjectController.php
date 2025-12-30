@@ -59,11 +59,11 @@ class ProjectController
         try {
             // Vérifier le token CSRF
             $token = $_POST['csrf_token'] ?? '';
-            
+
             // Debug temporaire
             error_log('Token reçu: ' . $token);
             error_log('Token session: ' . ($_SESSION['csrf_token'] ?? 'NON DEFINI'));
-            
+
             if (!AuthMiddleware::verifyCsrfToken($token)) {
                 echo json_encode([
                     'success' => false,
@@ -75,6 +75,13 @@ class ProjectController
                     ]
                 ]);
                 exit;
+            }
+
+            // Convertir les données POST en UTF-8 si nécessaire
+            foreach ($_POST as $key => $value) {
+                if (is_string($value) && !mb_check_encoding($value, 'UTF-8')) {
+                    $_POST[$key] = mb_convert_encoding($value, 'UTF-8', 'auto');
+                }
             }
 
             $data = [
@@ -224,6 +231,13 @@ class ProjectController
                 'message' => 'Token de sécurité invalide'
             ]);
             exit;
+        }
+
+        // Convertir les données POST en UTF-8 si nécessaire
+        foreach ($_POST as $key => $value) {
+            if (is_string($value) && !mb_check_encoding($value, 'UTF-8')) {
+                $_POST[$key] = mb_convert_encoding($value, 'UTF-8', 'auto');
+            }
         }
 
         $data = [
