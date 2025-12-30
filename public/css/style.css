@@ -27,12 +27,14 @@ body.dark {
 html {
   width: 100%;
   min-height: 100vh;
+  min-height: 100dvh; /* Fix Safari iOS - Dynamic Viewport Height */
   overflow-x: hidden;
   overflow-y: auto;
 }
 
 body {
   min-height: 100vh;
+  min-height: 100dvh; /* Fix Safari iOS - Dynamic Viewport Height */
   transition: background 0.3s ease, color 0.3s ease;
   padding: 0;
   background: var(--bg-color);
@@ -878,8 +880,14 @@ nav .nav-container .cancel {
   background: #314473;
   width: 0%;
   transition: width 0.1s ease;
-  z-index: 101;
+  z-index: 9999;
   box-shadow: 0 -0.125rem 0.625rem rgba(49, 68, 115, 0.3);
+}
+@media (max-width: 768px) {
+  .scroll-progress {
+    height: 0.25rem;
+    z-index: 9999;
+  }
 }
 
 .dropdown {
@@ -1396,7 +1404,17 @@ footer p {
   justify-content: center;
   box-shadow: 0 0.375rem 1.25rem rgba(49, 68, 115, 0.4);
   transition: all 0.3s ease;
-  z-index: 1000;
+  z-index: 9999;
+}
+@media (max-width: 768px) {
+  .dark-mode-toggle-home {
+    bottom: 1.25rem;
+    left: 1.25rem;
+    width: 3rem;
+    height: 3rem;
+    font-size: 1.25rem;
+    z-index: 9999;
+  }
 }
 .dark-mode-toggle-home:hover {
   transform: translateY(-0.3125rem) rotate(20deg);
@@ -1426,10 +1444,20 @@ footer p {
   justify-content: center;
   box-shadow: 0 0.375rem 1.25rem rgba(49, 68, 115, 0.4);
   transition: all 0.3s ease;
-  z-index: 1000;
+  z-index: 9999;
   opacity: 0;
   visibility: hidden;
   transform: translateY(1.25rem);
+}
+@media (max-width: 768px) {
+  .scroll-to-top {
+    bottom: 1.25rem;
+    right: 1.25rem;
+    width: 3rem;
+    height: 3rem;
+    font-size: 1.25rem;
+    z-index: 9999;
+  }
 }
 .scroll-to-top.visible {
   opacity: 1;
@@ -1446,6 +1474,11 @@ footer p {
 .scroll-to-top i {
   font-size: 1.5rem;
   transition: transform 0.3s ease;
+}
+@media (max-width: 768px) {
+  .scroll-to-top i {
+    font-size: 1.25rem;
+  }
 }
 
 .edit-profile-btn {

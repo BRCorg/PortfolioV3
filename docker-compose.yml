@@ -12,6 +12,7 @@ services:
       - "8081:80"
     volumes:
       - ./public/uploads:/var/www/html/public/uploads
+      - ./public/img:/var/www/html/public/img
       - ./.env:/var/www/html/.env:ro
     environment:
       - APP_ENV=production

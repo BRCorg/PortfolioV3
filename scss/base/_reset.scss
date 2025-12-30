@@ -12,12 +12,14 @@
 html {
   width: 100%;
   min-height: 100vh;
+  min-height: 100dvh; /* Fix Safari iOS - Dynamic Viewport Height */
   overflow-x: hidden;
   overflow-y: auto;
 }
 
 body {
   min-height: 100vh;
+  min-height: 100dvh; /* Fix Safari iOS - Dynamic Viewport Height */
   transition: background 0.3s ease, color 0.3s ease;
   padding: 0;
   background: var(--bg-color);

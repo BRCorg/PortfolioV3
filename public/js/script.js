@@ -1039,4 +1039,32 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
+// ==========================================
+// FIX POSITION FIXED MOBILE (URL BAR HIDE/SHOW)
+// ==========================================
+// Force le recalcul des éléments fixed quand la barre d'URL mobile se cache/affiche
+let lastHeight = window.innerHeight;
+window.addEventListener('resize', () => {
+    const currentHeight = window.innerHeight;
+    // Détecter uniquement les changements de hauteur (barre d'URL)
+    if (Math.abs(currentHeight - lastHeight) > 100) {
+        // Forcer le repaint des éléments fixed
+        const fixedElements = [
+            document.getElementById('darkModeToggle'),
+            document.getElementById('scrollToTop'),
+            document.getElementById('scrollProgress')
+        ];
+
+        fixedElements.forEach(el => {
+            if (el) {
+                el.style.transform = 'translateZ(0)';
+                requestAnimationFrame(() => {
+                    el.style.transform = '';
+                });
+            }
+        });
+    }
+    lastHeight = currentHeight;
+});
+
 console.log('Portfolio V2 - Script chargé avec succès ✓');
