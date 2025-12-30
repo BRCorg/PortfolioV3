@@ -5,7 +5,7 @@
   "autoload": {
     "psr-4": {
       "App\\": "src/",
-      "Config\\": "Config/"
+      "config\\": "config/"
     }
   },
   "autoload-dev": {
