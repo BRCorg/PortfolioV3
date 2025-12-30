@@ -9,7 +9,7 @@ class Database
     private string $host;
     private int $port;
     private string $dbname;
-    private string $charset = 'utf8';
+    private string $charset = 'utf8mb4';
     private string $username;
     private string $password;
     private ?PDO $pdo = null;

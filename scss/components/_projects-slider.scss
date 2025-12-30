@@ -82,6 +82,10 @@
     padding: 0;
     margin-inline: -1.25rem;
   }
+
+  .swiper-wrapper {
+    margin-bottom: 20px;
+  }
 }
 
 .emotions-slider__slide {
@@ -295,6 +299,10 @@
   max-height: 3.75rem;
   overflow: hidden;
   transition: max-height 0.6s ease-in;
+}
+
+.emotions-slider-item__footer {
+  padding-bottom: 0.5rem;
 }
 
 .emotions-slider-item__header-inner {

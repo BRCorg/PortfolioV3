@@ -2418,6 +2418,9 @@ body.dark {
     margin-inline: -1.25rem;
   }
 }
+.emotions-slider .swiper-wrapper {
+  margin-bottom: 20px;
+}
 
 .emotions-slider__slide {
   display: flex;
@@ -2609,6 +2612,10 @@ body.dark {
   max-height: 3.75rem;
   overflow: hidden;
   transition: max-height 0.6s ease-in;
+}
+
+.emotions-slider-item__footer {
+  padding-bottom: 0.5rem;
 }
 
 .emotions-slider-item__header-inner {
@@ -4107,6 +4114,7 @@ h2.section-visible::after {
 .project-list .swiper-wrapper {
   display: flex;
   align-items: center;
+  margin-bottom: 20px;
 }
 .project-list .swiper-slide {
   width: auto;
@@ -4555,7 +4563,7 @@ h2.section-visible::after {
   color: var(--text-color);
 }
 .project-detail-description .description-content p {
-  margin-bottom: 0.9375rem;
+  margin-bottom: 0.5rem;
 }
 .project-detail-description .description-content ul, .project-detail-description .description-content ol {
   padding-left: 1.5625rem;
@@ -4689,7 +4697,10 @@ h2.section-visible::after {
 
 @media (max-width: 768px) {
   .project-detail-page {
-    padding-top: 100px;
+    padding-top: 0;
+  }
+  .project-detail-carousel .swiper-slide img {
+    height: 19.25rem;
   }
   .back-to-portfolio {
     margin-left: 20px;
@@ -6908,3 +6919,5 @@ h2.section-visible::after {
     z-index: 1500;
   }
 }
+
+/*# sourceMappingURL=style.css.map */

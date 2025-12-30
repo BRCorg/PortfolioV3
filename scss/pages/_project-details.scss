@@ -362,9 +362,9 @@
     font-size: 1.1rem;
     line-height: 1.8;
     color: var(--text-color);
-    
+
     p {
-      margin-bottom: 0.9375rem;
+      margin-bottom: 0.5rem;
     }
     
     ul, ol {
@@ -523,7 +523,11 @@
 // Responsive
 @media (max-width: 768px) {
   .project-detail-page {
-    padding-top: 100px;
+    padding-top: 0;
+  }
+
+  .project-detail-carousel .swiper-slide img {
+    height: 19.25rem;
   }
   
   .back-to-portfolio {
