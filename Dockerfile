@@ -35,7 +35,12 @@ RUN { \
     } > /usr/local/etc/php/conf.d/opcache.ini
 
 # Créer les répertoires nécessaires
-RUN mkdir -p /var/www/html /var/log/nginx /var/log/supervisor /run/nginx
+RUN mkdir -p /var/www/html /var/log/nginx /var/log/supervisor /run/nginx \
+    /var/lib/nginx/tmp/client_body \
+    /var/lib/nginx/tmp/proxy \
+    /var/lib/nginx/tmp/fastcgi \
+    /var/lib/nginx/tmp/uwsgi \
+    /var/lib/nginx/tmp/scgi
 
 # Définir le répertoire de travail
 WORKDIR /var/www/html
@@ -57,7 +62,9 @@ COPY docker/supervisor/supervisord.conf /etc/supervisord.conf
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html/public \
     && chmod -R 775 /var/www/html/public/uploads \
-    && chmod 600 /var/www/html/.env 2>/dev/null || true
+    && chmod 600 /var/www/html/.env 2>/dev/null || true \
+    && chown -R www-data:www-data /var/lib/nginx/tmp \
+    && chmod -R 777 /var/lib/nginx/tmp
 
 # Exposer le port HTTP
 EXPOSE 80
