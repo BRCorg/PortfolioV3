@@ -251,7 +251,7 @@ class ProjectController
         // Gérer l'upload de l'image
         if (isset($_FILES['image']) && $_FILES['image']['error'] !== UPLOAD_ERR_NO_FILE) {
             // Valider le fichier uploadé
-            $validation = validateImageUpload($_FILES['image']);
+            $validation = \validateImageUpload($_FILES['image']);
 
             if ($validation['valid']) {
                 $uploadDir = __DIR__ . '/../../public/uploads/projects/';
