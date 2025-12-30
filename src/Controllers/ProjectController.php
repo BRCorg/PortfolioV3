@@ -233,13 +233,6 @@ class ProjectController
             exit;
         }
 
-        // Convertir les données POST en UTF-8 si nécessaire
-        foreach ($_POST as $key => $value) {
-            if (is_string($value) && !mb_check_encoding($value, 'UTF-8')) {
-                $_POST[$key] = mb_convert_encoding($value, 'UTF-8', 'auto');
-            }
-        }
-
         $data = [
             'title' => $_POST['title'] ?? '',
             'description' => $_POST['description'] ?? '',
