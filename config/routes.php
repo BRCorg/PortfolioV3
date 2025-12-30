@@ -72,6 +72,7 @@ $router->post($adminUrl . '/2fa/disable', TwoFactorController::class, 'disable')
 
 $router->get($adminUrl . '/projects', ProjectController::class, 'list');
 $router->post($adminUrl . '/projects/create', ProjectController::class, 'create');
+$router->get($adminUrl . '/projects/{id}/edit', ProjectController::class, 'edit');
 $router->post($adminUrl . '/projects/{id}/update', ProjectController::class, 'update');
 $router->get($adminUrl . '/projects/{id}/delete', ProjectController::class, 'delete');
 

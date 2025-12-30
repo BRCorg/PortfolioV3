@@ -1,0 +1,236 @@
+<section class="edit-section">
+    <header class="dashboard-header">
+        <h1><i class="fas fa-edit"></i> Modifier le projet</h1>
+        <a href="<?= $_ENV['ADMIN_SECRET_URL'] ?>/projects" class="btn">
+            <i class="fas fa-arrow-left"></i> Retour à la liste
+        </a>
+    </header>
+
+    <div class="form-container">
+        <form id="editProjectForm" enctype="multipart/form-data">
+            <input type="hidden" name="csrf_token" value="<?= \App\Middleware\AuthMiddleware::getCsrfToken() ?>">
+
+            <div class="form-group">
+                <label for="projectTitle">
+                    <i class="fas fa-heading"></i> Titre <span class="required">*</span>
+                </label>
+                <input type="text"
+                       id="projectTitle"
+                       name="title"
+                       value="<?= htmlspecialchars($project['title']) ?>"
+                       placeholder="Titre du projet"
+                       required>
+            </div>
+
+            <div class="form-group">
+                <label for="projectDescription">
+                    <i class="fas fa-align-left"></i> Description courte (page d'accueil)
+                </label>
+                <textarea id="projectDescription"
+                          name="description"
+                          placeholder="Description courte pour la liste des projets (200 caractères max recommandé)..."
+                          maxlength="250"><?= htmlspecialchars($project['description']) ?></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="projectDescriptionLong">
+                    <i class="fas fa-file-alt"></i> Description longue (page détails)
+                </label>
+                <textarea id="projectDescriptionLong"
+                          name="description_long"
+                          placeholder="Description complète du projet pour la page de détails..."
+                          rows="6"><?= htmlspecialchars($project['long_description'] ?? '') ?></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="projectCategory">
+                    <i class="fas fa-folder"></i> Catégorie <span class="required">*</span>
+                </label>
+                <select id="projectCategory" name="category_id" required>
+                    <option value="">-- Choisir une catégorie --</option>
+                    <?php foreach ($categories as $cat): ?>
+                        <option value="<?= $cat['id'] ?>" <?= $project['category_id'] == $cat['id'] ? 'selected' : '' ?>>
+                            <?= htmlspecialchars($cat['name']) ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="projectSkills">
+                    <i class="fas fa-code"></i> Compétences utilisées
+                </label>
+                <div class="skills-selector">
+                    <?php
+                    $projectSkillIds = array_column($project['skills'] ?? [], 'id');
+                    foreach ($skills as $skill):
+                    ?>
+                        <label class="skill-checkbox">
+                            <input type="checkbox"
+                                   name="skill_ids[]"
+                                   value="<?= $skill['id'] ?>"
+                                   <?= in_array($skill['id'], $projectSkillIds) ? 'checked' : '' ?>>
+                            <span><?= htmlspecialchars($skill['name']) ?></span>
+                        </label>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>
+                    <i class="fas fa-image"></i> Image principale actuelle
+                </label>
+                <div class="current-image">
+                    <img src="<?= htmlspecialchars($project['image']) ?>"
+                         alt="<?= htmlspecialchars($project['title']) ?>"
+                         style="max-width: 300px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="projectImage">
+                    <i class="fas fa-image"></i> Changer l'image principale (facultatif)
+                </label>
+                <div class="file-input-wrapper">
+                    <input type="file"
+                           id="projectImage"
+                           name="image"
+                           accept="image/*">
+                    <div class="file-input-label">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <span>Choisir une nouvelle image (max 5MB)</span>
+                    </div>
+                </div>
+                <small style="color: #666; margin-top: 0.5rem; display: block;">
+                    Laissez vide pour conserver l'image actuelle
+                </small>
+            </div>
+
+            <?php if (!empty($project['images'])): ?>
+            <div class="form-group">
+                <label>
+                    <i class="fas fa-images"></i> Images du carousel actuelles
+                </label>
+                <div class="gallery-preview" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1rem;">
+                    <?php foreach ($project['images'] as $img): ?>
+                        <img src="<?= htmlspecialchars($img['file_path']) ?>"
+                             alt="Image carousel"
+                             style="width: 100%; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                    <?php endforeach; ?>
+                </div>
+            </div>
+            <?php endif; ?>
+
+            <div class="form-group">
+                <label for="projectGallery">
+                    <i class="fas fa-images"></i> Ajouter des images au carousel (facultatif)
+                </label>
+                <div class="file-input-wrapper">
+                    <input type="file"
+                           id="projectGallery"
+                           name="gallery[]"
+                           accept="image/*"
+                           multiple>
+                    <div class="file-input-label">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <span>Ajouter des images supplémentaires (max 5MB chacune)</span>
+                    </div>
+                </div>
+                <small style="color: #666; margin-top: 0.5rem; display: block;">
+                    Ces nouvelles images seront ajoutées aux images existantes
+                </small>
+            </div>
+
+            <div class="form-group">
+                <label for="projectStatus">
+                    <i class="fas fa-toggle-on"></i> Statut
+                </label>
+                <select id="projectStatus" name="status">
+                    <option value="published" <?= $project['status'] === 'published' ? 'selected' : '' ?>>Publié</option>
+                    <option value="draft" <?= $project['status'] === 'draft' ? 'selected' : '' ?>>Brouillon</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="checkbox-label">
+                    <input type="checkbox"
+                           name="is_featured"
+                           value="1"
+                           <?= !empty($project['is_featured']) ? 'checked' : '' ?>>
+                    <span><i class="fas fa-star"></i> Projet mis en avant</span>
+                </label>
+            </div>
+
+            <div class="form-actions">
+                <a href="<?= $_ENV['ADMIN_SECRET_URL'] ?>/projects" class="btn btn-secondary">
+                    <i class="fas fa-times"></i> Annuler
+                </a>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Enregistrer les modifications
+                </button>
+            </div>
+        </form>
+
+        <div id="editMessage"></div>
+    </div>
+</section>
+
+<script>
+document.getElementById('editProjectForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const formData = new FormData(this);
+    const messageDiv = document.getElementById('editMessage');
+
+    // Récupérer toutes les checkboxes cochées pour les skills
+    const checkedSkills = Array.from(document.querySelectorAll('input[name="skill_ids[]"]:checked'))
+        .map(cb => cb.value);
+
+    // Supprimer les anciennes skill_ids du FormData
+    formData.delete('skill_ids[]');
+
+    // Ajouter les skill_ids comme JSON
+    formData.append('skill_ids', JSON.stringify(checkedSkills));
+
+    try {
+        const response = await fetch('<?= $_ENV['ADMIN_SECRET_URL'] ?>/projects/<?= $project['id'] ?>/update', {
+            method: 'POST',
+            body: formData
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            messageDiv.innerHTML = '<div class="alert alert-success">' +
+                '<i class="fas fa-check-circle"></i> ' + result.message +
+                '</div>';
+
+            // Rediriger après 1 seconde
+            setTimeout(() => {
+                window.location.href = '<?= $_ENV['ADMIN_SECRET_URL'] ?>/projects';
+            }, 1000);
+        } else {
+            messageDiv.innerHTML = '<div class="alert alert-error">' +
+                '<i class="fas fa-exclamation-circle"></i> ' + result.message +
+                '</div>';
+        }
+    } catch (error) {
+        messageDiv.innerHTML = '<div class="alert alert-error">' +
+            '<i class="fas fa-exclamation-circle"></i> Erreur lors de la mise à jour' +
+            '</div>';
+    }
+});
+
+// Preview de l'image avant upload
+document.getElementById('projectImage').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            const currentImage = document.querySelector('.current-image img');
+            currentImage.src = event.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+});
+</script>

@@ -178,6 +178,38 @@ class ProjectController
     }
 
     /**
+     * Afficher le formulaire d'édition d'un projet
+     */
+    public function edit(int $id): void
+    {
+        AuthMiddleware::requireAuth();
+
+        // Désactiver le cache
+        header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+        header('Cache-Control: post-check=0, pre-check=0', false);
+        header('Pragma: no-cache');
+
+        // Récupérer le projet avec toutes ses relations
+        $project = $this->projectRepository->findComplete($id);
+
+        if (!$project) {
+            header('Location: ' . $_ENV['ADMIN_SECRET_URL'] . '/projects?error=not_found');
+            exit;
+        }
+
+        // Récupérer les catégories et skills pour les listes déroulantes
+        $categories = $this->categoryRepository->all('name ASC');
+
+        $database = new Database();
+        $db = $database->connect();
+        $skillRepository = new \App\Repositories\SkillRepository($db);
+        $skills = $skillRepository->all('name ASC');
+
+        $template = 'editProject';
+        include __DIR__ . '/../Views/admin-layout.phtml';
+    }
+
+    /**
      * Mettre à jour un projet
      */
     public function update(int $id): void
@@ -200,12 +232,20 @@ class ProjectController
             'category_id' => $_POST['category_id'] ?? null,
         ];
 
+        // Ajouter description longue si fournie
+        if (isset($_POST['description_long'])) {
+            $data['long_description'] = $_POST['description_long'];
+        }
+
         if (isset($_POST['status'])) {
             $data['status'] = $_POST['status'];
         }
 
         if (isset($_POST['is_featured'])) {
             $data['is_featured'] = (int) $_POST['is_featured'];
+        } else {
+            // Si la checkbox n'est pas cochée, elle ne sera pas dans $_POST
+            $data['is_featured'] = 0;
         }
 
         // Gérer l'upload de l'image
@@ -230,13 +270,56 @@ class ProjectController
             }
         }
 
-        $skillIds = isset($_POST['skill_ids']) ? json_decode($_POST['skill_ids'], true) : null;
+        $skillIds = isset($_POST['skill_ids']) ? json_decode($_POST['skill_ids'], true) : [];
 
         $updated = $this->projectRepository->updateProject($id, $data, $skillIds);
 
+        // Gérer l'upload du carousel (images supplémentaires)
+        $galleryErrors = [];
+        if ($updated && isset($_FILES['gallery']) && is_array($_FILES['gallery']['name'])) {
+            $uploadDir = __DIR__ . '/../../public/uploads/projects/';
+
+            foreach ($_FILES['gallery']['name'] as $key => $name) {
+                if ($_FILES['gallery']['error'][$key] === UPLOAD_ERR_OK) {
+                    // Validation de chaque image
+                    $fileData = [
+                        'name' => $_FILES['gallery']['name'][$key],
+                        'type' => $_FILES['gallery']['type'][$key],
+                        'tmp_name' => $_FILES['gallery']['tmp_name'][$key],
+                        'error' => $_FILES['gallery']['error'][$key],
+                        'size' => $_FILES['gallery']['size'][$key]
+                    ];
+
+                    $validation = \validateImageUpload($fileData);
+
+                    if ($validation['valid']) {
+                        $extension = strtolower(pathinfo($name, PATHINFO_EXTENSION));
+                        $fileName = uniqid() . '_' . bin2hex(random_bytes(8)) . '.' . $extension;
+                        $targetPath = $uploadDir . $fileName;
+
+                        if (move_uploaded_file($_FILES['gallery']['tmp_name'][$key], $targetPath)) {
+                            // Ajouter l'image au projet
+                            $existingImages = $this->projectRepository->getProjectImages($id);
+                            $nextOrder = count($existingImages) + $key + 1;
+                            $this->projectRepository->addProjectImage($id, '/uploads/projects/' . $fileName, $nextOrder);
+                        } else {
+                            $galleryErrors[] = "Échec upload: $name";
+                        }
+                    } else {
+                        $galleryErrors[] = $validation['error'] . ": $name";
+                    }
+                }
+            }
+        }
+
+        $message = $updated ? 'Projet mis à jour avec succès' : 'Erreur lors de la mise à jour';
+        if (!empty($galleryErrors)) {
+            $message .= ' (⚠️ Carousel: ' . implode(', ', $galleryErrors) . ')';
+        }
+
         echo json_encode([
             'success' => $updated,
-            'message' => $updated ? 'Projet mis à jour' : 'Erreur lors de la mise à jour'
+            'message' => $message
         ]);
     }
 
