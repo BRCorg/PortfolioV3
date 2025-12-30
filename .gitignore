@@ -70,3 +70,8 @@ export-database.bat
 # Documentation (cacher tous les .md SAUF README.md)
 *.md
 !README.md
+
+# Documentation technique (UML et Merise)
+docs/uml/
+docs/merise/
+*.puml
