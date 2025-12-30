@@ -146,7 +146,7 @@ Je recherche un <strong>stage de 4 mois, du 1er avril au 31 juillet</strong>, af
             <div class="emotions-slider__slide swiper-slide">
               <div class="emotions-slider__item emotions-slider-item">
                 <div class="emotions-slider-item__image">
-                  <img src="<?= htmlspecialchars($project['image'] ?? 'assets/img/default.png') ?>" alt="<?= htmlspecialchars($project['title']) ?>" loading="lazy" />
+                  <img src="/uploads/projects/<?= htmlspecialchars($project['images'][0]['file_path'] ?? 'default.png') ?>" alt="<?= htmlspecialchars($project['title']) ?>" loading="lazy" />
                 </div>
 
                 <div class="emotions-slider-item__content">

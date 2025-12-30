@@ -45,7 +45,7 @@ window.addEventListener('load', function() {
                 // Marquer le loader comme affiché pour cette session
                 sessionStorage.setItem('loaderShown', 'true');
             }
-        }, 2000);
+        }, 800);
     }
 });
 
@@ -95,10 +95,18 @@ if (darkModeToggle) {
 // ==========================================
 // MENU BURGER (MOBILE)
 // ==========================================
+let menuOpen = false;
+
 function hamburg() {
     const dropdown = document.querySelector('.dropdown');
     if (dropdown) {
-        dropdown.style.transform = 'translateY(0px)';
+        if (menuOpen) {
+            dropdown.style.transform = 'translateY(-500px)';
+            menuOpen = false;
+        } else {
+            dropdown.style.transform = 'translateY(0px)';
+            menuOpen = true;
+        }
     }
 }
 
@@ -106,6 +114,7 @@ function cancel() {
     const dropdown = document.querySelector('.dropdown');
     if (dropdown) {
         dropdown.style.transform = 'translateY(-500px)';
+        menuOpen = false;
     }
 }
 
