@@ -1,0 +1,458 @@
+@startuml Diagramme de Classes - Portfolio V2
+
+' Configuration
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+
+' ====================================
+' ENTITIES
+' ====================================
+
+package "Entities" {
+    class User {
+        - id: ?int
+        - email: ?string
+        - password: ?string
+        - firstname: ?string
+        - lastname: ?string
+        - bio: ?string
+        - src: ?string
+        - twoFactorEnabled: bool
+        - twoFactorSecret: ?string
+        - twoFactorBackupCodes: ?string
+        - twoFactorEnabledAt: ?string
+        - createdAt: ?string
+        - updatedAt: ?string
+        --
+        + getId(): ?int
+        + getEmail(): ?string
+        + getFirstname(): ?string
+        + getLastname(): ?string
+        + getBio(): ?string
+        + getTwoFactorSecret(): ?string
+        + setEmail(string): self
+        + setFirstname(string): self
+        + setLastname(string): self
+        + setBio(string): self
+        + hydrate(array): self
+        + toArray(): array
+    }
+
+    class Project {
+        - id: ?int
+        - title: ?string
+        - slug: ?string
+        - description: ?string
+        - longDescription: ?string
+        - shortDescription: ?string
+        - image: ?string
+        - demoUrl: ?string
+        - githubUrl: ?string
+        - categoryId: ?int
+        - categoryName: ?string
+        - status: string
+        - isFeatured: bool
+        - displayOrder: int
+        - createdAt: ?string
+        - updatedAt: ?string
+        - skills: array
+        - images: array
+        --
+        + getId(): ?int
+        + getTitle(): ?string
+        + getSlug(): ?string
+        + getDescription(): ?string
+        + getLongDescription(): ?string
+        + getShortDescription(): ?string
+        + getDemoUrl(): ?string
+        + getGithubUrl(): ?string
+        + getCategoryId(): ?int
+        + getSkills(): array
+        + getImages(): array
+        + setTitle(string): self
+        + setSlug(string): self
+        + setDemoUrl(string): self
+        + setGithubUrl(string): self
+        + hydrate(array): self
+        + toArray(): array
+    }
+
+    class Category {
+        - id: ?int
+        - name: ?string
+        - slug: ?string
+        - description: ?string
+        - createdAt: ?string
+        - updatedAt: ?string
+        - projectCount: int
+        --
+        + getId(): ?int
+        + getName(): ?string
+        + getSlug(): ?string
+        + setName(string): self
+        + setSlug(string): self
+        + hydrate(array): self
+        + toArray(): array
+    }
+
+    class Skill {
+        - id: ?int
+        - name: ?string
+        - slug: ?string
+        - level: ?string
+        - icon: ?string
+        - color: ?string
+        - displayOrder: int
+        - createdAt: ?string
+        - updatedAt: ?string
+        --
+        + getId(): ?int
+        + getName(): ?string
+        + getSlug(): ?string
+        + getLevel(): ?string
+        + getColor(): ?string
+        + setName(string): self
+        + setSlug(string): self
+        + setLevel(string): self
+        + setColor(string): self
+        + hydrate(array): self
+        + toArray(): array
+    }
+
+    class Contact {
+        - id: ?int
+        - name: ?string
+        - email: ?string
+        - subject: ?string
+        - message: ?string
+        - isRead: bool
+        - ipAddress: ?string
+        - userAgent: ?string
+        - createdAt: ?string
+        - readAt: ?string
+        --
+        + getId(): ?int
+        + getName(): ?string
+        + getEmail(): ?string
+        + getMessage(): ?string
+        + isRead(): bool
+        + getIpAddress(): ?string
+        + getUserAgent(): ?string
+        + setIsRead(bool): self
+        + setReadAt(string): self
+        + hydrate(array): self
+        + toArray(): array
+    }
+
+    class ProjectImage {
+        - id: ?int
+        - projectId: ?int
+        - filePath: ?string
+        - altText: ?string
+        - displayOrder: int
+        - createdAt: ?string
+        --
+        + getId(): ?int
+        + getProjectId(): ?int
+        + getFilePath(): ?string
+        + getAltText(): ?string
+        + getDisplayOrder(): int
+        + setProjectId(int): self
+        + setFilePath(string): self
+        + setAltText(string): self
+        + hydrate(array): self
+        + toArray(): array
+    }
+}
+
+' ====================================
+' REPOSITORIES
+' ====================================
+
+package "Repositories" {
+    interface RepositoryInterface {
+        + findAll(): array
+        + findById(int): ?object
+        + create(array): ?int
+        + update(int, array): bool
+        + delete(int): bool
+    }
+
+    abstract class BaseRepository {
+        # pdo: PDO
+        # table: string
+        # entityClass: string
+        --
+        + __construct(PDO)
+        + findAll(): array
+        + findById(int): ?object
+        + create(array): ?int
+        + update(int, array): bool
+        + delete(int): bool
+        # hydrate(array): object
+    }
+
+    class UserRepository {
+        # table: string = "users"
+        # entityClass: string = User::class
+        --
+        + findByEmail(string): ?User
+        + updatePassword(int, string): bool
+        + enable2FA(int, string): bool
+        + disable2FA(int): bool
+    }
+
+    class ProjectRepository {
+        # table: string = "projects"
+        # entityClass: string = Project::class
+        --
+        + findBySlug(string): ?Project
+        + findFeatured(): array
+        + findByCategory(int): array
+        + findWithSkills(int): ?Project
+        + findWithImages(int): ?Project
+        + attachSkills(int, array): bool
+        + detachAllSkills(int): bool
+    }
+
+    class CategoryRepository {
+        # table: string = "categories"
+        # entityClass: string = Category::class
+        --
+        + findBySlug(string): ?Category
+        + findWithProjectCount(): array
+    }
+
+    class SkillRepository {
+        # table: string = "skills"
+        # entityClass: string = Skill::class
+        --
+        + findBySlug(string): ?Skill
+        + findByProject(int): array
+    }
+
+    class ContactRepository {
+        # table: string = "contacts"
+        # entityClass: string = Contact::class
+        --
+        + findUnread(): array
+        + markAsRead(int): bool
+    }
+
+    class ProjectImageRepository {
+        # table: string = "project_images"
+        # entityClass: string = ProjectImage::class
+        --
+        + findByProject(int): array
+        + deleteByProject(int): bool
+    }
+}
+
+' ====================================
+' CONTROLLERS
+' ====================================
+
+package "Controllers" {
+    class HomeController {
+        - projectRepository: ProjectRepository
+        - skillRepository: SkillRepository
+        - categoryRepository: CategoryRepository
+        --
+        + index(): void
+        + projectDetails(int): void
+    }
+
+    class AuthController {
+        - userRepository: UserRepository
+        --
+        + showLogin(): void
+        + login(): void
+        + logout(): void
+    }
+
+    class TwoFactorController {
+        - userRepository: UserRepository
+        --
+        + showSetup(): void
+        + enable(): void
+        + showVerify(): void
+        + verify(): void
+        + verifyBackup(): void
+        + disable(): void
+        + showBackupCodes(): void
+        + confirmBackupCodes(): void
+    }
+
+    class DashboardController {
+        - projectRepository: ProjectRepository
+        - contactRepository: ContactRepository
+        --
+        + index(): void
+    }
+
+    class ProjectController {
+        - projectRepository: ProjectRepository
+        - categoryRepository: CategoryRepository
+        - skillRepository: SkillRepository
+        - projectImageRepository: ProjectImageRepository
+        --
+        + list(): void
+        + create(): void
+        + update(int): void
+        + delete(int): void
+    }
+
+    class CategoryController {
+        - categoryRepository: CategoryRepository
+        --
+        + list(): void
+        + create(): void
+        + edit(int): void
+        + update(int): void
+        + delete(int): void
+    }
+
+    class SkillController {
+        - skillRepository: SkillRepository
+        --
+        + list(): void
+        + create(): void
+        + update(int): void
+        + delete(int): void
+    }
+
+    class ContactController {
+        - contactRepository: ContactRepository
+        --
+        + submit(): void
+    }
+}
+
+' ====================================
+' CORE
+' ====================================
+
+package "Core" {
+    class Router {
+        - routes: array
+        - basePath: string
+        --
+        + get(string, string, string): void
+        + post(string, string, string): void
+        + dispatch(): void
+        - addRoute(string, string, string, string): void
+        - convertRouteToRegex(string): string
+    }
+
+    class TwoFactorAuth {
+        - DIGITS: int = 6
+        - PERIOD: int = 30
+        - ALGORITHM: string = "sha1"
+        --
+        + {static} generateSecret(int): string
+        + {static} generateCode(string, ?int): string
+        + {static} verifyCode(string, string, int): bool
+        + {static} getQRCodeUrl(string, string, string): string
+        + {static} generateBackupCodes(int): array
+    }
+
+    class SecurityLogger {
+        - logFile: string
+        --
+        + {static} log(string, array): void
+        + {static} logLoginAttempt(string, bool): void
+        + {static} log2FAAttempt(string, bool): void
+    }
+}
+
+' ====================================
+' MIDDLEWARE
+' ====================================
+
+package "Middleware" {
+    class AuthMiddleware {
+        --
+        + {static} requireAuth(): void
+        + {static} isAuthenticated(): bool
+        + {static} login(array): void
+        + {static} logout(): void
+        + {static} user(): ?array
+        + {static} checkAllowedIP(): void
+    }
+
+    class RateLimiter {
+        - maxAttempts: int
+        - decayMinutes: int
+        --
+        + {static} check(string, int, int): bool
+        + {static} tooManyAttempts(string, int): bool
+        + {static} hit(string, int): void
+        + {static} clear(string): void
+    }
+}
+
+' ====================================
+' RELATIONS
+' ====================================
+
+' Héritage Repositories
+RepositoryInterface <|.. BaseRepository
+BaseRepository <|-- UserRepository
+BaseRepository <|-- ProjectRepository
+BaseRepository <|-- CategoryRepository
+BaseRepository <|-- SkillRepository
+BaseRepository <|-- ContactRepository
+BaseRepository <|-- ProjectImageRepository
+
+' Relations Entities
+Project "1" --> "1" Category : appartient à
+Project "*" --> "*" Skill : utilise
+Project "1" --> "*" ProjectImage : possède
+
+' Utilisation dans les Controllers
+HomeController --> ProjectRepository
+HomeController --> SkillRepository
+HomeController --> CategoryRepository
+
+AuthController --> UserRepository
+
+TwoFactorController --> UserRepository
+TwoFactorController ..> TwoFactorAuth : utilise
+
+DashboardController --> ProjectRepository
+DashboardController --> ContactRepository
+
+ProjectController --> ProjectRepository
+ProjectController --> CategoryRepository
+ProjectController --> SkillRepository
+ProjectController --> ProjectImageRepository
+
+CategoryController --> CategoryRepository
+SkillController --> SkillRepository
+ContactController --> ContactRepository
+
+' Relations Core
+Router ..> Controllers : instancie
+AuthMiddleware ..> Router : protège
+RateLimiter ..> AuthMiddleware : limite
+
+note right of ProjectImage
+  Nouvelle entité pour 
+  galerie multi-images
+  par projet
+end note
+
+note right of Skill
+  Ajout de slug et color
+  pour personnalisation
+end note
+
+note right of Project
+  3 types de descriptions:
+  - short (500 car)
+  - standard
+  - long
+  + demo_url, github_url
+end note
+
+@enduml

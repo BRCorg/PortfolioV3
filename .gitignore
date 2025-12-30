@@ -66,3 +66,7 @@ phpunit.xml
 compile-sass.bat
 watch-sass.bat
 export-database.bat
+
+# Documentation (cacher tous les .md SAUF README.md)
+*.md
+!README.md

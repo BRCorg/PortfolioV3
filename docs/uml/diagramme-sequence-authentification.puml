@@ -1,0 +1,201 @@
+@startuml Diagramme de Séquence - Authentification avec 2FA
+
+autonumber
+skinparam responseMessageBelowArrow true
+
+' ====================================
+' ACTEURS ET PARTICIPANTS
+' ====================================
+
+actor "Administrateur" as admin
+participant "Router" as router
+participant "AuthController" as authCtrl
+participant "UserRepository" as userRepo
+database "MySQL" as db
+participant "AuthMiddleware" as authMw
+participant "TwoFactorAuth" as twoFA
+participant "RateLimiter" as rateLimiter
+participant "SecurityLogger" as logger
+
+' ====================================
+' PHASE 1 : LOGIN (Email/Password)
+' ====================================
+
+== Phase 1 : Authentification Email/Password ==
+
+admin -> router : POST /admin/login
+activate router
+
+router -> rateLimiter : check(ip_address)
+activate rateLimiter
+rateLimiter -> rateLimiter : Vérifier nombre de tentatives
+rateLimiter --> router : OK (< 5 tentatives)
+deactivate rateLimiter
+
+router -> authCtrl : login()
+activate authCtrl
+
+authCtrl -> authCtrl : Valider CSRF token
+authCtrl -> authCtrl : Sanitize inputs
+
+authCtrl -> userRepo : findByEmail(email)
+activate userRepo
+userRepo -> db : SELECT * FROM users WHERE email = ?
+activate db
+db --> userRepo : user_data
+deactivate db
+userRepo --> authCtrl : User entity
+deactivate userRepo
+
+alt Email invalide
+    authCtrl -> logger : logLoginAttempt(email, false)
+    authCtrl -> rateLimiter : hit(ip_address)
+    authCtrl --> admin : Erreur : Identifiants invalides
+else Email valide
+    authCtrl -> authCtrl : password_verify(input, hash)
+    
+    alt Mot de passe invalide
+        authCtrl -> logger : logLoginAttempt(email, false)
+        authCtrl -> rateLimiter : hit(ip_address)
+        authCtrl --> admin : Erreur : Identifiants invalides
+    else Mot de passe valide
+        authCtrl -> logger : logLoginAttempt(email, true)
+        
+        alt 2FA activé
+            authCtrl -> authCtrl : Stocker user_id en session temporaire
+            authCtrl --> admin : Redirect /2fa/verify
+        else 2FA non activé
+            authCtrl -> authMw : login(user)
+            activate authMw
+            authMw -> authMw : session_regenerate_id()
+            authMw -> authMw : Créer $_SESSION['user_id']
+            authMw -> authMw : Créer CSRF token
+            authMw --> authCtrl : Session créée
+            deactivate authMw
+            authCtrl --> admin : Redirect /dashboard
+        end
+    end
+end
+
+deactivate authCtrl
+deactivate router
+
+' ====================================
+' PHASE 2 : VÉRIFICATION 2FA
+' ====================================
+
+== Phase 2 : Vérification 2FA ==
+
+admin -> router : GET /2fa/verify
+activate router
+router -> authCtrl : showVerify()
+activate authCtrl
+authCtrl -> authCtrl : Vérifier session temporaire
+authCtrl --> admin : Formulaire 2FA
+deactivate authCtrl
+deactivate router
+
+admin -> router : POST /2fa/verify (code)
+activate router
+
+router -> rateLimiter : check(user_id + "2fa")
+activate rateLimiter
+rateLimiter --> router : OK
+deactivate rateLimiter
+
+router -> authCtrl : verify()
+activate authCtrl
+
+authCtrl -> authCtrl : Valider CSRF token
+authCtrl -> authCtrl : Récupérer user_id session temp
+
+authCtrl -> userRepo : findById(user_id)
+activate userRepo
+userRepo -> db : SELECT * FROM users WHERE id = ?
+activate db
+db --> userRepo : user_data (avec 2fa_secret)
+deactivate db
+userRepo --> authCtrl : User entity
+deactivate userRepo
+
+authCtrl -> twoFA : verifyCode(2fa_secret, code)
+activate twoFA
+twoFA -> twoFA : generateCode(secret, time)
+twoFA -> twoFA : generateCode(secret, time-30s)
+twoFA -> twoFA : generateCode(secret, time+30s)
+twoFA -> twoFA : hash_equals() pour chaque période
+twoFA --> authCtrl : true/false
+deactivate twoFA
+
+alt Code invalide
+    authCtrl -> logger : log2FAAttempt(user_id, false)
+    authCtrl -> rateLimiter : hit(user_id + "2fa")
+    authCtrl --> admin : Erreur : Code invalide
+    
+    alt Trop de tentatives
+        router -> authMw : logout()
+        authCtrl --> admin : Redirect /login (session terminée)
+    end
+else Code valide
+    authCtrl -> logger : log2FAAttempt(user_id, true)
+    authCtrl -> rateLimiter : clear(user_id + "2fa")
+    
+    authCtrl -> authMw : login(user)
+    activate authMw
+    authMw -> authMw : session_regenerate_id()
+    authMw -> authMw : Créer $_SESSION['user_id']
+    authMw -> authMw : Créer $_SESSION['user_authenticated']
+    authMw -> authMw : Créer CSRF token
+    authMw --> authCtrl : Session créée
+    deactivate authMw
+    
+    authCtrl --> admin : Redirect /dashboard
+end
+
+deactivate authCtrl
+deactivate router
+
+' ====================================
+' PHASE 3 : CODE DE BACKUP (OPTIONNEL)
+' ====================================
+
+== Alternative : Utilisation d'un code de backup ==
+
+admin -> router : POST /2fa/verify-backup
+activate router
+router -> authCtrl : verifyBackup()
+activate authCtrl
+
+authCtrl -> userRepo : findById(user_id)
+activate userRepo
+userRepo -> db : SELECT backup_codes FROM users
+activate db
+db --> userRepo : backup_codes (JSON)
+deactivate db
+userRepo --> authCtrl : User entity
+deactivate userRepo
+
+authCtrl -> authCtrl : Décoder backup_codes
+authCtrl -> authCtrl : Chercher code dans array
+
+alt Code backup invalide
+    authCtrl -> logger : log2FAAttempt(user_id, false)
+    authCtrl --> admin : Erreur : Code invalide
+else Code backup valide
+    authCtrl -> userRepo : removeBackupCode(user_id, code)
+    activate userRepo
+    userRepo -> db : UPDATE users SET backup_codes = ?
+    activate db
+    db --> userRepo : Success
+    deactivate db
+    deactivate userRepo
+    
+    authCtrl -> logger : log2FAAttempt(user_id, true)
+    authCtrl -> authMw : login(user)
+    authCtrl --> admin : Redirect /dashboard
+end
+
+deactivate authCtrl
+deactivate router
+
+@enduml

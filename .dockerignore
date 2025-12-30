@@ -1,25 +1,80 @@
+# ===========================================
+# SÉCURITÉ CRITIQUE - Fichiers sensibles
+# ===========================================
+# Variables d'environnement (CRITIQUE)
+.env
+.env.*
+!.env.example
+*.env
+*.env.*
+
+# Exports et dumps de base de données (CRITIQUE)
+*.sql
+*.dump
+*.backup
+portfolio_v2_export.sql
+export-database.bat
+
+# Logs et données sensibles (CRITIQUE)
+*.log
+logs/
+error_log
+php_errors.log
+
+# Sessions PHP et données temporaires
+sessions/
+tmp/
+*.tmp
+
+# Uploads et fichiers utilisateurs (peuvent contenir données sensibles)
+public/uploads/profile/*
+public/uploads/projects/*
+!public/uploads/profile/.gitkeep
+!public/uploads/projects/.gitkeep
+
+# Clés et certificats
+*.pem
+*.key
+*.cert
+*.crt
+*.p12
+*.pfx
+id_rsa*
+*.pub
+
+# ===========================================
+# Fichiers de développement
+# ===========================================
 # Git
 .git
 .gitignore
+.gitattributes
 
 # Docker
 Dockerfile
 docker-compose.yml
+docker-compose.*.yml
 .dockerignore
+DOCKER.md
 
-# IDE
-.vscode
-.idea
+# IDE et éditeurs
+.vscode/
+.idea/
 *.swp
 *.swo
+*.sublime-*
+*.code-workspace
 
 # Claude AI
-.claude
+.claude/
 
 # Tests
-tests
-.phpunit.cache
+tests/
+.phpunit.cache/
 phpunit.xml
+phpunit.xml.dist
+TESTS.md
+coverage/
 
 # Documentation locale
 *.md
@@ -27,28 +82,44 @@ phpunit.xml
 
 # Fichiers Windows
 *.bat
+compile-sass.bat
+watch-sass.bat
+Thumbs.db
 
-# Environnement local
-.env.local
-.env.backup
+# Scripts de déploiement local
+deploy.sh
+deploy-*.sh
 
-# Logs
-*.log
-logs
+# Source SCSS (CSS déjà compilé)
+scss/
+*.scss
 
+# Node modules (si utilisé)
+node_modules/
+package-lock.json
+yarn.lock
+
+# ===========================================
 # Cache et temporaires
+# ===========================================
 *.cache
 *.tmp
 *.backup
+*.bak
+*.old
 .DS_Store
-Thumbs.db
+*.pid
+*.seed
+*.pid.lock
 
-# Node modules (si utilisé)
-node_modules
+# Composer (vendor sera réinstallé dans Docker)
+vendor/
+composer.lock
+composer.phar
 
-# Fichiers de développement
-deploy.sh
-export-database.bat
-
-# Source SCSS (CSS déjà compilé)
-scss
+# ===========================================
+# Fichiers spécifiques au développement local
+# ===========================================
+.env.local
+.env.development
+.env.testing
