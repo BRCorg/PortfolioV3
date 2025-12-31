@@ -9,7 +9,7 @@ services:
     container_name: portfolio_app
     restart: unless-stopped
     ports:
-      - "8081:80"
+      - "127.0.0.1:8081:80"  # Accessible uniquement depuis localhost (sécurisé)
     volumes:
       - ./public/uploads:/var/www/html/public/uploads
       - ./public/img:/var/www/html/public/img
@@ -39,6 +39,9 @@ services:
       - portfolio_network
 
   # phpMyAdmin (optionnel, pour gestion de la BDD)
+  # ⚠️ SÉCURITÉ : Accessible uniquement via tunnel SSH
+  # Pour y accéder : ssh -L 8080:localhost:8080 root@votre-vps
+  # Puis ouvrir : http://localhost:8080
   phpmyadmin:
     image: phpmyadmin:latest
     container_name: portfolio_phpmyadmin
@@ -49,7 +52,7 @@ services:
       PMA_USER: ${DB_USER:-portfolio_user}
       PMA_PASSWORD: ${DB_PASSWORD:-portfolio_password}
     ports:
-      - "8080:80"
+      - "127.0.0.1:8080:80"  # Accessible UNIQUEMENT depuis localhost (tunnel SSH requis)
     networks:
       - portfolio_network
     depends_on:
