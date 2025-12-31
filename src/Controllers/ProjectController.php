@@ -60,19 +60,10 @@ class ProjectController
             // Vérifier le token CSRF
             $token = $_POST['csrf_token'] ?? '';
 
-            // Debug temporaire
-            error_log('Token reçu: ' . $token);
-            error_log('Token session: ' . ($_SESSION['csrf_token'] ?? 'NON DEFINI'));
-
             if (!AuthMiddleware::verifyCsrfToken($token)) {
                 echo json_encode([
                     'success' => false,
-                    'message' => 'Token de sécurité invalide',
-                    'debug' => [
-                        'token_recu' => $token,
-                        'token_session' => $_SESSION['csrf_token'] ?? 'NON DEFINI',
-                        'session_id' => session_id()
-                    ]
+                    'message' => 'Token de sécurité invalide'
                 ]);
                 exit;
             }
