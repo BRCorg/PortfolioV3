@@ -275,6 +275,188 @@ setupImagePreview('src', 'profilePreview');
 setupImagePreview('image', 'projectImagePreview');
 
 // ==========================================
+// AMÉLIORATION FORMULAIRE PROJET
+// ==========================================
+
+// Skills Filter & Search
+const skillsSearch = document.getElementById('skillsSearch');
+const skillsSelector = document.getElementById('skillsSelector');
+const selectAllSkillsBtn = document.getElementById('selectAllSkills');
+const clearAllSkillsBtn = document.getElementById('clearAllSkills');
+const selectedSkillsCount = document.getElementById('selectedSkillsCount');
+const noSkillsFound = document.getElementById('noSkillsFound');
+
+if (skillsSearch && skillsSelector) {
+    // Fonction pour mettre à jour le compteur de skills sélectionnées
+    function updateSkillsCounter() {
+        const checkedCount = skillsSelector.querySelectorAll('input[type="checkbox"]:checked').length;
+        if (selectedSkillsCount) {
+            selectedSkillsCount.textContent = checkedCount;
+        }
+    }
+
+    // Fonction de recherche/filtre
+    skillsSearch.addEventListener('input', function(e) {
+        const searchTerm = e.target.value.toLowerCase().trim();
+        const skillCheckboxes = skillsSelector.querySelectorAll('.skill-checkbox');
+        let visibleCount = 0;
+
+        skillCheckboxes.forEach(label => {
+            const skillName = label.getAttribute('data-skill-name') || '';
+
+            if (skillName.includes(searchTerm)) {
+                label.classList.remove('hidden');
+                visibleCount++;
+            } else {
+                label.classList.add('hidden');
+            }
+        });
+
+        // Afficher/cacher le message "aucun résultat"
+        if (noSkillsFound) {
+            if (visibleCount === 0 && searchTerm !== '') {
+                noSkillsFound.style.display = 'block';
+                skillsSelector.style.display = 'none';
+            } else {
+                noSkillsFound.style.display = 'none';
+                skillsSelector.style.display = 'grid';
+            }
+        }
+    });
+
+    // Bouton "Tout sélectionner"
+    if (selectAllSkillsBtn) {
+        selectAllSkillsBtn.addEventListener('click', function() {
+            const visibleCheckboxes = skillsSelector.querySelectorAll('.skill-checkbox:not(.hidden) input[type="checkbox"]');
+            visibleCheckboxes.forEach(checkbox => {
+                checkbox.checked = true;
+            });
+            updateSkillsCounter();
+        });
+    }
+
+    // Bouton "Tout effacer"
+    if (clearAllSkillsBtn) {
+        clearAllSkillsBtn.addEventListener('click', function() {
+            const allCheckboxes = skillsSelector.querySelectorAll('input[type="checkbox"]');
+            allCheckboxes.forEach(checkbox => {
+                checkbox.checked = false;
+            });
+            updateSkillsCounter();
+        });
+    }
+
+    // Écouter les changements sur les checkboxes pour mettre à jour le compteur
+    skillsSelector.addEventListener('change', function(e) {
+        if (e.target.type === 'checkbox') {
+            updateSkillsCounter();
+        }
+    });
+
+    // Initialiser le compteur
+    updateSkillsCounter();
+}
+
+// ==========================================
+// CHARACTER COUNTER
+// ==========================================
+
+function setupCharacterCounter(textareaId, counterId) {
+    const textarea = document.getElementById(textareaId);
+    const counter = document.getElementById(counterId);
+
+    if (textarea && counter) {
+        // Fonction de mise à jour
+        function updateCounter() {
+            const length = textarea.value.length;
+            counter.textContent = length;
+
+            // Changer la couleur si proche de la limite
+            if (textarea.hasAttribute('maxlength')) {
+                const maxLength = parseInt(textarea.getAttribute('maxlength'));
+                const percentage = (length / maxLength) * 100;
+
+                if (percentage >= 90) {
+                    counter.style.color = '#e74c3c'; // Rouge
+                } else if (percentage >= 75) {
+                    counter.style.color = '#f39c12'; // Orange
+                } else {
+                    counter.style.color = ''; // Couleur par défaut
+                }
+            }
+        }
+
+        // Écouter les changements
+        textarea.addEventListener('input', updateCounter);
+        textarea.addEventListener('keyup', updateCounter);
+
+        // Initialiser
+        updateCounter();
+    }
+}
+
+// Activer les compteurs de caractères
+setupCharacterCounter('projectDescription', 'descriptionCounter');
+setupCharacterCounter('projectDescriptionLong', 'descriptionLongCounter');
+
+// ==========================================
+// IMAGE PREVIEW AMÉLIORÉE
+// ==========================================
+
+// Preview pour l'image principale
+const projectImageInput = document.getElementById('projectImage');
+const imagePreviewDiv = document.getElementById('imagePreview');
+
+if (projectImageInput && imagePreviewDiv) {
+    projectImageInput.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+
+        if (file && file.type.startsWith('image/')) {
+            const reader = new FileReader();
+
+            reader.onload = function(event) {
+                const img = imagePreviewDiv.querySelector('img');
+                if (img) {
+                    img.src = event.target.result;
+                }
+                imagePreviewDiv.style.display = 'block';
+            };
+
+            reader.readAsDataURL(file);
+        } else {
+            imagePreviewDiv.style.display = 'none';
+        }
+    });
+}
+
+// Preview pour la galerie
+const galleryInput = document.getElementById('projectGallery');
+const galleryPreviewDiv = document.getElementById('galleryPreview');
+
+if (galleryInput && galleryPreviewDiv) {
+    galleryInput.addEventListener('change', function(e) {
+        galleryPreviewDiv.innerHTML = ''; // Vider les previews existantes
+
+        const files = Array.from(e.target.files);
+
+        files.forEach(file => {
+            if (file.type.startsWith('image/')) {
+                const reader = new FileReader();
+
+                reader.onload = function(event) {
+                    const img = document.createElement('img');
+                    img.src = event.target.result;
+                    img.alt = 'Preview';
+                    galleryPreviewDiv.appendChild(img);
+                };
+
+                reader.readAsDataURL(file);
+            }
+        });
+    });
+}
+
+// ==========================================
 // CONFIRMATION DE SUPPRESSION
 // ==========================================
 document.querySelectorAll('.btn-delete, .delete-btn, [class*="delete"]').forEach(btn => {

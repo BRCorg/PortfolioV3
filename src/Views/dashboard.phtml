@@ -162,116 +162,178 @@
 
     <!-- Modal Projects -->
     <div id="projectModal" class="modal" style="display: none;">
-        <div class="modal-content">
+        <div class="modal-content modal-content-wide">
             <div class="modal-header">
                 <h3><i class="fas fa-project-diagram"></i> Ajouter un projet</h3>
                 <button class="close"><i class="fas fa-times"></i></button>
             </div>
 
             <form id="createProjectForm" enctype="multipart/form-data">
-                <div class="form-group">
-                    <label for="projectTitle">
-                        <i class="fas fa-heading"></i> Titre <span class="required">*</span>
-                    </label>
-                    <input type="text"
-                           id="projectTitle"
-                           name="title"
-                           placeholder="Titre du projet"
-                           required>
-                </div>
+                <!-- Section : Informations générales -->
+                <div class="form-section">
+                    <h4 class="form-section-title">
+                        <i class="fas fa-info-circle"></i> Informations générales
+                    </h4>
 
-                <div class="form-group">
-                    <label for="projectDescription">
-                        <i class="fas fa-align-left"></i> Description courte (page d'accueil)
-                    </label>
-                    <textarea id="projectDescription"
-                              name="description"
-                              placeholder="Description courte pour la liste des projets (200 caractères max recommandé)..."
-                              maxlength="250"></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label for="projectDescriptionLong">
-                        <i class="fas fa-file-alt"></i> Description longue (page détails)
-                    </label>
-                    <textarea id="projectDescriptionLong"
-                              name="description_long"
-                              placeholder="Description complète du projet pour la page de détails..."
-                              rows="6"></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label for="projectCategory">
-                        <i class="fas fa-folder"></i> Catégorie <span class="required">*</span>
-                    </label>
-                    <select id="projectCategory" name="category_id" required>
-                        <option value="">-- Choisir une catégorie --</option>
-                        <?php foreach ($categories as $cat): ?>
-                            <option value="<?= $cat['id'] ?>"><?= htmlspecialchars($cat['name']) ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="projectSkills">
-                        <i class="fas fa-code"></i> Compétences utilisées
-                    </label>
-                    <div class="skills-selector">
-                        <?php foreach ($skills as $skill): ?>
-                            <label class="skill-checkbox">
-                                <input type="checkbox"
-                                       name="skill_ids[]"
-                                       value="<?= $skill['id'] ?>">
-                                <span><?= htmlspecialchars($skill['name']) ?></span>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="projectTitle">
+                                <i class="fas fa-heading"></i> Titre <span class="required">*</span>
                             </label>
-                        <?php endforeach; ?>
+                            <input type="text"
+                                   id="projectTitle"
+                                   name="title"
+                                   placeholder="Titre du projet"
+                                   required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="projectCategory">
+                                <i class="fas fa-folder"></i> Catégorie <span class="required">*</span>
+                            </label>
+                            <select id="projectCategory" name="category_id" required>
+                                <option value="">-- Choisir une catégorie --</option>
+                                <?php foreach ($categories as $cat): ?>
+                                    <option value="<?= $cat['id'] ?>"><?= htmlspecialchars($cat['name']) ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label for="projectImage">
-                        <i class="fas fa-image"></i> Image principale <span class="required">*</span>
-                    </label>
-                    <div class="file-input-wrapper">
-                        <input type="file"
-                               id="projectImage"
-                               name="image"
-                               accept="image/*"
-                               required>
-                        <div class="file-input-label">
-                            <i class="fas fa-cloud-upload-alt"></i>
-                            <span>Choisir l'image principale (max 5MB)</span>
-                        </div>
+                <!-- Section : Contenu -->
+                <div class="form-section">
+                    <h4 class="form-section-title">
+                        <i class="fas fa-align-left"></i> Contenu
+                    </h4>
+
+                    <div class="form-group">
+                        <label for="projectDescription">
+                            <i class="fas fa-align-left"></i> Description courte (page d'accueil)
+                        </label>
+                        <textarea id="projectDescription"
+                                  name="description"
+                                  placeholder="Description courte pour la liste des projets (200 caractères max recommandé)..."
+                                  maxlength="250"
+                                  rows="3"></textarea>
+                        <small class="char-counter">
+                            <span id="descriptionCounter">0</span> / 250 caractères
+                        </small>
                     </div>
-                    <small style="color: #666; margin-top: 0.5rem; display: block;">
-                        Cette image sera affichée dans la liste des projets
-                    </small>
+
+                    <div class="form-group">
+                        <label for="projectDescriptionLong">
+                            <i class="fas fa-file-alt"></i> Description longue (page détails)
+                        </label>
+                        <textarea id="projectDescriptionLong"
+                                  name="description_long"
+                                  placeholder="Description complète du projet pour la page de détails..."
+                                  rows="6"></textarea>
+                        <small class="char-counter">
+                            <span id="descriptionLongCounter">0</span> caractères
+                        </small>
+                    </div>
                 </div>
 
-                <div class="form-group">
-                    <label for="projectGallery">
-                        <i class="fas fa-images"></i> Images du carousel (facultatif)
-                    </label>
-                    <div class="file-input-wrapper">
-                        <input type="file"
-                               id="projectGallery"
-                               name="gallery[]"
-                               accept="image/*"
-                               multiple>
-                        <div class="file-input-label">
-                            <i class="fas fa-cloud-upload-alt"></i>
-                            <span>Ajouter des images pour le carousel (max 5MB chacune)</span>
+                <!-- Section : Technologies -->
+                <div class="form-section">
+                    <h4 class="form-section-title">
+                        <i class="fas fa-code"></i> Technologies utilisées
+                    </h4>
+
+                    <div class="form-group">
+                        <div class="skills-filter-wrapper">
+                            <input type="text"
+                                   id="skillsSearch"
+                                   placeholder="🔍 Rechercher une technologie..."
+                                   autocomplete="off">
+                            <div class="skills-actions">
+                                <button type="button" id="selectAllSkills" class="btn-skill-action">
+                                    <i class="fas fa-check-double"></i> Tout sélectionner
+                                </button>
+                                <button type="button" id="clearAllSkills" class="btn-skill-action">
+                                    <i class="fas fa-times"></i> Tout effacer
+                                </button>
+                                <span class="skills-counter">
+                                    <i class="fas fa-layer-group"></i>
+                                    <span id="selectedSkillsCount">0</span> sélectionnée(s)
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="skills-selector" id="skillsSelector">
+                            <?php foreach ($skills as $skill): ?>
+                                <label class="skill-checkbox" data-skill-name="<?= strtolower(htmlspecialchars($skill['name'])) ?>">
+                                    <input type="checkbox"
+                                           name="skill_ids[]"
+                                           value="<?= $skill['id'] ?>">
+                                    <span><?= htmlspecialchars($skill['name']) ?></span>
+                                </label>
+                            <?php endforeach; ?>
+                        </div>
+                        <div id="noSkillsFound" class="no-results" style="display: none;">
+                            <i class="fas fa-search"></i> Aucune technologie trouvée
                         </div>
                     </div>
-                    <small style="color: #666; margin-top: 0.5rem; display: block;">
-                        Ces images seront affichées dans un carousel sur la page détails du projet
-                    </small>
+                </div>
+
+                <!-- Section : Médias -->
+                <div class="form-section">
+                    <h4 class="form-section-title">
+                        <i class="fas fa-images"></i> Médias
+                    </h4>
+
+                    <div class="form-group">
+                        <label for="projectImage">
+                            <i class="fas fa-image"></i> Image principale <span class="required">*</span>
+                        </label>
+                        <div class="file-input-wrapper">
+                            <input type="file"
+                                   id="projectImage"
+                                   name="image"
+                                   accept="image/*"
+                                   required>
+                            <div class="file-input-label">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <span>Choisir l'image principale (max 5MB)</span>
+                            </div>
+                        </div>
+                        <div id="imagePreview" class="image-preview" style="display: none;">
+                            <img src="" alt="Aperçu">
+                        </div>
+                        <small style="color: #666; margin-top: 0.5rem; display: block;">
+                            Cette image sera affichée dans la liste des projets
+                        </small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="projectGallery">
+                            <i class="fas fa-images"></i> Images du carousel (facultatif)
+                        </label>
+                        <div class="file-input-wrapper">
+                            <input type="file"
+                                   id="projectGallery"
+                                   name="gallery[]"
+                                   accept="image/*"
+                                   multiple>
+                            <div class="file-input-label">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <span>Ajouter des images pour le carousel (max 5MB chacune)</span>
+                            </div>
+                        </div>
+                        <div id="galleryPreview" class="gallery-preview"></div>
+                        <small style="color: #666; margin-top: 0.5rem; display: block;">
+                            Ces images seront affichées dans un carousel sur la page détails du projet
+                        </small>
+                    </div>
                 </div>
 
                 <div class="form-actions">
-                    <button type="button" class="close-modal">Annuler</button>
+                    <button type="button" class="close-modal">
+                        <i class="fas fa-times"></i> Annuler
+                    </button>
                     <button type="submit">
-                        <i class="fas fa-plus"></i> Ajouter
+                        <i class="fas fa-plus"></i> Ajouter le projet
                     </button>
                 </div>
             </form>
