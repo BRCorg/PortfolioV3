@@ -67,6 +67,39 @@ function validateImageUpload(array $file, int $maxSize = 5242880): array
         return ['valid' => false, 'error' => 'Format non autorisé (JPG, PNG, WebP uniquement)'];
     }
 
+    // Vérification avancée : magic bytes (signature du fichier)
+    $handle = fopen($file['tmp_name'], 'rb');
+    if ($handle === false) {
+        return ['valid' => false, 'error' => 'Impossible de lire le fichier'];
+    }
+
+    $header = fread($handle, 12);
+    fclose($handle);
+
+    $validSignature = false;
+
+    // JPEG: FF D8 FF
+    if (strlen($header) >= 3 && $header[0] === "\xFF" && $header[1] === "\xD8" && $header[2] === "\xFF") {
+        $validSignature = true;
+    }
+    // PNG: 89 50 4E 47 0D 0A 1A 0A
+    elseif (strlen($header) >= 8 && substr($header, 0, 8) === "\x89\x50\x4E\x47\x0D\x0A\x1A\x0A") {
+        $validSignature = true;
+    }
+    // WebP: RIFF .... WEBP
+    elseif (strlen($header) >= 12 && substr($header, 0, 4) === "RIFF" && substr($header, 8, 4) === "WEBP") {
+        $validSignature = true;
+    }
+
+    if (!$validSignature) {
+        return ['valid' => false, 'error' => 'Fichier corrompu ou invalide'];
+    }
+
+    // Vérifier avec getimagesize() pour une validation supplémentaire
+    if (@getimagesize($file['tmp_name']) === false) {
+        return ['valid' => false, 'error' => 'Le fichier n\'est pas une image valide'];
+    }
+
     // Vérifier l'extension du fichier
     $extension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
     $allowedExtensions = ['jpg', 'jpeg', 'png', 'webp'];
