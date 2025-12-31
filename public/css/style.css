@@ -2458,6 +2458,7 @@ body.dark {
 .emotions-slider__slide {
   display: flex;
   align-items: center;
+  justify-content: center;
   min-height: 34.375rem;
 }
 
@@ -2538,6 +2539,14 @@ body.dark {
   flex-wrap: wrap;
   gap: 0.5rem;
   padding-top: 2.5rem;
+  width: 100%;
+  text-align: center;
+}
+.slider-pagination.swiper-pagination-horizontal.swiper-pagination-bullets-dynamic {
+  left: 50%;
+  white-space: nowrap;
+  transform: none !important;
+  width: auto !important;
 }
 
 .swiper-pagination-lock {
@@ -2587,6 +2596,12 @@ body.dark {
   overflow: hidden;
   box-shadow: 0 0.625rem 2.5rem rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
+}
+@media (max-width: 767px) {
+  .emotions-slider-item {
+    width: calc(100dvw - 6rem);
+    max-width: 22rem;
+  }
 }
 .dark .emotions-slider-item {
   background: var(--nav-bg);
@@ -3754,17 +3769,41 @@ h2.section-visible::after {
 .main-container {
   margin-top: 3.75rem;
   display: flex;
-  justify-content: space-evenly;
+  justify-content: center;
+  gap: 18rem;
+  max-width: 120rem;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 2rem;
+}
+@media (max-width: 68.75rem) and (min-width: 55.26rem) {
+  .main-container {
+    gap: 1.5rem;
+    padding: 0 1.5rem;
+  }
+  .main-container .content {
+    width: 55% !important;
+  }
+  .main-container .image {
+    width: 40%;
+  }
+  .main-container .image img {
+    max-width: 100%;
+    height: auto;
+  }
 }
 @media (max-width: 55.25rem) {
   .main-container {
     flex-direction: column;
     align-items: center;
     margin-top: 1rem;
+    padding: 0 1rem;
+    gap: 2rem;
   }
 }
 .main-container .content {
   width: 50%;
+  max-width: 50rem;
 }
 .main-container .content h1 span,
 .main-container .content .typewriter span {
@@ -4129,6 +4168,11 @@ h2.section-visible::after {
 @media (max-height: 37.5rem) and (orientation: landscape) {
   .scroll-indicator {
     display: none;
+  }
+}
+@media (min-width: 75rem) {
+  .scroll-indicator {
+    bottom: 6rem;
   }
 }
 @media (max-width: 55.25rem) {
@@ -5791,6 +5835,8 @@ h2.section-visible::after {
   flex-wrap: wrap;
   justify-content: center;
   gap: 2rem;
+  max-width: 90rem;
+  width: 100%;
 }
 .contact-section .contact-left,
 .contact-section .contact-right {
@@ -7206,5 +7252,3 @@ h2.section-visible::after {
     z-index: 1500;
   }
 }
-
-/*# sourceMappingURL=style.css.map */

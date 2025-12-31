@@ -33,6 +33,8 @@
     flex-wrap: wrap;
     justify-content: center;
     gap: $spacing-xl;
+    max-width: 90rem; // 1440px - limite pour grands écrans
+    width: 100%;
   }
 
   .contact-left,

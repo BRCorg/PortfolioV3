@@ -258,137 +258,9 @@ if (typewriterText) {
 // ==========================================
 // CAROUSEL DE PROJETS AVEC SWIPER
 // ==========================================
-document.addEventListener("DOMContentLoaded", () => {
-    const projectSlider = document.querySelector('.project-list');
-
-    if (!projectSlider) return;
-
-    const categoryFilter = document.getElementById('categoryFilter');
-
-    // Créer la structure de navigation complète
-    const portfolioSection = projectSlider.closest('.portfolio');
-
-    // Navigation avec flèches
-    let navContainer = portfolioSection.querySelector('.project-nav');
-    if (!navContainer) {
-        navContainer = document.createElement('div');
-        navContainer.className = 'project-nav slider-nav';
-        navContainer.innerHTML = `
-            <div tabindex="0" class="project-nav-btn slider-nav__item slider-nav__item_prev prev">
-                <svg width="16" height="28" viewBox="0 0 16 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M14 26L2 14L14 2" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
-                </svg>
-            </div>
-            <div tabindex="0" class="project-nav-btn slider-nav__item slider-nav__item_next next">
-                <svg width="16" height="28" viewBox="0 0 16 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M2 26L14 14L2 2" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
-                </svg>
-            </div>
-        `;
-        projectSlider.parentNode.insertBefore(navContainer, projectSlider);
-    }
-
-    // Pagination dots en bas
-    let dotsContainer = portfolioSection.querySelector('.project-nav-dots');
-    if (!dotsContainer) {
-        dotsContainer = document.createElement('div');
-        dotsContainer.className = 'project-nav-dots slider-pagination';
-        projectSlider.parentNode.insertBefore(dotsContainer, projectSlider.nextSibling);
-    }
-
-    // Wrapper Swiper
-    projectSlider.classList.add('swiper');
-    const wrapper = document.createElement('div');
-    wrapper.className = 'swiper-wrapper';
-
-    // Déplacer les cartes dans le wrapper
-    const cards = Array.from(projectSlider.children);
-    cards.forEach(card => {
-        card.classList.add('swiper-slide');
-        wrapper.appendChild(card);
-    });
-    projectSlider.appendChild(wrapper);
-
-    // Initialiser Swiper
-    const projectSwiper = new Swiper(projectSlider, {
-        slidesPerView: "auto",
-        spaceBetween: 20,
-        speed: 600,
-        observer: true,
-        watchOverflow: true,
-        watchSlidesProgress: true,
-        centeredSlides: true,
-        initialSlide: 1,
-        loop: true,
-        loopAdditionalSlides: 2,
-        allowTouchMove: false,  // Désactiver le drag/swipe
-        simulateTouch: false,   // Désactiver la simulation tactile
-        touchRatio: 0,          // Pas de déplacement tactile
-        preventClicks: true,    // Empêcher les clics sur les slides
-        preventClicksPropagation: true,
-        navigation: {
-            nextEl: '.project-nav-btn.next',
-            prevEl: '.project-nav-btn.prev',
-            disabledClass: 'disabled'
-        },
-        pagination: {
-            el: '.project-nav-dots',
-            type: 'bullets',
-            bulletClass: 'dot',
-            bulletActiveClass: 'active',
-            clickable: true
-        },
-        breakpoints: {
-            768: {
-                spaceBetween: 40
-            }
-        },
-        on: {
-            init: function() {
-                updateSlideClasses(this);
-            },
-            slideChange: function() {
-                updateSlideClasses(this);
-            }
-        }
-    });
-
-    // Fonction pour mettre à jour les classes des slides
-    function updateSlideClasses(swiper) {
-        swiper.slides.forEach((slide) => {
-            slide.classList.remove('prev', 'next', 'active');
-
-            if (slide.classList.contains('swiper-slide-active')) {
-                slide.classList.add('active');
-            } else if (slide.classList.contains('swiper-slide-prev')) {
-                slide.classList.add('prev');
-            } else if (slide.classList.contains('swiper-slide-next')) {
-                slide.classList.add('next');
-            }
-        });
-    }
-
-    // Filtre par catégorie
-    if (categoryFilter) {
-        categoryFilter.addEventListener('change', function() {
-            const selectedCategory = this.value;
-
-            projectSwiper.slides.forEach((slide) => {
-                const card = slide.querySelector('.project-card');
-                const category = card ? card.getAttribute('data-category') : '';
-
-                if (selectedCategory === 'all' || category === selectedCategory) {
-                    slide.style.display = 'flex';
-                } else {
-                    slide.style.display = 'none';
-                }
-            });
-
-            projectSwiper.update();
-            projectSwiper.slideTo(0);
-        });
-    }
-});
+// Note: Ce carrousel utilise la classe .emotions-slider du HTML
+// Il n'y a pas besoin de code supplémentaire ici car le carrousel
+// est initialisé par la section "PROJECTS SLIDER (SWIPER)" plus bas dans ce fichier
 
 // ==========================================
 // FORMULAIRE DE CONTACT
@@ -879,47 +751,50 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function initializeSliders() {
-        const list = [];
-
         sliders.forEach((element) => {
-            const [slider, prevEl, nextEl, pagination] = [
-                element.querySelector(".swiper"),
-                element.querySelector(".slider-nav__item_prev"),
-                element.querySelector(".slider-nav__item_next"),
-                element.querySelector(".slider-pagination")
-            ];
+            const slider = element.querySelector(".swiper");
+            const prevEl = element.querySelector(".slider-nav__item_prev");
+            const nextEl = element.querySelector(".slider-nav__item_next");
+            const pagination = element.querySelector(".slider-pagination");
 
-            if (slider) {
-                list.push(
-                    new Swiper(slider, {
-                        loop: true,
-                        slidesPerView: "auto",
-                        spaceBetween: 20,
-                        speed: 600,
-                        observer: true,
-                        watchOverflow: true,
-                        watchSlidesProgress: true,
-                        centeredSlides: true,
-                        loopedSlides: 3,
-                        initialSlide: Math.floor(slider.querySelectorAll('.swiper-slide').length / 2),
-                        navigation: { 
-                            nextEl, 
-                            prevEl, 
-                            disabledClass: "disabled" 
+            // Vérifier si le slider n'est pas déjà initialisé
+            if (slider && !slider.swiper) {
+                new Swiper(slider, {
+                    loop: true,
+                    speed: 700,
+                    spaceBetween: 20,
+
+                    pagination: {
+                        el: pagination,
+                        clickable: true,
+                        dynamicBullets: true,
+                        bulletClass: 'slider-pagination__item',
+                        bulletActiveClass: 'active'
+                    },
+
+                    navigation: {
+                        nextEl: nextEl,
+                        prevEl: prevEl
+                    },
+
+                    breakpoints: {
+                        0: {
+                            slidesPerView: 1,
+                            spaceBetween: 15,
+                            centeredSlides: true
                         },
-                        pagination: {
-                            el: pagination,
-                            type: "bullets",
-                            modifierClass: "slider-pagination",
-                            bulletClass: "slider-pagination__item",
-                            bulletActiveClass: "active",
-                            clickable: true
+                        768: {
+                            slidesPerView: 2,
+                            spaceBetween: 25,
+                            centeredSlides: true
                         },
-                        breakpoints: {
-                            768: { spaceBetween: 40 }
+                        1024: {
+                            slidesPerView: 3,
+                            spaceBetween: 30,
+                            centeredSlides: true
                         }
-                    })
-                );
+                    }
+                });
             }
         });
     }
