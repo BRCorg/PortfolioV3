@@ -136,9 +136,7 @@ class SkillController
      */
     private function generateSlug(string $name): string
     {
-        $slug = strtolower($name);
-        $slug = preg_replace('/[^a-z0-9]+/', '-', $slug);
-        $slug = trim($slug, '-');
-        return $slug;
+        // Utilise la fonction helper globale
+        return generateSlug($name);
     }
 }

@@ -94,7 +94,7 @@ closeModal.addEventListener('click', () => {
 document.getElementById('editSkillForm').addEventListener('submit', async function(e) {
     e.preventDefault();
     const skillId = document.getElementById('edit-skill-id').value;
-    const formData = new FormData(this);
+    const formData = addCsrfToken(new FormData(this));
 
     const response = await fetch(`<?= $_ENV['ADMIN_SECRET_URL'] ?>/skills/${skillId}/update`, {
         method: 'POST',
@@ -112,11 +112,15 @@ document.getElementById('editSkillForm').addEventListener('submit', async functi
 // Suppression
 document.querySelectorAll('.btn-delete').forEach(btn => {
     btn.addEventListener('click', async function() {
-        if (!confirm('Êtes-vous sûr de vouloir supprimer cette compétence ?')) return;
+        // Pas de confirm() ici, il est déjà géré par dashboard.js
 
         const skillId = this.dataset.id;
+        const formData = new FormData();
+        addCsrfToken(formData);
+
         const response = await fetch(`<?= $_ENV['ADMIN_SECRET_URL'] ?>/skills/${skillId}/delete`, {
-            method: 'POST'
+            method: 'POST',
+            body: formData
         });
 
         const result = await response.json();

@@ -63,12 +63,10 @@ class Category extends BaseModel
      */
     private function generateSlug(string $name): string
     {
-        $slug = strtolower(trim($name));
-        $slug = preg_replace('/[^a-z0-9-]/', '-', $slug);
-        $slug = preg_replace('/-+/', '-', $slug);
-        $slug = trim($slug, '-');
+        // Utilise la fonction helper globale pour la génération de base
+        $slug = generateSlug($name);
 
-        // Vérifier l'unicité
+        // Vérifier l'unicité du slug dans la base de données
         $baseSlug = $slug;
         $counter = 1;
         while ($this->findBySlug($slug)) {

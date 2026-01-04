@@ -46,11 +46,15 @@
 // Suppression
 document.querySelectorAll('.btn-delete').forEach(btn => {
     btn.addEventListener('click', async function() {
-        if (!confirm('Êtes-vous sûr de vouloir supprimer cette catégorie ?')) return;
+        // Pas de confirm() ici, il est déjà géré par dashboard.js
 
         const categoryId = this.dataset.id;
+        const formData = new FormData();
+        addCsrfToken(formData);
+
         const response = await fetch(`<?= $_ENV['ADMIN_SECRET_URL'] ?>/categories/${categoryId}/delete`, {
-            method: 'POST'
+            method: 'POST',
+            body: formData
         });
 
         const result = await response.json();

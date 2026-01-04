@@ -76,11 +76,11 @@ class HomeController
     }
 
     /**
-     * Afficher les détails d'un projet
+     * Afficher les détails d'un projet (par slug pour SEO)
      */
-    public function projectDetails(int $id): void
+    public function projectDetails(string $slug): void
     {
-        $project = $this->projectRepository->findComplete($id);
+        $project = $this->projectRepository->findBySlugWithCategory($slug);
 
         if (!$project) {
             header('HTTP/1.0 404 Not Found');
@@ -96,9 +96,9 @@ class HomeController
         }
 
         // SEO Meta Tags pour le projet
-        $pageTitle = htmlspecialchars($project['title']) . ' - Projet de Guven Berancan';
+        $pageTitle = htmlspecialchars($project['title']) . ' - Projet de Berancan Guven';
         $pageDescription = substr(strip_tags($project['description']), 0, 155) . '...';
-        $canonicalUrl = 'https://' . $_SERVER['HTTP_HOST'] . '/project/' . $id;
+        $canonicalUrl = 'https://' . $_SERVER['HTTP_HOST'] . '/project/' . $slug;
         $ogTitle = htmlspecialchars($project['title']);
         $ogDescription = substr(strip_tags($project['description']), 0, 200);
         $ogImage = !empty($project['images'][0]['file_path']) ? 'https://' . $_SERVER['HTTP_HOST'] . '/uploads/projects/' . $project['images'][0]['file_path'] : 'https://' . $_SERVER['HTTP_HOST'] . '/img/PhotoDeProfilPF2.png';

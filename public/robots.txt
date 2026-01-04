@@ -1,4 +1,4 @@
-# robots.txt pour Portfolio Guven Berancan
+# robots.txt pour Portfolio Berancan Guven
 
 User-agent: *
 Allow: /
@@ -10,7 +10,7 @@ Disallow: /config/
 Disallow: /src/
 
 # Sitemap
-Sitemap: https://<?= $_SERVER['HTTP_HOST'] ?? 'votre-domaine.com' ?>/sitemap.xml
+Sitemap: https://portfolio.berancan-guven.fr/sitemap.xml
 
 # Bots spécifiques
 User-agent: Googlebot

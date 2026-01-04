@@ -111,3 +111,20 @@ function validateImageUpload(array $file, int $maxSize = 5242880): array
     // Tout est OK
     return ['valid' => true, 'error' => null];
 }
+
+/**
+ * Génère un slug URL-friendly à partir d'un texte
+ *
+ * Convertit un texte en minuscules, remplace les caractères spéciaux par des tirets,
+ * et élimine les tirets multiples/aux extrémités
+ *
+ * @param string $text Texte à convertir en slug
+ * @return string Slug généré (ex: "Mon Titre!" -> "mon-titre")
+ */
+function generateSlug(string $text): string
+{
+    $slug = strtolower(trim($text));
+    $slug = preg_replace('/[^a-z0-9-]/', '-', $slug);
+    $slug = preg_replace('/-+/', '-', $slug);
+    return trim($slug, '-');
+}

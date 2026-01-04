@@ -649,3 +649,36 @@ async function deleteMessage(messageId) {
     }
 }
 
+// ==========================================
+// CUSTOM FILE INPUT - TRIGGER CLICK
+// ==========================================
+
+// Gérer les clics sur les labels customisés d'upload de fichiers
+document.querySelectorAll('.file-input-wrapper').forEach(wrapper => {
+    const input = wrapper.querySelector('input[type="file"]');
+    const label = wrapper.querySelector('.file-input-label');
+
+    if (input && label) {
+        // Déclencher le sélecteur de fichiers quand on clique sur le label
+        label.addEventListener('click', function() {
+            input.click();
+        });
+
+        // Mettre à jour le texte du label quand un fichier est sélectionné
+        input.addEventListener('change', function() {
+            const fileCount = this.files.length;
+            const labelSpan = label.querySelector('span');
+
+            if (fileCount > 0) {
+                if (this.multiple) {
+                    labelSpan.textContent = `${fileCount} fichier(s) sélectionné(s)`;
+                } else {
+                    labelSpan.textContent = this.files[0].name;
+                }
+                label.style.borderColor = '#4caf50';
+                label.style.color = '#4caf50';
+            }
+        });
+    }
+});
+

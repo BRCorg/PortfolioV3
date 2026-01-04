@@ -14,7 +14,7 @@ Portfolio professionnel développé en PHP natif avec architecture MVC, mettant 
 ## 📁 Architecture du projet
 
 ```
-PortfolioV2/
+PortfolioV3/
 ├── config/                 # Configuration de l'application
 │   ├── database.php       # Connexion PDO à la base de données
 │   └── routes.php         # Définition des routes

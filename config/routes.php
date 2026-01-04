@@ -27,8 +27,8 @@ if (is_array($adminUrl)) {
 // Page d'accueil
 $router->get('/', HomeController::class, 'index');
 
-// Détails d'un projet
-$router->get('/project/{id}', HomeController::class, 'projectDetails');
+// Détails d'un projet (par slug pour SEO)
+$router->get('/project/{slug}', HomeController::class, 'projectDetails');
 
 // Formulaire de contact
 $router->post('/contact/submit', ContactController::class, 'submit');

@@ -12,7 +12,7 @@ use App\Middleware\AuthMiddleware;
 
 /**
  * DashboardController
- * G�re le tableau de bord admin
+ * Gère le tableau de bord admin
  */
 class DashboardController
 {
@@ -29,7 +29,7 @@ class DashboardController
      */
     public function index(): void
     {
-        // V�rifier l'authentification
+        // Vérifier l'authentification
         AuthMiddleware::requireAuth();
 
         // Récupérer les statistiques
@@ -47,10 +47,10 @@ class DashboardController
         // Récupérer les 5 derniers messages
         $recentMessages = $contactModel->getLatest(5);
 
-        // R�cup�rer les cat�gories pour le select
+        // Récupérer les catégories pour le select
         $categories = $categoryModel->all('name ASC');
 
-        // R�cup�rer toutes les skills pour le select
+        // Récupérer toutes les skills pour le select
         $skills = $skillModel->all('name ASC');
 
         // Charger la vue
