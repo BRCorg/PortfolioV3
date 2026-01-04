@@ -51,7 +51,7 @@ class HomeController
         $user = $this->userRepository->find(1); // ID 1 = toi
         if (!$user) {
             $user = [
-                'name' => 'Guven Berancan',
+                'name' => 'Berancan Guven',
                 'email' => '',
                 'src' => 'assets/img/profile.jpg',
                 'description' => '',
@@ -63,11 +63,11 @@ class HomeController
         $categories = $this->categoryRepository->all('name ASC');
 
         // SEO Meta Tags
-        $pageTitle = 'Guven Berancan - Développeur Web Full Stack Junior | Portfolio';
+        $pageTitle = 'Berancan Guven - Développeur Web Full Stack | Portfolio';
         $pageDescription = 'Étudiant en 2ème année Bachelor Dev Web Full Stack à la 3W Academy. Découvrez mes projets en PHP, Symfony, React et JavaScript. En recherche de stage 4 mois (avril-juillet 2025).';
         $canonicalUrl = 'https://' . $_SERVER['HTTP_HOST'] . '/';
-        $ogTitle = 'Guven Berancan - Développeur Web Full Stack Junior';
-        $ogDescription = 'Portfolio de Guven Berancan : projets en PHP, Symfony, React. Étudiant à la 3W Academy en recherche de stage.';
+        $ogTitle = 'Berancan Guven - Développeur Web Full Stack';
+        $ogDescription = 'Portfolio de Berancan Guven, développeur web full stack junior spécialisé en PHP, Symfony et React.';
         $ogImage = 'https://' . $_SERVER['HTTP_HOST'] . '/img/PhotoDeProfilPF2.png';
 
         // Charger la vue
