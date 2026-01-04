@@ -35,6 +35,15 @@
     gap: $spacing-xl;
     max-width: 90rem; // 1440px - limite pour grands écrans
     width: 100%;
+
+    // Ultra-wide screens
+    @media (min-width: 120rem) {
+      max-width: 120rem; // 1920px sur écrans 2K+
+    }
+
+    @media (min-width: 160rem) {
+      max-width: 150rem; // 2400px sur écrans 4K+
+    }
   }
 
   .contact-left,
@@ -313,6 +322,15 @@
     margin: 5rem auto;
     padding: $spacing-xl;
     text-align: center;
+
+    // Ultra-wide screens
+    @media (min-width: 120rem) {
+      max-width: 70rem; // 1120px sur écrans 2K+
+    }
+
+    @media (min-width: 160rem) {
+      max-width: 90rem; // 1440px sur écrans 4K+
+    }
 
     h1 {
       font-size: 2.2rem;

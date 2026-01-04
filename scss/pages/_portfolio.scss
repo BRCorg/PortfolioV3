@@ -75,6 +75,15 @@
   border-radius: $border-radius-xl;
   box-shadow: 0 0.25rem 0.9375rem rgba(0, 0, 0, 0.1);
 
+  // Ultra-wide screens - Expansion progressive
+  @media (min-width: 120rem) {
+    max-width: 85rem; // 1360px sur écrans 2K+
+  }
+
+  @media (min-width: 160rem) {
+    max-width: 110rem; // 1760px sur écrans 4K+
+  }
+
   h1 {
     font-size: 2.5rem;
     margin-bottom: $spacing-md;

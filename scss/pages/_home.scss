@@ -12,6 +12,16 @@
   margin-right: auto;
   padding: 0 2rem;
 
+  // Ultra-wide screens (>1920px) - Permettre l'expansion jusqu'à 2560px
+  @media (min-width: 120rem) {
+    max-width: 160rem; // 2560px pour moniteurs 2K/4K
+  }
+
+  // Extra large screens (>2560px) - Limite finale à 3200px
+  @media (min-width: 160rem) {
+    max-width: 200rem; // 3200px pour moniteurs 4K+
+  }
+
   // Tablette large (884px - 1100px) - Réduire l'espace et ajuster les proportions
   @media (max-width: 68.75rem) and (min-width: 55.26rem) {
     gap: 1.5rem;
@@ -42,6 +52,15 @@
   .content {
     width: 50%;
     max-width: 50rem; // Limite la largeur du contenu
+
+    // Ultra-wide screens - Permettre au contenu de s'étendre davantage
+    @media (min-width: 120rem) {
+      max-width: 65rem; // 1040px sur écrans 2K+
+    }
+
+    @media (min-width: 160rem) {
+      max-width: 80rem; // 1280px sur écrans 4K+
+    }
 
     h1 span,
     .typewriter span {
