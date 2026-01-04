@@ -18,8 +18,7 @@ class ProjectController
 
     public function __construct()
     {
-        $database = new Database();
-        $db = $database->connect();
+        $db = Database::getInstance()->connect();
 
         $this->projectRepository = new ProjectRepository($db);
         $this->categoryRepository = new CategoryRepository($db);
@@ -212,8 +211,7 @@ class ProjectController
         // Récupérer les catégories et skills pour les listes déroulantes
         $categories = $this->categoryRepository->all('name ASC');
 
-        $database = new Database();
-        $db = $database->connect();
+        $db = Database::getInstance()->connect();
         $skillRepository = new \App\Repositories\SkillRepository($db);
         $skills = $skillRepository->all('name ASC');
 

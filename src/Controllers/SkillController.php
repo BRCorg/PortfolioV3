@@ -16,8 +16,7 @@ class SkillController
 
     public function __construct()
     {
-        $database = new Database();
-        $db = $database->connect();
+        $db = Database::getInstance()->connect();
 
         $this->skillRepository = new SkillRepository($db);
     }

@@ -50,4 +50,24 @@ class ContactRepository extends BaseRepository
         $stmt = $this->db->query($sql);
         return (int) $stmt->fetch(\PDO::FETCH_ASSOC)['total'];
     }
+
+    /**
+     * Récupérer les derniers messages (par nombre)
+     */
+    public function getLatest(int $limit = 5): array
+    {
+        $sql = "SELECT * FROM {$this->table}
+                ORDER BY created_at DESC
+                LIMIT " . (int)$limit;
+
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute();
+            return $stmt->fetchAll(\PDO::FETCH_ASSOC) ?: [];
+        } catch (\Exception $e) {
+            // Fallback : récupérer tous et limiter avec array_slice
+            $allMessages = $this->all('created_at DESC');
+            return array_slice($allMessages, 0, $limit);
+        }
+    }
 }

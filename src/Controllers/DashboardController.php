@@ -3,11 +3,11 @@
 namespace App\Controllers;
 
 use config\Database;
-use App\Models\Project;
-use App\Models\Skill;
-use App\Models\User;
-use App\Models\Category;
-use App\Models\Contact;
+use App\Repositories\ProjectRepository;
+use App\Repositories\SkillRepository;
+use App\Repositories\UserRepository;
+use App\Repositories\CategoryRepository;
+use App\Repositories\ContactRepository;
 use App\Middleware\AuthMiddleware;
 
 /**
@@ -16,12 +16,21 @@ use App\Middleware\AuthMiddleware;
  */
 class DashboardController
 {
-    private $db;
+    private ProjectRepository $projectRepository;
+    private SkillRepository $skillRepository;
+    private UserRepository $userRepository;
+    private CategoryRepository $categoryRepository;
+    private ContactRepository $contactRepository;
 
     public function __construct()
     {
-        $database = new Database();
-        $this->db = $database->connect();
+        $db = Database::getInstance()->connect();
+
+        $this->projectRepository = new ProjectRepository($db);
+        $this->skillRepository = new SkillRepository($db);
+        $this->userRepository = new UserRepository($db);
+        $this->categoryRepository = new CategoryRepository($db);
+        $this->contactRepository = new ContactRepository($db);
     }
 
     /**
@@ -33,25 +42,19 @@ class DashboardController
         AuthMiddleware::requireAuth();
 
         // Récupérer les statistiques
-        $projectModel = new Project($this->db);
-        $skillModel = new Skill($this->db);
-        $userModel = new User($this->db);
-        $categoryModel = new Category($this->db);
-        $contactModel = new Contact($this->db);
-
-        $projectsCount = $projectModel->count();
-        $skillsCount = $skillModel->count();
-        $categoriesCount = $categoryModel->count();
-        $contactsCount = $contactModel->count();
+        $projectsCount = $this->projectRepository->count();
+        $skillsCount = $this->skillRepository->count();
+        $categoriesCount = $this->categoryRepository->count();
+        $contactsCount = $this->contactRepository->count();
 
         // Récupérer les 5 derniers messages
-        $recentMessages = $contactModel->getLatest(5);
+        $recentMessages = $this->contactRepository->getLatest(5);
 
         // Récupérer les catégories pour le select
-        $categories = $categoryModel->all('name ASC');
+        $categories = $this->categoryRepository->all('name ASC');
 
         // Récupérer toutes les skills pour le select
-        $skills = $skillModel->all('name ASC');
+        $skills = $this->skillRepository->all('name ASC');
 
         // Charger la vue
         $template = 'dashboard';

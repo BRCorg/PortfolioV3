@@ -16,8 +16,7 @@ class CategoryController
 
     public function __construct()
     {
-        $database = new Database();
-        $db = $database->connect();
+        $db = Database::getInstance()->connect();
 
         $this->categoryRepository = new CategoryRepository($db);
     }

@@ -19,8 +19,7 @@ class TwoFactorController
 
     public function __construct()
     {
-        $database = new Database();
-        $db = $database->connect();
+        $db = Database::getInstance()->connect();
 
         $this->userRepository = new UserRepository($db);
         $this->securityLogger = new SecurityLogger();

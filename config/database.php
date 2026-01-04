@@ -4,8 +4,16 @@ namespace config;
 use PDO;
 use PDOException;
 
+/**
+ * Classe Database - Singleton Pattern
+ *
+ * Garantit une seule instance de connexion à la base de données
+ * pour toute l'application, évitant ainsi les connexions multiples.
+ */
 class Database
 {
+    private static ?Database $instance = null;
+
     private string $host;
     private int $port;
     private string $dbname;
@@ -14,7 +22,10 @@ class Database
     private string $password;
     private ?PDO $pdo = null;
 
-    public function __construct()
+    /**
+     * Constructeur privé - empêche l'instanciation directe
+     */
+    private function __construct()
     {
         $this->host = getenv('DB_HOST') ?: ($_ENV['DB_HOST'] ?? throw new \RuntimeException('DB_HOST non défini dans .env'));
         $this->port = (int)(getenv('DB_PORT') ?: ($_ENV['DB_PORT'] ?? 3306));
@@ -23,6 +34,37 @@ class Database
         $this->password = getenv('DB_PASSWORD') ?: ($_ENV['DB_PASSWORD'] ?? '');
     }
 
+    /**
+     * Empêche le clonage de l'instance
+     */
+    private function __clone() {}
+
+    /**
+     * Empêche la désérialisation de l'instance
+     */
+    public function __wakeup()
+    {
+        throw new \Exception("Cannot unserialize singleton");
+    }
+
+    /**
+     * Retourne l'instance unique de Database (Singleton)
+     *
+     * @return Database Instance unique
+     */
+    public static function getInstance(): Database
+    {
+        if (self::$instance === null) {
+            self::$instance = new self();
+        }
+        return self::$instance;
+    }
+
+    /**
+     * Retourne la connexion PDO
+     *
+     * @return PDO Connexion à la base de données
+     */
     public function connect(): PDO
     {
         if ($this->pdo === null) {

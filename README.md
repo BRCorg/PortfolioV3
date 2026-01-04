@@ -1,6 +1,6 @@
 # Portfolio V3 - Berancan Guven
 
-Portfolio professionnel développé en PHP natif avec architecture MVC, mettant en avant mes compétences en développement web full-stack.
+Portfolio professionnel développé en PHP natif avec architecture **MVC + Repository Pattern**, mettant en avant mes compétences en développement web full-stack.
 
 ## 🚀 Technologies utilisées
 
@@ -117,14 +117,34 @@ server {
 }
 ```
 
+## 🏗️ Architecture & Design Patterns
+
+### Repository Pattern
+- **Séparation des responsabilités** : Controllers → Repositories → Database
+- **Abstraction de la couche de persistance** : Facilite les tests et la maintenance
+- **7 Repositories** : Project, Skill, Category, Contact, User + BaseRepository + Interface
+
+### Singleton Pattern (Database)
+- **Une seule instance** de connexion PDO pour toute l'application
+- **Optimisation des ressources** : Évite les connexions multiples
+- **Thread-safe** : Protection contre le clonage et la désérialisation
+
+### Avantages de cette architecture
+- ✅ Code DRY (Don't Repeat Yourself) - Aucune duplication
+- ✅ SOLID Principles respectés
+- ✅ Facilement testable (mockable)
+- ✅ Scalable et maintenable
+
 ## 🔒 Sécurité
 
 - **Authentification 2FA** : TOTP (Google Authenticator) avec codes de backup
 - **Protection CSRF** : Tokens uniques pour chaque formulaire
+- **Rate Limiting** : Protection contre le brute force (IP + Email)
 - **Sessions sécurisées** : Configuration hardened avec flags httponly, secure, samesite
 - **Headers de sécurité HTTP** : XSS Protection, X-Frame-Options, Content-Type-Options
 - **Préparation des requêtes SQL** : Protection contre les injections SQL via PDO
 - **Variables d'environnement** : Isolation de la configuration sensible
+- **Security Logger** : Traçabilité des événements critiques
 
 ## 🧪 Tests
 

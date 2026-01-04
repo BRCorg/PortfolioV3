@@ -22,8 +22,7 @@ class ContactController
 
     public function __construct()
     {
-        $database = new Database();
-        $db = $database->connect();
+        $db = Database::getInstance()->connect();
 
         $this->contactRepository = new ContactRepository($db);
         $this->securityLogger = new SecurityLogger();

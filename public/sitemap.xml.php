@@ -12,8 +12,7 @@ use App\Repositories\ProjectRepository;
 
 header('Content-Type: application/xml; charset=utf-8');
 
-$database = new Database();
-$db = $database->connect();
+$db = Database::getInstance()->connect();
 $projectRepository = new ProjectRepository($db);
 
 // URL de base du site
@@ -79,7 +78,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
     ?>
     <!-- Projet: <?= htmlspecialchars($project['title']) ?> -->
     <url>
-        <loc><?= $baseUrl ?>/project/<?= $project['id'] ?></loc>
+        <loc><?= $baseUrl ?>/project/<?= $project['slug'] ?></loc>
         <lastmod><?= $lastmod ?></lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
