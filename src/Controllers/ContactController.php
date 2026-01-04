@@ -30,11 +30,23 @@ class ContactController
     }
 
     /**
-     * Traiter le formulaire de contact
+     * Traiter le formulaire de contact avec protection anti-spam multi-couches
+     *
+     * Système de sécurité en 7 couches :
+     * 1. Rate limiting par IP (3 messages max par heure)
+     * 2. Validation token CSRF (protection contre Cross-Site Request Forgery)
+     * 3. Validation des champs obligatoires
+     * 4. Rate limiting par email (2 messages max par 30min)
+     * 5. Détection de contenu spam (mots-clés, liens)
+     * 6. Sauvegarde en base de données (avec IP et user-agent)
+     * 7. Envoi d'email de notification à l'admin
+     *
+     * @return void Retourne une réponse JSON avec le statut d'envoi
      */
     public function submit(): void
     {
-        // 1. Protection anti-spam par IP
+        // COUCHE 1 : Rate limiting par adresse IP
+        // Limite : 3 tentatives par heure pour éviter le spam automatisé
         $clientIP = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
         if (!RateLimiter::attempt("contact_ip_{$clientIP}", 3, 60)) {
             $this->securityLogger->logRateLimitBlock('contact_ip', $clientIP, $clientIP);
@@ -45,7 +57,8 @@ class ContactController
             exit;
         }
 
-        // 2. Vérifier le token CSRF
+        // COUCHE 2 : Vérification du token CSRF
+        // Empêche les soumissions de formulaire depuis des sites externes
         $token = $_POST['csrf_token'] ?? '';
         if (!AuthMiddleware::verifyCsrfToken($token)) {
             $this->securityLogger->logCsrfAttempt($clientIP);
@@ -56,6 +69,7 @@ class ContactController
             exit;
         }
 
+        // Nettoyage des données (trim pour enlever les espaces superflus)
         $data = [
             'name' => trim($_POST['name'] ?? ''),
             'email' => trim($_POST['email'] ?? ''),
@@ -63,7 +77,7 @@ class ContactController
             'message' => trim($_POST['message'] ?? '')
         ];
 
-        // 3. Validation renforcée
+        // COUCHE 3 : Validation des champs obligatoires
         if (empty($data['name']) || empty($data['email']) || empty($data['message'])) {
             echo json_encode([
                 'success' => false,
@@ -72,6 +86,7 @@ class ContactController
             exit;
         }
 
+        // Validation du format email (RFC 822)
         if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
             echo json_encode([
                 'success' => false,
@@ -80,7 +95,9 @@ class ContactController
             exit;
         }
 
-        // 4. Protection anti-spam par email
+        // COUCHE 4 : Rate limiting par adresse email
+        // Limite : 2 messages max par 30 minutes par email
+        // Empêche qu'un utilisateur spam avec la même adresse email
         if (!RateLimiter::attempt("contact_email_{$data['email']}", 2, 30)) {
             echo json_encode([
                 'success' => false,
@@ -89,7 +106,8 @@ class ContactController
             exit;
         }
 
-        // 5. Détection de contenu spam
+        // COUCHE 5 : Détection de contenu spam
+        // Analyse le message pour détecter des patterns de spam (mots-clés, liens multiples)
         if ($this->isSpam($data)) {
             $this->securityLogger->logSpamDetection($clientIP, $data);
             echo json_encode([
@@ -99,13 +117,15 @@ class ContactController
             exit;
         }
 
-        // 6. Sauvegarder en base
+        // COUCHE 6 : Sauvegarde en base de données
+        // Le repository enregistre aussi l'IP et le user-agent pour traçabilité
         $contactId = $this->contactRepository->create($data);
 
         if ($contactId > 0) {
-            // 7. Envoyer l'email de notification
+            // COUCHE 7 : Envoi de l'email de notification à l'administrateur
+            // Utilise PHPMailer avec SMTP pour fiabilité
             $emailSent = $this->sendNotificationEmail($data);
-            
+
             echo json_encode([
                 'success' => true,
                 'message' => 'Message envoyé avec succès !',
@@ -120,24 +140,40 @@ class ContactController
     }
 
     /**
-     * Détection simple de spam
+     * Détection de spam basée sur l'analyse heuristique du contenu
+     *
+     * Méthode de détection simple mais efficace utilisant deux approches :
+     * 1. Liste de mots-clés typiques du spam (blacklist)
+     * 2. Comptage des liens HTTP (les spammeurs incluent souvent de nombreux liens)
+     *
+     * @param array $data Données du formulaire (name, email, subject, message)
+     * @return bool True si le message est considéré comme spam, False sinon
      */
     private function isSpam(array $data): bool
     {
+        // Liste de mots-clés couramment utilisés dans les spams
+        // Cette liste peut être étendue selon les patterns observés
         $spamWords = ['viagra', 'casino', 'bitcoin', 'crypto', 'loan', 'free money', 'click here', 'urgent'];
+
+        // Concaténer le message et le sujet pour analyse globale
+        // Conversion en minuscules pour une comparaison insensible à la casse
         $content = strtolower($data['message'] . ' ' . $data['subject']);
-        
+
+        // RÈGLE 1 : Vérifier la présence de mots-clés spam
         foreach ($spamWords as $word) {
             if (strpos($content, strtolower($word)) !== false) {
-                return true;
+                return true; // Mot spam détecté
             }
         }
 
-        // Trop de liens
+        // RÈGLE 2 : Compter le nombre de liens HTTP/HTTPS
+        // Les messages légitimes contiennent rarement plus de 2 liens
+        // Les spammeurs incluent souvent de nombreux liens vers des sites malveillants
         if (substr_count($content, 'http') > 2) {
-            return true;
+            return true; // Trop de liens détectés
         }
 
+        // Le message passe tous les filtres, probablement légitime
         return false;
     }
 

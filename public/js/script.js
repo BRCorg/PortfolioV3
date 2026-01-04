@@ -211,7 +211,7 @@ const typewriterText = document.getElementById('typewriterText');
 
 if (typewriterText) {
     const texts = [
-        'développeur Web Full Stack Junior',
+        'développeur Web Full Stack',
         'créatif',
         'passionné',
         'toujours à l\'écoute',

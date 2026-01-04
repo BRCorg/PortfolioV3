@@ -51,13 +51,21 @@ class ProjectController
 
     /**
      * Créer un projet (AJAX)
+     *
+     * Cette méthode gère la création complète d'un projet avec :
+     * - Validation CSRF pour la sécurité
+     * - Upload de l'image principale du projet
+     * - Upload d'une galerie d'images (carousel)
+     * - Association des compétences au projet
+     *
+     * @return void Retourne une réponse JSON avec le statut de création
      */
     public function create(): void
     {
         AuthMiddleware::requireAuth();
 
         try {
-            // Vérifier le token CSRF
+            // ÉTAPE 1 : Vérification du token CSRF pour se protéger contre les attaques CSRF
             $token = $_POST['csrf_token'] ?? '';
 
             if (!AuthMiddleware::verifyCsrfToken($token)) {
@@ -68,6 +76,8 @@ class ProjectController
                 exit;
             }
 
+            // ÉTAPE 2 : Préparation des données du projet
+            // Gestion de compatibilité pour les différents noms de champs (long_description vs description_long)
             $data = [
                 'title' => $_POST['title'] ?? '',
                 'description' => $_POST['description'] ?? '',
@@ -77,25 +87,28 @@ class ProjectController
                 'is_featured' => 0
             ];
 
-        // Gérer l'upload de l'image
+        // ÉTAPE 3 : Gestion de l'upload de l'image principale
         $uploadError = null;
         if (isset($_FILES['image']) && $_FILES['image']['error'] !== UPLOAD_ERR_NO_FILE) {
-            // Valider le fichier uploadé
+            // Validation du fichier (type MIME, taille, extension)
             $validation = \validateImageUpload($_FILES['image']);
 
             if (!$validation['valid']) {
                 $uploadError = $validation['error'];
             } else {
+                // Créer le dossier d'upload s'il n'existe pas
                 $uploadDir = __DIR__ . '/../../public/uploads/projects/';
                 if (!is_dir($uploadDir)) {
                     mkdir($uploadDir, 0755, true);
                 }
 
-                // Générer un nom de fichier sécurisé
+                // Générer un nom de fichier unique et sécurisé pour éviter les collisions
+                // Format: uniqid_randomhex.extension
                 $extension = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
                 $fileName = uniqid() . '_' . bin2hex(random_bytes(8)) . '.' . $extension;
                 $targetPath = $uploadDir . $fileName;
 
+                // Déplacer le fichier temporaire vers le dossier final
                 if (move_uploaded_file($_FILES['image']['tmp_name'], $targetPath)) {
                     $data['image'] = '/uploads/projects/' . $fileName;
                 } else {
@@ -104,19 +117,23 @@ class ProjectController
             }
         }
 
-        // Récupérer les skills (si fournis)
+        // ÉTAPE 4 : Récupération des compétences associées au projet
         $skillIds = $_POST['skill_ids'] ?? [];
 
+        // ÉTAPE 5 : Création du projet en base de données avec ses compétences
         $projectId = $this->projectRepository->createProject($data, $skillIds);
 
-        // Gérer l'upload du carousel (images supplémentaires)
+        // ÉTAPE 6 : Gestion de la galerie d'images (carousel)
+        // Traitement séparé car une galerie peut contenir plusieurs images
         $galleryErrors = [];
         if ($projectId > 0 && isset($_FILES['gallery']) && is_array($_FILES['gallery']['name'])) {
             $uploadDir = __DIR__ . '/../../public/uploads/projects/';
-            
+
+            // Parcourir chaque image de la galerie
             foreach ($_FILES['gallery']['name'] as $key => $name) {
                 if ($_FILES['gallery']['error'][$key] === UPLOAD_ERR_OK) {
-                    // Validation de chaque image
+                    // Reconstruction du tableau $_FILES pour chaque image individuelle
+                    // Nécessaire car $_FILES['gallery'] est un tableau multidimensionnel
                     $fileData = [
                         'name' => $_FILES['gallery']['name'][$key],
                         'type' => $_FILES['gallery']['type'][$key],
@@ -124,16 +141,18 @@ class ProjectController
                         'error' => $_FILES['gallery']['error'][$key],
                         'size' => $_FILES['gallery']['size'][$key]
                     ];
-                    
+
+                    // Validation de chaque image de la galerie
                     $validation = \validateImageUpload($fileData);
-                    
+
                     if ($validation['valid']) {
+                        // Génération d'un nom unique pour chaque image
                         $extension = strtolower(pathinfo($name, PATHINFO_EXTENSION));
                         $fileName = uniqid() . '_' . bin2hex(random_bytes(8)) . '.' . $extension;
                         $targetPath = $uploadDir . $fileName;
-                        
+
                         if (move_uploaded_file($_FILES['gallery']['tmp_name'][$key], $targetPath)) {
-                            // Ajouter l'image au projet avec le chemin complet
+                            // Enregistrer l'image en BDD avec son ordre d'affichage (display_order)
                             $this->projectRepository->addProjectImage($projectId, '/uploads/projects/' . $fileName, $key + 1);
                         } else {
                             $galleryErrors[] = "Échec upload: $name";
@@ -145,6 +164,7 @@ class ProjectController
             }
         }
 
+        // ÉTAPE 7 : Construction du message de retour avec tous les avertissements éventuels
         $message = $projectId > 0 ? 'Projet créé avec succès' : 'Erreur lors de la création';
         if ($projectId > 0 && $uploadError) {
             $message .= ' (⚠️ Image principale: ' . $uploadError . ')';
@@ -153,13 +173,14 @@ class ProjectController
             $message .= ' (⚠️ Carousel: ' . implode(', ', $galleryErrors) . ')';
         }
 
+        // ÉTAPE 8 : Réponse JSON pour le traitement AJAX côté client
         echo json_encode([
             'success' => $projectId > 0,
             'message' => $message,
             'project_id' => $projectId,
             'upload_error' => $uploadError
         ]);
-        
+
         } catch (\Exception $e) {
             echo json_encode([
                 'success' => false,

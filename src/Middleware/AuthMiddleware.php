@@ -37,7 +37,16 @@ class AuthMiddleware
     }
 
     /**
-     * Connecter un utilisateur
+     * Connecter un utilisateur et créer une session sécurisée
+     *
+     * Processus de connexion sécurisé :
+     * 1. Régénération de l'ID de session (protection contre session fixation)
+     * 2. Stockage des informations utilisateur en session
+     * 3. Génération d'un token CSRF unique pour protéger les formulaires
+     * 4. Tracking du temps de connexion et d'activité
+     *
+     * @param array $user Tableau contenant les informations de l'utilisateur (id, email, etc.)
+     * @return void
      */
     public static function login(array $user): void
     {
@@ -45,19 +54,25 @@ class AuthMiddleware
             session_start();
         }
 
-        // Régénérer l'ID de session pour éviter la fixation
+        // SÉCURITÉ CRITIQUE : Régénérer l'ID de session
+        // Cela empêche les attaques de session fixation où un attaquant
+        // force un utilisateur à utiliser un ID de session connu
+        // Le paramètre 'true' supprime également l'ancien fichier de session
         session_regenerate_id(true);
 
+        // Stocker les informations essentielles de l'utilisateur
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['user_email'] = $user['email'];
-        $_SESSION['user_authenticated'] = true;
-        $_SESSION['login_time'] = time();
-        $_SESSION['last_activity'] = time();
-        
-        // Stocker aussi l'utilisateur complet pour compatibilité
+        $_SESSION['user_authenticated'] = true; // Flag d'authentification
+        $_SESSION['login_time'] = time(); // Timestamp de connexion initiale
+        $_SESSION['last_activity'] = time(); // Timestamp de dernière activité (pour timeout)
+
+        // Stocker l'objet utilisateur complet pour accès facile
+        // (informations 2FA, profil, etc.)
         $_SESSION['user'] = $user;
 
-        // Token CSRF
+        // Générer un nouveau token CSRF pour protéger tous les formulaires
+        // Token de 32 bytes (64 caractères hexadécimaux) cryptographiquement sécurisé
         $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
     }
 
@@ -99,7 +114,17 @@ class AuthMiddleware
     }
 
     /**
-     * Vérifier le token CSRF
+     * Vérifier le token CSRF (Cross-Site Request Forgery)
+     *
+     * Le token CSRF protège contre les attaques où un site malveillant
+     * tente d'effectuer des actions au nom de l'utilisateur connecté.
+     *
+     * Utilise hash_equals() au lieu de === pour éviter les timing attacks :
+     * - hash_equals() prend toujours le même temps quelle que soit la différence
+     * - === peut révéler la longueur de la chaîne via le temps d'exécution
+     *
+     * @param string $token Le token soumis par le formulaire
+     * @return bool True si le token est valide, False sinon
      */
     public static function verifyCsrfToken(string $token): bool
     {
@@ -107,6 +132,7 @@ class AuthMiddleware
             session_start();
         }
 
+        // Comparaison sécurisée contre les timing attacks
         return isset($_SESSION['csrf_token']) && hash_equals($_SESSION['csrf_token'], $token);
     }
 

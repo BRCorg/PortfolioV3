@@ -9,54 +9,72 @@ namespace App\Middleware;
 class RateLimiter
 {
     /**
-     * Vérifier si une action est limitée
+     * Vérifier si une action est limitée (Rate Limiting)
      *
-     * @param string $key Identifiant unique (ex: 'login_192.168.1.1', 'contact_user@email.com')
-     * @param int $maxAttempts Nombre maximum de tentatives
-     * @param int $decayMinutes Durée en minutes avant reset
-     * @return bool True si l'action est autorisée, False si limitée
+     * Système de protection contre :
+     * - Le spam automatisé (bots)
+     * - Les attaques par force brute (brute force)
+     * - Les abus (flooding)
+     *
+     * Fonctionnement :
+     * - Utilise un compteur par clé unique (IP, email, etc.)
+     * - Le compteur s'incrémente à chaque tentative
+     * - Si le compteur dépasse maxAttempts, l'action est bloquée
+     * - Le compteur se réinitialise automatiquement après decayMinutes
+     *
+     * Exemples d'utilisation :
+     * - attempt('login_192.168.1.1', 5, 15) : max 5 tentatives de login par IP toutes les 15min
+     * - attempt('contact_user@email.com', 3, 60) : max 3 messages par email par heure
+     *
+     * @param string $key Identifiant unique de l'action (ex: 'login_192.168.1.1', 'contact_user@email.com')
+     * @param int $maxAttempts Nombre maximum de tentatives autorisées
+     * @param int $decayMinutes Durée en minutes avant réinitialisation du compteur
+     * @return bool True si l'action est autorisée, False si la limite est atteinte
      */
     public static function attempt(string $key, int $maxAttempts = 5, int $decayMinutes = 15): bool
     {
+        // Initialiser le tableau de rate limiting en session si nécessaire
         if (!isset($_SESSION['rate_limiter'])) {
             $_SESSION['rate_limiter'] = [];
         }
 
         $now = time();
-        $rateLimitKey = 'rl_' . $key;
+        $rateLimitKey = 'rl_' . $key; // Préfixe pour éviter les collisions de clés
 
-        // Nettoyer les anciennes entrées expirées
+        // ÉTAPE 1 : Nettoyage des anciennes entrées expirées
+        // Évite l'accumulation de données en session
         self::cleanup();
 
-        // Vérifier si l'entrée existe
+        // ÉTAPE 2 : Première tentative pour cette clé
         if (!isset($_SESSION['rate_limiter'][$rateLimitKey])) {
             $_SESSION['rate_limiter'][$rateLimitKey] = [
                 'attempts' => 1,
-                'reset_at' => $now + ($decayMinutes * 60)
+                'reset_at' => $now + ($decayMinutes * 60) // Timestamp de fin du délai
             ];
-            return true;
+            return true; // Première tentative toujours autorisée
         }
 
         $data = $_SESSION['rate_limiter'][$rateLimitKey];
 
-        // Si le délai est expiré, réinitialiser
+        // ÉTAPE 3 : Vérifier si le délai de reset est dépassé
+        // Si oui, on réinitialise le compteur et on autorise l'action
         if ($now > $data['reset_at']) {
             $_SESSION['rate_limiter'][$rateLimitKey] = [
                 'attempts' => 1,
                 'reset_at' => $now + ($decayMinutes * 60)
             ];
-            return true;
+            return true; // Compteur réinitialisé, action autorisée
         }
 
-        // Incrémenter le compteur
+        // ÉTAPE 4 : Incrémenter le compteur de tentatives
         $_SESSION['rate_limiter'][$rateLimitKey]['attempts']++;
 
-        // Vérifier si limite dépassée
+        // ÉTAPE 5 : Vérifier si la limite est dépassée
         if ($_SESSION['rate_limiter'][$rateLimitKey]['attempts'] > $maxAttempts) {
-            return false;
+            return false; // BLOQUÉ : Trop de tentatives
         }
 
-        return true;
+        return true; // Autorisé : Encore des tentatives disponibles
     }
 
     /**
