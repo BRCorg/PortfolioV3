@@ -959,6 +959,39 @@ nav .nav-container .cancel {
 .dropdown .links a:hover::before, .dropdown .links a:active::before {
   height: 60%;
 }
+.dropdown .links a.mobile-cv-btn {
+  background: linear-gradient(135deg, #314473, #293961);
+  color: white;
+  font-weight: 700;
+  margin-top: 1rem;
+  padding: 1rem 2rem;
+  text-align: center;
+  justify-content: center;
+  gap: 0.625rem;
+  box-shadow: 0 0.25rem 0.75rem rgba(49, 68, 115, 0.3);
+}
+.dropdown .links a.mobile-cv-btn i {
+  font-size: 1.1rem;
+}
+.dropdown .links a.mobile-cv-btn::before {
+  display: none;
+}
+.dropdown .links a.mobile-cv-btn:hover, .dropdown .links a.mobile-cv-btn:active {
+  background: linear-gradient(135deg, #560591, #bc13fe);
+  color: white;
+  padding-left: 2rem;
+  transform: translateY(-2px);
+  box-shadow: 0 0.5rem 1.25rem rgba(49, 68, 115, 0.4);
+}
+.dark .dropdown .links a.mobile-cv-btn:hover, .dark .dropdown .links a.mobile-cv-btn:active {
+  color: white;
+  background: linear-gradient(135deg, #adbbdc, rgb(190.8717948718, 201.8205128205, 227.6282051282));
+}
+.dark .dropdown .links a.mobile-cv-btn {
+  background: linear-gradient(135deg, #adbbdc, rgb(190.8717948718, 201.8205128205, 227.6282051282));
+  color: #222f4f;
+  box-shadow: 0 0.25rem 0.75rem rgba(173, 187, 220, 0.3);
+}
 
 :root {
   --bg-color: #ffffff;
