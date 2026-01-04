@@ -79,7 +79,7 @@ class HomeController
      */
     public function projectDetails(string $slug): void
     {
-        $project = $this->projectRepository->findBySlugWithCategory($slug);
+        $project = $this->projectRepository->findCompleteBySlug($slug);
 
         if (!$project) {
             header('HTTP/1.0 404 Not Found');
@@ -100,7 +100,7 @@ class HomeController
         $canonicalUrl = 'https://' . $_SERVER['HTTP_HOST'] . '/project/' . $slug;
         $ogTitle = htmlspecialchars($project['title']);
         $ogDescription = substr(strip_tags($project['description']), 0, 200);
-        $ogImage = !empty($project['images'][0]['file_path']) ? 'https://' . $_SERVER['HTTP_HOST'] . '/uploads/projects/' . $project['images'][0]['file_path'] : 'https://' . $_SERVER['HTTP_HOST'] . '/img/PhotoDeProfilPF2.png';
+        $ogImage = !empty($project['images'][0]['file_path']) ? 'https://' . $_SERVER['HTTP_HOST'] . $project['images'][0]['file_path'] : 'https://' . $_SERVER['HTTP_HOST'] . '/img/PhotoDeProfilPF2.png';
 
         $template = 'projectDetails';
         include __DIR__ . '/../Views/layout.phtml';
