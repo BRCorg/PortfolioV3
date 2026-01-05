@@ -48,8 +48,12 @@ class CategoryController
             exit;
         }
 
+        $name = $_POST['name'] ?? '';
+        $slug = $this->generateSlug($name);
+
         $data = [
-            'name' => $_POST['name'] ?? '',
+            'name' => $name,
+            'slug' => $slug,
             'description' => $_POST['description'] ?? ''
         ];
 
@@ -60,6 +64,18 @@ class CategoryController
             'message' => $categoryId > 0 ? 'Catégorie créée' : 'Erreur lors de la création',
             'category_id' => $categoryId
         ]);
+    }
+
+    /**
+     * Générer un slug à partir d'un nom
+     */
+    private function generateSlug(string $name): string
+    {
+        $slug = strtolower($name);
+        $slug = preg_replace('/[^a-z0-9\s-]/', '', $slug);
+        $slug = preg_replace('/[\s-]+/', '-', $slug);
+        $slug = trim($slug, '-');
+        return $slug;
     }
 
     /**
@@ -95,8 +111,11 @@ class CategoryController
             exit;
         }
 
+        $name = $_POST['name'] ?? '';
+
         $data = [
-            'name' => $_POST['name'] ?? '',
+            'name' => $name,
+            'slug' => $this->generateSlug($name),
             'description' => $_POST['description'] ?? ''
         ];
 
