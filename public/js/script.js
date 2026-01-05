@@ -151,7 +151,7 @@ document.querySelectorAll('a[href*="#"]').forEach(anchor => {
             if (!hash) return;
 
             // Si c'est un lien vers une section de la page principale
-            if (href.startsWith('#') || href.includes('index.php#')) {
+            if (href.startsWith('#') || href.startsWith('/#')) {
                 e.preventDefault();
 
                 // Si on est sur une page de détails de projet, rediriger vers l'accueil
