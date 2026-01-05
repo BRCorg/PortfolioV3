@@ -1,0 +1,164 @@
+/**
+ * Pages légales (Mentions légales, Politique de confidentialité)
+ */
+
+.legal-page {
+  min-height: 100vh;
+  padding: 6rem 2rem 4rem;
+  background: var(--background);
+
+  .legal-container {
+    max-width: 50rem;
+    margin: 0 auto;
+    background: var(--nav-bg);
+    padding: 3rem;
+    border-radius: $border-radius-lg;
+    box-shadow: 0 0.25rem 1.25rem rgba(0, 0, 0, 0.1);
+
+    @media (max-width: 48rem) {
+      padding: 2rem 1.5rem;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      color: $primary-dark;
+      margin-bottom: 0.5rem;
+      text-align: center;
+
+      .dark & {
+        color: $white;
+      }
+
+      @media (max-width: 48rem) {
+        font-size: 2rem;
+      }
+    }
+
+    .last-updated {
+      text-align: center;
+      font-size: 0.875rem;
+      color: rgba($text-color, 0.6);
+      font-style: italic;
+      margin-bottom: 2.5rem;
+
+      .dark & {
+        color: rgba($white, 0.6);
+      }
+    }
+  }
+
+  .legal-section {
+    margin-bottom: 2.5rem;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    h2 {
+      font-size: 1.75rem;
+      color: $primary-color;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 0.125rem solid rgba($primary-color, 0.2);
+
+      .dark & {
+        color: $accent-color;
+        border-bottom-color: rgba($accent-color, 0.2);
+      }
+
+      @media (max-width: 48rem) {
+        font-size: 1.5rem;
+      }
+    }
+
+    h3 {
+      font-size: 1.25rem;
+      color: $primary-dark;
+      margin: 1.5rem 0 0.75rem;
+      font-weight: 600;
+
+      .dark & {
+        color: $white;
+      }
+
+      @media (max-width: 48rem) {
+        font-size: 1.125rem;
+      }
+    }
+
+    p {
+      font-size: 1rem;
+      line-height: 1.7;
+      color: $text-color;
+      margin-bottom: 1rem;
+
+      .dark & {
+        color: rgba($white, 0.85);
+      }
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      strong {
+        color: $primary-dark;
+        font-weight: 600;
+
+        .dark & {
+          color: $white;
+        }
+      }
+
+      em {
+        color: rgba($text-color, 0.7);
+        font-size: 0.9375rem;
+
+        .dark & {
+          color: rgba($white, 0.6);
+        }
+      }
+
+      a {
+        color: $primary-color;
+        text-decoration: underline;
+        transition: color 0.3s ease;
+
+        &:hover {
+          color: darken($primary-color, 10%);
+        }
+
+        .dark & {
+          color: $accent-color;
+
+          &:hover {
+            color: lighten($accent-color, 10%);
+          }
+        }
+      }
+    }
+
+    ul {
+      margin: 1rem 0 1rem 1.5rem;
+      list-style: disc;
+
+      li {
+        font-size: 1rem;
+        line-height: 1.7;
+        color: $text-color;
+        margin-bottom: 0.5rem;
+
+        .dark & {
+          color: rgba($white, 0.85);
+        }
+
+        strong {
+          color: $primary-dark;
+
+          .dark & {
+            color: $white;
+          }
+        }
+      }
+    }
+  }
+}

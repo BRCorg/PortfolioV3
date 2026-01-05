@@ -124,13 +124,13 @@
   <nav>
     <div class="nav-container">
       <div class="logo-section">
-        <div class="logo">
+        <a href="/" class="logo">
           <span class="logo-initials">&lt;/&gt;</span>
           <div class="logo-text">
             <span class="logo-name">Berancan Guven</span>
             <span class="logo-subtitle">Dev Full Stack Junior</span>
           </div>
-        </div>
+        </a>
         <div class="social-links-nav">
           <a href="https://github.com/BRCorg" target="_blank" aria-label="GitHub">
             <i class="fa-brands fa-github"></i>
@@ -142,17 +142,17 @@
       </div>
 
       <div class="links">
-        <a href="index.php#home" class="nav-link">Accueil</a>
+        <a href="/#home" class="nav-link">Accueil</a>
         <div class="nav-dropdown">
-          <a href="index.php#projects" class="dropdown-trigger">
+          <a href="/#projects" class="dropdown-trigger">
             Projets <i class="fas fa-chevron-down"></i>
           </a>
           <div class="dropdown-menu">
-            <a href="index.php#projects" class="dropdown-item">Tous les projets</a>
+            <a href="/#projects" class="dropdown-item">Tous les projets</a>
             <div class="dropdown-divider"></div>
             <?php if (!empty($projects)): ?>
               <?php foreach ($projects as $proj): ?>
-                <a href="/project/<?= $proj['id'] ?>" class="dropdown-item">
+                <a href="/project/<?= $proj['slug'] ?>" class="dropdown-item">
                   <?= htmlspecialchars($proj['title']) ?>
                   <span class="project-category"><?= htmlspecialchars($proj['category_name']) ?></span>
                 </a>
@@ -162,9 +162,9 @@
             <?php endif; ?>
           </div>
         </div>
-        <a href="index.php#parcours" class="nav-link">Mon Parcours</a>
-        <a href="index.php#testimonials" class="nav-link">Témoignages</a>
-        <a href="index.php#contact" class="nav-link contact-btn">Contact</a>
+        <a href="/#parcours" class="nav-link">Mon Parcours</a>
+        <a href="/#testimonials" class="nav-link">Témoignages</a>
+        <a href="/#contact" class="nav-link contact-btn">Contact</a>
       </div>
 
       <a href="assets/files/CV-Guven-Berancan-DevWebFullStack.pdf" download="CV-Guven-Berancan-DevWebFullStack.pdf" class="cv-btn">
@@ -175,11 +175,11 @@
     </div>
     <div class="dropdown">
       <div class="links">
-        <a href="index.php#home" class="mobile-nav-link">Accueil</a>
-        <a href="index.php#projects" class="mobile-nav-link">Projets</a>
-        <a href="index.php#parcours" class="mobile-nav-link">Mon Parcours</a>
-        <a href="index.php#testimonials" class="mobile-nav-link">Témoignages</a>
-        <a href="index.php#contact" class="mobile-nav-link">Contact</a>
+        <a href="/#home" class="mobile-nav-link">Accueil</a>
+        <a href="/#projects" class="mobile-nav-link">Projets</a>
+        <a href="/#parcours" class="mobile-nav-link">Mon Parcours</a>
+        <a href="/#testimonials" class="mobile-nav-link">Témoignages</a>
+        <a href="/#contact" class="mobile-nav-link">Contact</a>
         <!-- Download CV in mobile dropdown - Stylisé différemment -->
         <a href="assets/files/CV-Guven-Berancan-DevWebFullStack.pdf" download="CV-Guven-Berancan-DevWebFullStack.pdf" class="mobile-nav-link mobile-cv-btn">
           <i class="fas fa-download"></i> Télécharger le CV
@@ -220,5 +220,34 @@
       <i class="fa-brands fa-linkedin"></i>
     </a>
   </div>
+  <div class="footer-legal">
+    <a href="/legal">Mentions légales</a>
+    <span class="separator">•</span>
+    <a href="/privacy">Politique de confidentialité</a>
+  </div>
   <p>&copy; 2025 Berancan Guven. Tous droits réservés.</p>
 </footer>
+
+<!-- Cookie Consent Banner -->
+<div id="cookie-consent-banner" class="cookie-consent-banner">
+  <div class="cookie-consent-banner__container">
+    <div class="cookie-consent-banner__content">
+      <h3>🍪 Cookies</h3>
+      <p>
+        Nous utilisons uniquement des cookies essentiels pour le fonctionnement du site.
+        Aucun cookie de tracking ou publicité.
+        <a href="/privacy">En savoir plus</a>
+      </p>
+    </div>
+    <div class="cookie-consent-banner__actions">
+      <button id="accept-cookies" class="cookie-consent-banner__btn cookie-consent-banner__btn--accept">
+        Accepter
+      </button>
+      <button id="decline-cookies" class="cookie-consent-banner__btn cookie-consent-banner__btn--decline">
+        Refuser
+      </button>
+    </div>
+  </div>
+</div>
+
+<script src="/js/cookie-consent.js"></script>

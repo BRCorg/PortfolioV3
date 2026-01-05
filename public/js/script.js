@@ -941,5 +941,3 @@ window.addEventListener('resize', () => {
     }
     lastHeight = currentHeight;
 });
-
-console.log('Portfolio V2 - Script chargé avec succès ✓');

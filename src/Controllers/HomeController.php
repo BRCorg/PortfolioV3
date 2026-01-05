@@ -83,7 +83,7 @@ class HomeController
 
         if (!$project) {
             header('HTTP/1.0 404 Not Found');
-            include __DIR__ . '/../Views/error404.phtml';
+            include __DIR__ . '/../Views/404.phtml';
             exit;
         }
 
@@ -103,6 +103,54 @@ class HomeController
         $ogImage = !empty($project['images'][0]['file_path']) ? 'https://' . $_SERVER['HTTP_HOST'] . $project['images'][0]['file_path'] : 'https://' . $_SERVER['HTTP_HOST'] . '/img/PhotoDeProfilPF2.png';
 
         $template = 'projectDetails';
+        include __DIR__ . '/../Views/layout.phtml';
+    }
+
+    /**
+     * Page Politique de Confidentialité (RGPD)
+     */
+    public function privacy(): void
+    {
+        // Récupérer tous les projets pour le menu
+        $allProjects = $this->projectRepository->getPublished('display_order ASC');
+        $projects = [];
+        foreach ($allProjects as $proj) {
+            $projects[] = $this->projectRepository->findComplete($proj['id']);
+        }
+
+        // SEO Meta Tags
+        $pageTitle = 'Politique de Confidentialité - Berancan Guven';
+        $pageDescription = 'Politique de confidentialité et protection des données personnelles du portfolio de Berancan Guven. Informations sur la collecte, le traitement et vos droits RGPD.';
+        $canonicalUrl = 'https://' . $_SERVER['HTTP_HOST'] . '/privacy';
+        $ogTitle = 'Politique de Confidentialité';
+        $ogDescription = 'Politique de confidentialité et protection des données personnelles (RGPD)';
+        $ogImage = 'https://' . $_SERVER['HTTP_HOST'] . '/img/PhotoDeProfilPF2.png';
+
+        $template = 'privacy';
+        include __DIR__ . '/../Views/layout.phtml';
+    }
+
+    /**
+     * Page Mentions Légales
+     */
+    public function legal(): void
+    {
+        // Récupérer tous les projets pour le menu
+        $allProjects = $this->projectRepository->getPublished('display_order ASC');
+        $projects = [];
+        foreach ($allProjects as $proj) {
+            $projects[] = $this->projectRepository->findComplete($proj['id']);
+        }
+
+        // SEO Meta Tags
+        $pageTitle = 'Mentions Légales - Berancan Guven';
+        $pageDescription = 'Mentions légales du portfolio de Berancan Guven. Informations sur l\'éditeur, l\'hébergement et les conditions d\'utilisation.';
+        $canonicalUrl = 'https://' . $_SERVER['HTTP_HOST'] . '/legal';
+        $ogTitle = 'Mentions Légales';
+        $ogDescription = 'Mentions légales et informations sur l\'éditeur du site';
+        $ogImage = 'https://' . $_SERVER['HTTP_HOST'] . '/img/PhotoDeProfilPF2.png';
+
+        $template = 'legal';
         include __DIR__ . '/../Views/layout.phtml';
     }
 }

@@ -36,6 +36,10 @@ $router->post('/contact/submit', ContactController::class, 'submit');
 // SEO - Sitemap XML
 $router->get('/sitemap.xml', SitemapController::class, 'generate');
 
+// Pages légales (RGPD)
+$router->get('/privacy', HomeController::class, 'privacy');
+$router->get('/legal', HomeController::class, 'legal');
+
 // ==========================================
 // ROUTES ADMIN - Authentification
 // ==========================================

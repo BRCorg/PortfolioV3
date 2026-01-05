@@ -24,6 +24,7 @@
 @import 'components/contacts';
 @import 'components/admin-lists';
 @import 'components/animations';
+@import 'components/cookie-consent';
 
 // 4. PAGES - Styles spécifiques aux pages
 @import 'pages/home';
@@ -34,6 +35,7 @@
 @import 'pages/login';
 @import 'pages/dashboard';
 @import 'pages/404';
+@import 'pages/legal';
 
 // 5. VENDORS - Bibliothèques tierces (si nécessaire)
 // @import 'vendors/nom-de-la-lib';

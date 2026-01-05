@@ -8,14 +8,8 @@ const CSRF_TOKEN = window.CSRF_TOKEN || '';
 
 // Helper: Ajouter automatiquement le token CSRF à un FormData
 function addCsrfToken(formData) {
-    console.log('CSRF Token disponible:', CSRF_TOKEN);
     if (!formData.has('csrf_token')) {
         formData.append('csrf_token', CSRF_TOKEN);
-    }
-    // Debug: afficher tous les champs du FormData
-    console.log('FormData contents:');
-    for (let pair of formData.entries()) {
-        console.log(pair[0] + ': ' + (pair[1] instanceof File ? pair[1].name : pair[1]));
     }
     return formData;
 }
@@ -163,7 +157,6 @@ if (createProjectForm) {
 
             // Récupérer le texte brut d'abord
             const responseText = await response.text();
-            console.log('Réponse brute:', responseText);
 
             // Essayer de parser en JSON
             let result;
