@@ -154,11 +154,11 @@ document.querySelectorAll('a[href*="#"]').forEach(anchor => {
             if (href.startsWith('#') || href.startsWith('/#')) {
                 e.preventDefault();
 
-                // Si on est sur une page de détails de projet, rediriger vers l'accueil
-                const isOnProjectDetail = window.location.pathname.includes('/project/');
+                // Vérifier si on est sur la page d'accueil
+                const isOnHomePage = window.location.pathname === '/' || window.location.pathname === '';
 
-                if (isOnProjectDetail) {
-                    // Rediriger vers l'accueil avec l'ancre
+                // Si on n'est pas sur la page d'accueil, rediriger vers l'accueil avec l'ancre
+                if (!isOnHomePage) {
                     window.location.href = '/#' + hash;
                     return;
                 }
