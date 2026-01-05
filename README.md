@@ -4,6 +4,16 @@ Le projet est accessible en ligne à l’adresse suivante :
 
 👉 https://portfolio.berancan-guven.fr
 
+## 🛠️ Organisation Git & bonnes pratiques
+
+Les bonnes pratiques Git (branches par fonctionnalité, pull requests, merges, etc.) sont bien connues.
+
+Ce projet ayant déjà été réalisé à plus de 70 % avant l’introduction approfondie de ces notions,
+j’ai choisi de ne pas modifier le workflow Git en cours afin de rester cohérent avec l’avancement du projet.
+
+Ces bonnes pratiques seront en revanche appliquées systématiquement sur les prochains projets,
+avec une gestion claire des branches et des merges.
+
 # Portfolio V3 - Berancan Guven
 
 Portfolio professionnel développé en PHP natif avec architecture **MVC + Repository Pattern**, mettant en avant mes compétences en développement web full-stack.
