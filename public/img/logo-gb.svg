@@ -1,18 +1,39 @@
 <svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
-    </linearGradient>
+ <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+  <stop offset="0%" stop-color="#020617" />
+  <stop offset="100%" stop-color="#0f172a" />
+</linearGradient>
+
   </defs>
 
   <!-- Background Circle -->
   <circle cx="60" cy="60" r="58" fill="url(#gradient)" stroke="#fff" stroke-width="2"/>
 
   <!-- BG Text -->
-  <text x="60" y="78" font-family="Arial, sans-serif" font-size="48" font-weight="700" fill="#ffffff" text-anchor="middle">BG</text>
+  <text x="60" y="78" font-family="Arial, sans-serif" font-size="42" font-weight="600" fill="#ffffff" text-anchor="middle">BG</text>
 
   <!-- Code brackets decoration -->
-  <path d="M 25 35 L 20 40 L 25 45" stroke="#ffffff" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.7"/>
-  <path d="M 95 35 L 100 40 L 95 45" stroke="#ffffff" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.7"/>
+  <!-- Chevron gauche -->
+<!-- Chevron gauche -->
+<path
+  d="M 25 52 L 18 60 L 25 68"
+  stroke="#ffffff"
+  stroke-width="3"
+  stroke-linecap="round"
+  fill="none"
+  opacity="0.7"
+/>
+
+<!-- Chevron droit -->
+<path
+  d="M 95 52 L 102 60 L 95 68"
+  stroke="#ffffff"
+  stroke-width="3"
+  stroke-linecap="round"
+  fill="none"
+  opacity="0.7"
+/>
+
 </svg>
+
