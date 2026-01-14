@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <!-- Favicon -->
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/img/favicon.svg?v=<?= date('YmdHis') ?>">
 
   <!-- SEO Meta Tags -->
   <title><?= $pageTitle ?? 'Berancan Guven - Développeur Web Full Stack Junior | Portfolio' ?></title>
@@ -20,16 +20,19 @@
   <meta property="og:type" content="website">
   <meta property="og:title" content="<?= $ogTitle ?? 'Berancan Guven - Développeur Web Full Stack' ?>">
   <meta property="og:description" content="<?= $ogDescription ?? 'Portfolio de Berancan Guven, développeur web full stack junior spécialisé en PHP, Symfony et React.' ?>">
-  <meta property="og:image" content="https://<?= $_SERVER['HTTP_HOST'] ?>/img/PhotoDeProfilPF2carré.png">
+  <meta property="og:image" content="https://<?= $_SERVER['HTTP_HOST'] ?>/img/PhotoDeProfilPF2carré.png?v=<?= date('YmdHis') ?>">
   <meta property="og:url" content="<?= $canonicalUrl ?? 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] ?>">
   <meta property="og:site_name" content="Berancan Guven Portfolio">
   <meta property="og:locale" content="fr_FR">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="1200">
+  <meta property="og:image:type" content="image/png">
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="<?= $ogTitle ?? 'Berancan Guven - Développeur Web Full Stack' ?>">
+  <meta name="twitter:image" content="https://<?= $_SERVER['HTTP_HOST'] ?>/img/PhotoDeProfilPF2carré.png?v=<?= date('YmdHis') ?>">
   <meta name="twitter:description" content="<?= $ogDescription ?? 'Portfolio de Berancan Guven, développeur web full stack junior.' ?>">
-  <meta name="twitter:image" content="https://<?= $_SERVER['HTTP_HOST'] ?>/img/PhotoDeProfilPF2carré.png">
 
   <!-- Structured Data (JSON-LD) -->
   <script type="application/ld+json">
@@ -60,7 +63,7 @@
       "@type": "Organization",
       "name": "Berancan Guven",
       "url": "https://<?= $_SERVER['HTTP_HOST'] ?>",
-      "logo": "https://<?= $_SERVER['HTTP_HOST'] ?>/favicon.svg"
+      "logo": "https://<?= $_SERVER['HTTP_HOST'] ?>/img/favicon.svg?v=<?= date('YmdHis') ?>"
     }
     </script>
 
