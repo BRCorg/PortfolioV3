@@ -20,7 +20,7 @@
   <meta property="og:type" content="website">
   <meta property="og:title" content="<?= $ogTitle ?? 'Berancan Guven - Développeur Web Full Stack' ?>">
   <meta property="og:description" content="<?= $ogDescription ?? 'Portfolio de Berancan Guven, développeur web full stack junior spécialisé en PHP, Symfony et React.' ?>">
-  <meta property="og:image" content="<?= $ogImage ?? 'https://' . $_SERVER['HTTP_HOST'] . '/img/PhotoDeProfilPF2.png' ?>">
+  <meta property="og:image" content="https://<?= $_SERVER['HTTP_HOST'] ?>/img/PhotoDeProfilPF2carré.png">
   <meta property="og:url" content="<?= $canonicalUrl ?? 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] ?>">
   <meta property="og:site_name" content="Berancan Guven Portfolio">
   <meta property="og:locale" content="fr_FR">
@@ -29,7 +29,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="<?= $ogTitle ?? 'Berancan Guven - Développeur Web Full Stack' ?>">
   <meta name="twitter:description" content="<?= $ogDescription ?? 'Portfolio de Berancan Guven, développeur web full stack junior.' ?>">
-  <meta name="twitter:image" content="<?= $ogImage ?? 'https://' . $_SERVER['HTTP_HOST'] . '/img/PhotoDeProfilPF2.png' ?>">
+  <meta name="twitter:image" content="https://<?= $_SERVER['HTTP_HOST'] ?>/img/PhotoDeProfilPF2carré.png">
 
   <!-- Structured Data (JSON-LD) -->
   <script type="application/ld+json">
@@ -39,7 +39,7 @@
       "name": "Berancan Guven",
       "jobTitle": "Développeur Web Full Stack Junior",
       "url": "https://<?= $_SERVER['HTTP_HOST'] ?>",
-      "image": "https://<?= $_SERVER['HTTP_HOST'] ?>/img/PhotoDeProfilPF2.png",
+      "image": "https://<?= $_SERVER['HTTP_HOST'] ?>/img/PhotoDeProfilPF2carré.png",
       "sameAs": [
         "https://github.com/BRCorg",
         "https://www.linkedin.com/in/berancanguven"
@@ -52,6 +52,17 @@
       "description": "Étudiant en développement web full stack à la 3W Academy, en recherche de stage de 4 mois."
     }
   </script>
+
+    <!-- Organization Logo for Google (SEO) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Berancan Guven",
+      "url": "https://<?= $_SERVER['HTTP_HOST'] ?>",
+      "logo": "https://<?= $_SERVER['HTTP_HOST'] ?>/favicon.svg"
+    }
+    </script>
 
   <!-- Google Tag Manager -->
   <script>
